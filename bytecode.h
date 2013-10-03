@@ -1,42 +1,133 @@
+#ifndef BYTECODE_H
+#define BYTECODE_H
+
 #include <iostream>
 #include <fstream>
 #include <stdlib.h>
 #include "parallel.h"
 
-// Endianness could be a problem here 
-#define MAX_EDGE_LENGTH = 8
-#define LAST_SET(b) = (b & (0x80))
-#define EDGE_BYTES = 0x7f
-#define EDGE_SIZE_PER_BYTE = 7
+#define MAX_EDGE_SIZE_IN_BYTES 10
+#define LAST_BIT_SET(b) (b & (0x80))
+#define EDGE_SIZE_PER_BYTE 7
 
+intE eatEdge(char* start, uintE *curOffset) {
+  int bytesEaten = 0;
+  intE edgeRead = 0;
+  int shiftAmount = 0;
 
-// A sequential difference code decoder
-template <class T>
-struct decoder {
+  while (bytesEaten < MAX_EDGE_SIZE_IN_BYTES) {
+    char b = start[*curOffset];
+    edgeRead += ((b & 0x7f) << shiftAmount);
+    (*curOffset)++; 
+    bytesEaten++;
+    if (LAST_BIT_SET(b))
+      shiftAmount += EDGE_SIZE_PER_BYTE;
+    else 
+      break;
+  } 
+  return edgeRead;
+}
 
-  intE eatEdge(char* offset) {
-    int bytesEaten = 0;
-    intE edgeRead = 0;
-
-    while (bytesEaten < MAX_EDGE_LENGTH) {
-      offset++;
-      char b = *offset; 
-      if (LAST_SET(b)) {
-        edgeRead += (b & EDGE_BYTES);
-        edgeRead <<= EDGE_SIZE_PER_BYTE;
-      } else {
-        break;        
-      }
-    } 
-    return edgeRead;
-  }
-
-  void decode(T t, char* edgeStart, intE source, intT degree) {
-    int edgesRead = 0;
-    char* cur = edgeStart;
-    for (int edgesRead = 0; edgesRead < degree; edgesRead++) {
-      intE edge = eatEdge(cur);
-      t.func(source, edge);
-    }
+struct dummyT {
+  bool srcTarg(intE src, intE target, intT edgeNumber) {
+    return true;
   }
 };
+
+template <class T>
+void decode(T t, char* edgeStart, intE source, uintT degree) {
+  int edgesRead = 0;
+  uintE curOffset = 0;
+  for (int edgesRead = 0; edgesRead < degree; edgesRead++) {
+    intE edge = eatEdge(edgeStart, &curOffset);
+    if (!t.srcTarg(source, edge, edgesRead)) {
+      break; 
+    }
+  }
+}
+
+
+// Should provide the difference between this edge and the previous edge
+uintE compressEdge(char *start, uintE curOffset, intE e) {
+  int shift = 0;
+  char curByte = e & 0x7f;
+  int bytesUsed = 0;
+  while ((curByte > 0) || ((e >> shift) > 0)) {
+    bytesUsed++;
+    char toWrite = curByte;
+    shift += 7;
+    // Check to see if there's any bits left to represent
+    curByte = (e >> shift) & 0x7f;
+    if ((e >> shift) > 0) {
+      toWrite |= 0x80; 
+    }
+    start[curOffset] = toWrite;
+    curOffset++;
+  }
+  return curOffset;
+}
+
+/*
+   Sequentially compress the edge list. Edges should 
+   already be sorted 
+*/
+void compressEdgeSet(intE source, intE *edgeStart, uintT degree) {
+  intE t = 0;
+  if (degree <= 0) {
+    return;
+  }
+  intE *savedEdges = newA(intE, degree);
+  {parallel_for(long i=0; i < degree; i++) savedEdges[i] = edgeStart[i];}
+
+  uintE currentOffset = 0;
+  for (uintT i=0; i < degree; i++) {
+    currentOffset = compressEdge((char *)edgeStart, currentOffset, savedEdges[i]);
+  }
+  free(savedEdges);
+}
+
+/*
+  Compresses the edge set in parallel. Does not modify offsets - empty space can now
+  be left between the end of adjacency lists. 
+*/
+void parallelCompressEdges(intE *edges, intT *offsets, long n, long m) {
+  {parallel_for(intE i=0; i<n; i++) {
+    intE *edgesStart = edges + offsets[i];
+    uintT degree = ((i == n-1) ? m : offsets[i+1])-offsets[i];
+    compressEdgeSet(i, edgesStart, degree);
+  }}
+}
+
+
+/*
+  Performs a sequential compression. This guarantees the adjacencies for vertex 
+  k and k+1 are actually contiguous in memory even after compression. 
+*/
+void sequentialCompressEdges(intE *edges, intT *offsets, long n, long m) {
+  // Create copies of edges and offsets
+  intT *oldOffsets = newA(intT, n);
+  intE *savedEdges = newA(intE, m);
+  {parallel_for(long i=0; i < m; i++) savedEdges[i] = edges[i];}
+  {parallel_for(intT i=0; i < n; i++) oldOffsets[i] = offsets[i];}
+
+  // Offset into edges where the next compressed edge should be written
+  uintE currentOffset = 0; 
+  uintE nWritten = 0;
+  offsets[0] = 0; 
+  for (intE i=0; i<n; i++) {
+    intE *edgesStart = edges + oldOffsets[i];
+    uintT degree = ((i == n-1) ? m : oldOffsets[i+1])-oldOffsets[i];
+
+    // The start of vertex i's edge list is from currentOffset
+    offsets[i] = currentOffset;
+    // Compress each edge sequentially
+    for (uintT edgeI=0; edgeI < degree; edgeI++) {
+      // Write compressed edge to edges + currentOffset. 
+      currentOffset = compressEdge((char *)edges, currentOffset, savedEdges[nWritten + edgeI]);
+    }
+    // Increment nWritten after all of vertex n's neighbors are written
+    nWritten += degree;
+  }
+}
+
+#endif
