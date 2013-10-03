@@ -42,6 +42,14 @@ struct pairFirstCmp {
 };
 
 template <class IntType>
+struct pairBothCmp {
+  bool operator() (pair<intE,IntType> a, pair<intE,IntType> b) {
+    if (a.first != b.first) return a.first < b.first;
+    return a.second < b.second;
+  }
+};
+
+template <class IntType>
 struct singletonCmp {
   bool operator() (IntType a, IntType b) {
     return a < b;
@@ -182,7 +190,9 @@ graph<vertex> readGraphFromFile(char* fname, bool isSymmetric) {
     /* From here on-out, we use temp, and tOffsets to guarantee 
        stability as after compression offsets is no longer a reliable source
        of degree information. */
-    quickSort(temp,m,pairFirstCmp<intE>());
+
+    // Use pairBothCmp to get sortedness within an adj-list.
+    quickSort(temp,m,pairBothCmp<intE>());
  
     tOffsets[0] = 0; inEdges[0] = temp[0].second;
     {parallel_for(intT i=1;i<m;i++) {
