@@ -26,6 +26,7 @@
 #include <fstream>
 #include <stdlib.h>
 #include "parallel.h"
+#include "bytecode.h"
 #include "quickSort.h"
 using namespace std;
 
@@ -39,6 +40,24 @@ struct pairFirstCmp {
     return a.first < b.first;
   }
 };
+
+template <class IntType>
+struct singletonCmp {
+  bool operator() (IntType a, IntType b) {
+    return a < b;
+  }
+};
+
+void compressEdges(intE *edges, intT *offsets, long n, long m) {
+  sequentialCompressEdges(edges, offsets, n, m);
+  // Parallel mode - in order to tightly compact the edges, we need to 
+  // perform the compression sequentially
+//  {parallel_for(intE i=0; i<n; i++) {
+//    intE *edgesStart = edges + offsets[i];
+//    uintT degree = ((i == n-1) ? m : offsets[i+1])-offsets[i];
+//    compressEdgeSet(i, edgesStart, degree);
+//  }}
+}
 
 // A structure that keeps a sequence of strings all allocated from
 // the same block of memory
@@ -125,6 +144,12 @@ graph<vertex> readGraphFromFile(char* fname, bool isSymmetric) {
   {parallel_for(long i=0; i < n; i++) offsets[i] = atol(W.Strings[i + 3]);}
   {parallel_for(long i=0; i<m; i++) edges[i] = atol(W.Strings[i+n+3]); }
   //W.del(); // to deal with performance bug in malloc
+
+  /* Steps : 
+      1. Sort within each in-edge/out-edge segment 
+      2. sequentially compress edges using difference coding  
+  */
+
     
   vertex* v = newA(vertex,n);
 
@@ -133,6 +158,8 @@ graph<vertex> readGraphFromFile(char* fname, bool isSymmetric) {
     uintT l = ((i == n-1) ? m : offsets[i+1])-offsets[i];
     v[i].setOutDegree(l); 
     v[i].setOutNeighbors(edges+o);     
+    // Quicksort within this vertex's out-edge bucket
+    quickSort(edges+o, l, singletonCmp<intE>());
     }}
 
   if(!isSymmetric) {
@@ -140,14 +167,21 @@ graph<vertex> readGraphFromFile(char* fname, bool isSymmetric) {
     {parallel_for(intT i=0;i<n;i++) tOffsets[i] = INT_T_MAX;}
     intE* inEdges = newA(intE,m);
     intPair* temp = newA(intPair,m);
+    // Create m many new intPairs. 
     {parallel_for(intT i=0;i<n;i++){
       uintT o = offsets[i];
       for(intT j=0;j<v[i].getOutDegree();j++){	  
 	temp[o+j] = make_pair(v[i].getOutNeighbor(j),i);
       }
       }}
+
+    compressEdges(edges, offsets, n, m);
+
     free(offsets);
 
+    /* From here on-out, we use temp, and tOffsets to guarantee 
+       stability as after compression offsets is no longer a reliable source
+       of degree information. */
     quickSort(temp,m,pairFirstCmp<intE>());
  
     tOffsets[0] = 0; inEdges[0] = temp[0].second;
@@ -170,14 +204,19 @@ graph<vertex> readGraphFromFile(char* fname, bool isSymmetric) {
       uintT l = ((i == n-1) ? m : tOffsets[i+1])-tOffsets[i];
       v[i].setInDegree(l);
       v[i].setInNeighbors(inEdges+o);
-      }}    
+      }}
+
+    compressEdges(inEdges, tOffsets, n, m);
 
     free(tOffsets);
+    cout << "finished reading graph" << endl;
     return graph<vertex>(v,(intT)n,m,edges,inEdges);
   }
 
   else {
+    compressEdges(edges, offsets, n, m);
     free(offsets);
+    cout << "finished reading graph" << endl;
     return graph<vertex>(v,(intT)n,m,edges);
   }
 }

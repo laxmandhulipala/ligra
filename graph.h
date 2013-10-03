@@ -2,6 +2,7 @@
 #include <fstream>
 #include <stdlib.h>
 #include "parallel.h"
+
 using namespace std;
 
 // **************************************************************
@@ -13,6 +14,8 @@ struct symmetricVertex {
   intT degree;
   void del() {free(neighbors); }
 symmetricVertex(intE* n, intT d) : neighbors(n), degree(d) {}
+  intE* getInNeighbors() { return neighbors; }
+  intE* getOutNeighbors() { return neighbors; }
   uintE getInNeighbor(intT j) { return neighbors[j]; }
   uintE getOutNeighbor(intT j) { return neighbors[j]; }
   intT getInDegree() { return degree; }
@@ -31,6 +34,8 @@ struct asymmetricVertex {
   intT inDegree;
   void del() {free(inNeighbors); free(outNeighbors);}
 asymmetricVertex(intE* iN, intE* oN, intT id, intT od) : inNeighbors(iN), outNeighbors(oN), inDegree(id), outDegree(od) {}
+  intE* getInNeighbors() { return inNeighbors; }
+  intE* getOutNeighbors() { return outNeighbors; }
   uintE getInNeighbor(intT j) { return inNeighbors[j]; }
   uintE getOutNeighbor(intT j) { return outNeighbors[j]; }
   intT getInDegree() { return inDegree; }
