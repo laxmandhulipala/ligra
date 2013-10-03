@@ -38,10 +38,20 @@ template <class T>
 void decode(T t, char* edgeStart, intE source, uintT degree) {
   int edgesRead = 0;
   uintE curOffset = 0;
-  for (int edgesRead = 0; edgesRead < degree; edgesRead++) {
-    intE edge = eatEdge(edgeStart, &curOffset);
-    if (!t.srcTarg(source, edge, edgesRead)) {
-      break; 
+  if (degree > 0) {
+    // Eat first edge, which is uncompressed. 
+    intE startEdge = eatEdge(edgeStart, &curOffset);
+    if (!t.srcTarg(source,startEdge,edgesRead)) {
+      return;
+    }
+    intE prevEdge = startEdge;
+    for (int edgesRead = 0; edgesRead < degree; edgesRead++) {
+      // Eat the next 'edge', which is a difference, and reconstruct edge.
+      intE edgeDiff = eatEdge(edgeStart, &curOffset);
+      intE edge = prevEdge + edgeDiff;
+      if (!t.srcTarg(source, edge, edgesRead)) {
+        break; 
+      }
     }
   }
 }
@@ -121,12 +131,17 @@ void sequentialCompressEdges(intE *edges, intT *offsets, long n, long m) {
     // The start of vertex i's edge list is from currentOffset
     offsets[i] = currentOffset;
     // Compress each edge sequentially
-    for (uintT edgeI=0; edgeI < degree; edgeI++) {
-      // Write compressed edge to edges + currentOffset. 
-      currentOffset = compressEdge((char *)edges, currentOffset, savedEdges[nWritten + edgeI]);
+    if (degree > 0) {
+      // Compress the first edge whole (no difference coding on first edge yet)
+      currentOffset = compressEdge((char *)edges, currentOffset, savedEdges[nWritten]);
+      for (uintT edgeI=1; edgeI < degree; edgeI++) {
+        // Store difference between cur and prev edge. 
+        intE difference = savedEdges[nWritten + edgeI] - savedEdges[nWritten + edgeI - 1];
+        currentOffset = compressEdge((char *)edges, currentOffset, difference);
+      }
+      // Increment nWritten after all of vertex n's neighbors are written
+      nWritten += degree;
     }
-    // Increment nWritten after all of vertex n's neighbors are written
-    nWritten += degree;
   }
 }
 
