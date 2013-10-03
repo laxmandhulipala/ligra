@@ -33,6 +33,7 @@
 #include "utils.h"
 #include "graph.h"
 #include "IO.h"
+#include "bytecode.h"
 using namespace std;
 
 //*****START FRAMEWORK*****
@@ -158,6 +159,19 @@ void remDuplicates(intT* indices, intT* flags, intT m, intT n) {
 
 //*****EDGE FUNCTIONS*****
 
+template <class F>
+struct denseT {
+  F *f;
+  bool* nextArr;
+  bool* vertexArr;
+denseT(F* fp, bool* np, bool* vp) : f(fp), nextArr(np), vertexArr(vp) {}
+  bool srcTarg(intE src, intE target, intT edgeNumber) {
+    if (vertexArr[target] && (*f).update(target, src)) nextArr[src] = 1;
+    if (!(*f).cond(src)) return false;
+    return true;
+  }
+};
+
 template <class F, class vertex>
   bool* edgeMapDense(graph<vertex> GA, bool* vertices, F f, bool parallel = 0) {
   intT numVertices = GA.n;
@@ -167,18 +181,8 @@ template <class F, class vertex>
     next[i] = 0;
     if (f.cond(i)) { 
       intT d = G[i].getInDegree();
-      if(!parallel || d < 1000) {
-	for(intT j=0; j<d; j++){
-	  intT ngh = G[i].getInNeighbor(j);
-	  if (vertices[ngh] && f.update(ngh,i)) next[i] = 1;
-	  if(!f.cond(i)) break;
-	}
-      } else {
-	{parallel_for(intT j=0; j<d; j++){
-	  intT ngh = G[i].getInNeighbor(j);
-	  if (vertices[ngh] && f.update(ngh,i)) next[i] = 1;
-	  }}
-      }
+      char *nghArr = (char *)(G[i].getInNeighbors());
+      decode(denseT<F>(&f, next, vertices), nghArr, i, d);
     }
     }}
   return next;
@@ -187,6 +191,7 @@ template <class F, class vertex>
 template <class F, class vertex>
 bool* edgeMapDenseForward(graph<vertex> GA, bool* vertices, F f) {
   intT numVertices = GA.n;
+  cout << "rawr" << endl;
   vertex *G = GA.V;
   bool* next = newA(bool,numVertices);
   {parallel_for(long i=0;i<numVertices;i++) next[i] = 0;}
@@ -209,6 +214,26 @@ bool* edgeMapDenseForward(graph<vertex> GA, bool* vertices, F f) {
     }}
   return next;
 }
+
+template <class F>
+struct sparseT {
+  F f;
+  intT v;
+  intT o;
+  intT *outEdges;
+sparseT(F fP, intT vP, intT oP, intT *outEdgesP) : f(fP), v(vP), o(oP), outEdges(outEdgesP) {}
+  bool srcTarg(intE src, intE target, intT edgeNumber) {
+    if (f.cond(target) && f.updateAtomic(v, target)) {
+      outEdges[o + edgeNumber] = target;
+    }
+    else {
+      outEdges[o + edgeNumber] = -1;
+    }
+    return true;
+  }
+};
+
+
 
 template <class F, class vertex>
 pair<uintT,intT*> edgeMapSparse(vertex* frontierVertices, intT* indices, 
@@ -266,6 +291,7 @@ vertices edgeMap(graph<vertex> GA, vertices V, F f, intT threshold = -1,
     abort();
   }
 
+
   // used to generate nonzero indices to get degrees
   uintT* degrees = newA(uintT, m);
   vertex* frontierVertices;
@@ -279,7 +305,7 @@ vertices edgeMap(graph<vertex> GA, vertices V, F f, intT threshold = -1,
   uintT outDegrees = sequence::plusReduce(degrees, m);
   edgesTraversed += outDegrees;
   if (outDegrees == 0) return vertices(numVertices);
-  if (m + outDegrees > threshold) { 
+//  if (m + outDegrees > threshold) { 
     V.toDense();
     free(degrees);
     free(frontierVertices);
@@ -287,19 +313,18 @@ vertices edgeMap(graph<vertex> GA, vertices V, F f, intT threshold = -1,
       edgeMapDenseForward(GA,V.d,f) : 
       edgeMapDense(GA, V.d, f, option);
     vertices v1 = vertices(numVertices, R);
-    //cout << "size (D) = " << v1.m << endl;
     return  v1;
-  } else { 
-    pair<uintT,intT*> R = 
-      remDups ? 
-      edgeMapSparse(frontierVertices, V.s, degrees, V.numNonzeros(), f, 
-		    numVertices, GA.flags) :
-      edgeMapSparse(frontierVertices, V.s, degrees, V.numNonzeros(), f);
-    //cout << "size (S) = " << R.first << endl;
-    free(degrees);
-    free(frontierVertices);
-    return vertices(numVertices, R.first, R.second);
-  }
+//  } else { 
+//    pair<uintT,intT*> R = 
+//      remDups ? 
+//      edgeMapSparse(frontierVertices, V.s, degrees, V.numNonzeros(), f, 
+//		    numVertices, GA.flags) :
+//      edgeMapSparse(frontierVertices, V.s, degrees, V.numNonzeros(), f);
+//    //cout << "size (S) = " << R.first << endl;
+//    free(degrees);
+//    free(frontierVertices);
+//    return vertices(numVertices, R.first, R.second);
+//  }
 }
 
 //*****VERTEX FUNCTIONS*****
@@ -463,7 +488,7 @@ template <class F, class vertex>
     }}
   uintT outDegrees = sequence::plusReduce(degrees, m);    
   if (outDegrees == 0) return vertices(numVertices);
-  if (m + outDegrees > threshold) { 
+//  if (m + outDegrees > threshold) { 
     V.toDense();
     free(degrees);
     free(frontierVertices);
@@ -473,15 +498,15 @@ template <class F, class vertex>
     vertices v1 = vertices(numVertices, R);
     //cout << "size (D) = " << v1.m << endl;
     return  v1;
-  } else { 
-    pair<uintT,intT*> R = 
-      remDups ? 
-      edgeMapSparseW(frontierVertices, V.s, degrees, V.numNonzeros(), f, 
-		    numVertices, GA.flags) :
-      edgeMapSparseW(frontierVertices, V.s, degrees, V.numNonzeros(), f);
-    //cout << "size (S) = " << R.first << endl;
-    free(degrees);
-    free(frontierVertices);
-    return vertices(numVertices, R.first, R.second);
-  }
+//  } else { 
+//    pair<uintT,intT*> R = 
+//      remDups ? 
+//      edgeMapSparseW(frontierVertices, V.s, degrees, V.numNonzeros(), f, 
+//		    numVertices, GA.flags) :
+//      edgeMapSparseW(frontierVertices, V.s, degrees, V.numNonzeros(), f);
+//    //cout << "size (S) = " << R.first << endl;
+//    free(degrees);
+//    free(frontierVertices);
+//    return vertices(numVertices, R.first, R.second);
+//  }
 }
