@@ -57,6 +57,7 @@ void decode(T t, char* edgeStart, intE source, uintT degree) {
 }
 
 
+
 // Should provide the difference between this edge and the previous edge
 uintE compressEdge(char *start, uintE curOffset, intE e) {
   int shift = 0;
@@ -143,6 +144,8 @@ void sequentialCompressEdges(intE *edges, intT *offsets, long n, long m) {
       nWritten += degree;
     }
   }
+  free(oldOffsets);
+  free(savedEdges);
 }
 
 #endif
