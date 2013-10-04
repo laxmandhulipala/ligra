@@ -174,6 +174,7 @@ denseT(F* fp, bool* np, bool* vp) : f(fp), nextArr(np), vertexArr(vp) {}
 
 template <class F, class vertex>
   bool* edgeMapDense(graph<vertex> GA, bool* vertices, F f, bool parallel = 0) {
+  
   intT numVertices = GA.n;
   vertex *G = GA.V;
   bool* next = newA(bool,numVertices);
@@ -188,42 +189,41 @@ template <class F, class vertex>
   return next;
 }
 
+template <class F>
+struct denseForwardT {
+  F *f;
+  bool* nextArr;
+  bool* vertexArr;
+denseForwardT(F* fp, bool* np, bool* vp) : f(fp), nextArr(np), vertexArr(vp) {}
+  bool srcTarg(intE src, intE target, intT edgeNumber) {
+    if ((*f).cond(target) && (*f).updateAtomic(src,target)) nextArr[target] = 1;
+    return true;
+  }
+};
+
 template <class F, class vertex>
 bool* edgeMapDenseForward(graph<vertex> GA, bool* vertices, F f) {
   intT numVertices = GA.n;
-  cout << "rawr" << endl;
   vertex *G = GA.V;
   bool* next = newA(bool,numVertices);
   {parallel_for(long i=0;i<numVertices;i++) next[i] = 0;}
-  {parallel_for (long i=0; i<numVertices; i++){
-    if (vertices[i]) {
-      intT d = G[i].getOutDegree();
-      if(d < 1000) {
-	for(intT j=0; j<d; j++){
-	  uintT ngh = G[i].getOutNeighbor(j);
-	  if (f.cond(ngh) && f.updateAtomic(i,ngh)) next[ngh] = 1;
-	}
-      }
-      else {
-	{parallel_for(intT j=0; j<d; j++){
-	  uintT ngh = G[i].getOutNeighbor(j);
-	  if (f.cond(ngh) && f.updateAtomic(i,ngh)) next[ngh] = 1;
-	  }}
-      }
-    }
-    }}
+  {parallel_for (long i=0; i<numVertices; i++) {
+    intT d = G[i].getOutDegree();
+    char *nghArr = (char *)(G[i].getOutNeighbors());
+    decode(denseForwardT<F>(&f, next, vertices), nghArr, i, d);
+  }}
   return next;
 }
 
 template <class F>
 struct sparseT {
-  F f;
+  F *f;
   intT v;
   intT o;
   intT *outEdges;
-sparseT(F fP, intT vP, intT oP, intT *outEdgesP) : f(fP), v(vP), o(oP), outEdges(outEdgesP) {}
+sparseT(F *fP, intT vP, intT oP, intT *outEdgesP) : f(fP), v(vP), o(oP), outEdges(outEdgesP) {}
   bool srcTarg(intE src, intE target, intT edgeNumber) {
-    if (f.cond(target) && f.updateAtomic(v, target)) {
+    if ((*f).cond(target) && (*f).updateAtomic(v, target)) {
       outEdges[o + edgeNumber] = target;
     }
     else {
@@ -244,27 +244,16 @@ pair<uintT,intT*> edgeMapSparse(vertex* frontierVertices, intT* indices,
   uintT outEdgeCount = sequence::plusScan(offsets, degrees, m);
 
   intT* outEdges = newA(intT,outEdgeCount);
+  // In parallel, for each edge in frontier vertices, get out-degree and check
   {parallel_for (intT i = 0; i < m; i++) {
     intT v = indices[i];
     intT o = offsets[i];
     vertex vert = frontierVertices[i]; 
     intT d = vert.getOutDegree();
-    if(d < 1000) {
-      for (intT j=0; j < d; j++) {
-	intT ngh = vert.getOutNeighbor(j);
-	if (f.cond(ngh) && f.updateAtomic(v,ngh)) 
-	  outEdges[o+j] = ngh;
-	else outEdges[o+j] = -1;
-      } 
-    } else {
-      {parallel_for (intT j=0; j < d; j++) {
-	intT ngh = vert.getOutNeighbor(j);
-	if (f.cond(ngh) && f.updateAtomic(v,ngh)) 
-	  outEdges[o+j] = ngh;
-	else outEdges[o+j] = -1;
-	}} 
-    }
-    }}
+    char *nghArr = (char *)(vert.getOutNeighbors());
+    // Decode, with src = v, and degree d, applying sparseT
+    decode(sparseT<F>(&f, v, o, outEdges), nghArr, v, d);
+  }}
 
   intT* nextIndices = newA(intT, outEdgeCount);
   if(remDups) remDuplicates(outEdges,flags,outEdgeCount,remDups);
@@ -305,7 +294,7 @@ vertices edgeMap(graph<vertex> GA, vertices V, F f, intT threshold = -1,
   uintT outDegrees = sequence::plusReduce(degrees, m);
   edgesTraversed += outDegrees;
   if (outDegrees == 0) return vertices(numVertices);
-//  if (m + outDegrees > threshold) { 
+  if (m + outDegrees > threshold) { 
     V.toDense();
     free(degrees);
     free(frontierVertices);
@@ -314,17 +303,17 @@ vertices edgeMap(graph<vertex> GA, vertices V, F f, intT threshold = -1,
       edgeMapDense(GA, V.d, f, option);
     vertices v1 = vertices(numVertices, R);
     return  v1;
-//  } else { 
-//    pair<uintT,intT*> R = 
-//      remDups ? 
-//      edgeMapSparse(frontierVertices, V.s, degrees, V.numNonzeros(), f, 
-//		    numVertices, GA.flags) :
-//      edgeMapSparse(frontierVertices, V.s, degrees, V.numNonzeros(), f);
-//    //cout << "size (S) = " << R.first << endl;
-//    free(degrees);
-//    free(frontierVertices);
-//    return vertices(numVertices, R.first, R.second);
-//  }
+  } else { 
+    pair<uintT,intT*> R = 
+      remDups ? 
+      edgeMapSparse(frontierVertices, V.s, degrees, V.numNonzeros(), f, 
+		    numVertices, GA.flags) :
+      edgeMapSparse(frontierVertices, V.s, degrees, V.numNonzeros(), f);
+    //cout << "size (S) = " << R.first << endl;
+    free(degrees);
+    free(frontierVertices);
+    return vertices(numVertices, R.first, R.second);
+  }
 }
 
 //*****VERTEX FUNCTIONS*****
@@ -488,7 +477,7 @@ template <class F, class vertex>
     }}
   uintT outDegrees = sequence::plusReduce(degrees, m);    
   if (outDegrees == 0) return vertices(numVertices);
-//  if (m + outDegrees > threshold) { 
+  if (m + outDegrees > threshold) { 
     V.toDense();
     free(degrees);
     free(frontierVertices);
@@ -496,17 +485,15 @@ template <class F, class vertex>
       edgeMapDenseForward(GA,V.d,f) : 
       edgeMapDense(GA, V.d, f,option);
     vertices v1 = vertices(numVertices, R);
-    //cout << "size (D) = " << v1.m << endl;
     return  v1;
-//  } else { 
-//    pair<uintT,intT*> R = 
-//      remDups ? 
-//      edgeMapSparseW(frontierVertices, V.s, degrees, V.numNonzeros(), f, 
-//		    numVertices, GA.flags) :
-//      edgeMapSparseW(frontierVertices, V.s, degrees, V.numNonzeros(), f);
-//    //cout << "size (S) = " << R.first << endl;
-//    free(degrees);
-//    free(frontierVertices);
-//    return vertices(numVertices, R.first, R.second);
-//  }
+  } else { 
+    pair<uintT,intT*> R = 
+      remDups ? 
+      edgeMapSparseW(frontierVertices, V.s, degrees, V.numNonzeros(), f, 
+		    numVertices, GA.flags) :
+      edgeMapSparseW(frontierVertices, V.s, degrees, V.numNonzeros(), f);
+    free(degrees);
+    free(frontierVertices);
+    return vertices(numVertices, R.first, R.second);
+  }
 }
