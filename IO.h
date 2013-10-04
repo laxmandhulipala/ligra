@@ -25,6 +25,7 @@
 #include <iostream>
 #include <fstream>
 #include <stdlib.h>
+#include <cmath>
 #include "parallel.h"
 #include "bytecode.h"
 #include "quickSort.h"
@@ -127,6 +128,32 @@ words stringToWords(char *Str, long n) {
 
   free(offsets); free(FL);
   return words(Str,n,SA,m);
+}
+
+struct logT {
+  double* cost;
+logT(double* costP) : cost(costP) {}
+  bool srcTarg(intE src, intE target, intT edgeNumber) {
+    double logcost = log(((double) abs(src - target)) + 1);
+    *cost = (*cost) + logcost;
+    return true;
+  }
+};
+
+
+template <class vertex>
+double logCost(graph<vertex> GA) {
+  double logs = 0.0;
+  vertex *G = GA.V;
+  for (intT i = 0; i < GA.n; i++) {
+    intT d = G[i].getInDegree();
+    char *nghArr = (char *)(G[i].getInNeighbors());
+    double costP = 0.0;
+    decode(logT(&costP), nghArr, i, d);
+    logs += costP;
+  }
+  cout << "logs == " << logs << endl;
+  return logs/(GA.m*log(2.0));
 }
 
 template <class vertex>
