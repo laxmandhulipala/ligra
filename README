@@ -2,6 +2,8 @@ This code is part of the project "Ligra: A Lightweight Graph Processing
 Framework for Shared Memory", presented at Principles and Practice of 
 Parallel Programming, 2013 by Julian Shun and Guy Blelloch.
 
+The paper can be found at : http://www.cs.cmu.edu/~jshun/ligra.pdf
+
 This code currently compiles with g++ version 4.8.0 or higher with
 support for Cilk+ and also with the Intel icpc compiler. To compile
 with g++ using Cilk, define the environment variable CILK. To compile
@@ -114,9 +116,6 @@ vertexFilter: takes as input a vertices data structure V and a boolean
 function F which is applied to all vertices in V. It returns a
 vertices data structure containing all vertices v in V such that F(v)
 returned true.
-
-
-
 
 Example: An example unweighted graph rMatGraph_J_5_100 and weighted
 graph rMatGraph_WJ_5_100 are provided. They are symmetric graphs, so
