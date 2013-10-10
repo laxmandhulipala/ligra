@@ -26,14 +26,16 @@ intE eatFirstEdge(char *start, uintE *curOffset, uintE source) {
     sign = -1;
   }
   edgeRead += (fb & 0x3f);
-  shiftAmount += 6;
+  if (LAST_BIT_SET(fb)) {
+    shiftAmount += 6;
+  }
   bytesEaten++;
   (*curOffset)++;
 
   if (LAST_BIT_SET(fb)) {
     while (bytesEaten < MAX_EDGE_SIZE_IN_BYTES) {
       char b = start[*curOffset];
-      edgeRead += ((b & 0x7f) << shiftAmount);
+      edgeRead |= ((b & 0x7f) << shiftAmount);
       (*curOffset)++; 
       bytesEaten++;
       if (LAST_BIT_SET(b))
@@ -66,6 +68,9 @@ intE eatEdge(char* start, uintE *curOffset) {
 
 struct dummyT {
   bool srcTarg(intE src, intE target, intT edgeNumber) {
+    if (src == 1) {
+      cout << "targ = " << target << endl;
+    }
     return true;
   }
 };
@@ -81,10 +86,11 @@ void decode(T t, char* edgeStart, intE source, uintT degree) {
       return;
     }
     intE prevEdge = startEdge;
-    for (int edgesRead = 0; edgesRead < degree; edgesRead++) {
+    for (int edgesRead = 1; edgesRead < degree; edgesRead++) {
       // Eat the next 'edge', which is a difference, and reconstruct edge.
       intE edgeDiff = eatEdge(edgeStart, &curOffset);
       intE edge = prevEdge + edgeDiff;
+      prevEdge = edge;
       if (!t.srcTarg(source, edge, edgesRead)) {
         break; 
       }
@@ -200,12 +206,11 @@ void sequentialCompressEdges(intE *edges, intT *offsets, long n, long m) {
   uintE nWritten = 0;
   offsets[0] = 0; 
   for (intE i=0; i<n; i++) {
-    intE *edgesStart = edges + oldOffsets[i];
     uintT degree = ((i == n-1) ? m : oldOffsets[i+1])-oldOffsets[i];
 
     // The start of vertex i's edge list is from currentOffset
     offsets[i] = currentOffset;
-    // Compress each edge sequentially
+
     if (degree > 0) {
       // Compress the first edge whole, which is signed difference coded
       currentOffset = compressFirstEdge((char *)edges, currentOffset, 
@@ -214,11 +219,16 @@ void sequentialCompressEdges(intE *edges, intT *offsets, long n, long m) {
         // Store difference between cur and prev edge. 
         intE difference = savedEdges[nWritten + edgeI] - 
                           savedEdges[nWritten + edgeI - 1];
+
+        uintE prevOffset = currentOffset;
         currentOffset = compressEdge((char *)edges, currentOffset, difference);
       }
       // Increment nWritten after all of vertex n's neighbors are written
       nWritten += degree;
     }
+
+//    We've written - let's test this with the dummyT. 
+//    decode(dummyT(), ((char *)edges) + offsets[i], i, degree);
   }
   free(oldOffsets);
   free(savedEdges);
