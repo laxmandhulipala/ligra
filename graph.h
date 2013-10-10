@@ -1,3 +1,6 @@
+#ifndef GRAPH_H
+#define GRAPH_H
+
 #include <iostream>
 #include <fstream>
 #include <stdlib.h>
@@ -137,3 +140,5 @@ wghGraph(vertex* VV, intT nn, uintT mm, intE* ai, intE* _inEdges=NULL)
     if(inEdges != NULL) free(inEdges);
   }
 };
+
+#endif

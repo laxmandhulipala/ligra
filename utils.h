@@ -1,3 +1,6 @@
+#ifndef UTIL_H
+#define UTIL_H
+
 // This code is part of the project "Ligra: A Lightweight Graph Processing
 // Framework for Shared Memory", presented at Principles and Practice of 
 // Parallel Programming, 2013.
@@ -295,3 +298,5 @@ inline void writeAdd(ET *a, ET b) {
   do {oldV = *a; newV = oldV + b;}
   while (!CAS(a, oldV, newV));
 }
+
+#endif
