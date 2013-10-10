@@ -4,11 +4,47 @@
 #include <iostream>
 #include <fstream>
 #include <stdlib.h>
+#include <cmath>
 #include "parallel.h"
 
 #define MAX_EDGE_SIZE_IN_BYTES 10
 #define LAST_BIT_SET(b) (b & (0x80))
 #define EDGE_SIZE_PER_BYTE 7
+
+/* Reads the first edge of an out-edge list, which is the signed
+   difference between the target and source. 
+*/
+intE eatFirstEdge(char *start, uintE *curOffset, uintE source) {
+  intE edgeRead = 0;
+  int bytesEaten = 0;
+  int shiftAmount = 0;
+
+  int sign = 1;
+
+  char fb = start[*curOffset];
+  if ((fb & 0x40) == 0x40) {
+    sign = -1;
+  }
+  edgeRead += (fb & 0x3f);
+  shiftAmount += 6;
+  bytesEaten++;
+  (*curOffset)++;
+
+  if (LAST_BIT_SET(fb)) {
+    while (bytesEaten < MAX_EDGE_SIZE_IN_BYTES) {
+      char b = start[*curOffset];
+      edgeRead += ((b & 0x7f) << shiftAmount);
+      (*curOffset)++; 
+      bytesEaten++;
+      if (LAST_BIT_SET(b))
+        shiftAmount += EDGE_SIZE_PER_BYTE;
+      else 
+        break;
+    }
+  }
+  edgeRead *= sign;
+  return (source + edgeRead);
+}
 
 intE eatEdge(char* start, uintE *curOffset) {
   int bytesEaten = 0;
@@ -39,8 +75,8 @@ void decode(T t, char* edgeStart, intE source, uintT degree) {
   int edgesRead = 0;
   uintE curOffset = 0;
   if (degree > 0) {
-    // Eat first edge, which is uncompressed. 
-    intE startEdge = eatEdge(edgeStart, &curOffset);
+    // Eat first edge, which is compressed specially
+    intE startEdge = eatFirstEdge(edgeStart, &curOffset, source);
     if (!t.srcTarg(source,startEdge,edgesRead)) {
       return;
     }
@@ -56,7 +92,44 @@ void decode(T t, char* edgeStart, intE source, uintT degree) {
   }
 }
 
+// Compresses the first edge, writing target-source and a sign bit. 
+uintE compressFirstEdge(char *start, uintE offset, intE source, intE target) {
+  char* saveStart = start;
+  uintE saveOffset = offset;
 
+  intE preCompress = target - source;
+  int bytesUsed = 0;
+  int shift = 0;
+  char firstByte = 0;
+  intE toCompress = abs(preCompress);
+  firstByte = toCompress & 0x3f; // 0011|1111
+  if (preCompress < 0) {
+    firstByte |= 0x40;
+  }
+  shift += 6;
+  if ((toCompress >> shift) > 0) {
+    firstByte |= 0x80;
+  }
+  start[offset] = firstByte;
+  offset++;
+
+  char curByte = (toCompress >> shift) & 0x7f;
+  while ((curByte > 0) || ((toCompress >> shift) > 0)) {
+    bytesUsed++;
+    char toWrite = curByte;
+    shift += 7;
+    // Check to see if there's any bits left to represent
+    curByte = (toCompress >> shift) & 0x7f;
+    if ((toCompress >> shift) > 0) {
+      toWrite |= 0x80; 
+    }
+    start[offset] = toWrite;
+    offset++;
+  }
+
+  intE ret = eatFirstEdge(saveStart, &saveOffset, source);
+  return offset;
+}
 
 // Should provide the difference between this edge and the previous edge
 uintE compressEdge(char *start, uintE curOffset, intE e) {
@@ -92,14 +165,15 @@ void compressEdgeSet(intE source, intE *edgeStart, uintT degree) {
 
   uintE currentOffset = 0;
   for (uintT i=0; i < degree; i++) {
-    currentOffset = compressEdge((char *)edgeStart, currentOffset, savedEdges[i]);
+    currentOffset = compressEdge((char *)edgeStart, currentOffset, 
+                                 savedEdges[i]);
   }
   free(savedEdges);
 }
 
 /*
-  Compresses the edge set in parallel. Does not modify offsets - empty space can now
-  be left between the end of adjacency lists. 
+  Compresses the edge set in parallel. Does not modify offsets - empty space 
+  can now be left between the end of adjacency lists. 
 */
 void parallelCompressEdges(intE *edges, intT *offsets, long n, long m) {
   {parallel_for(intE i=0; i<n; i++) {
@@ -133,11 +207,13 @@ void sequentialCompressEdges(intE *edges, intT *offsets, long n, long m) {
     offsets[i] = currentOffset;
     // Compress each edge sequentially
     if (degree > 0) {
-      // Compress the first edge whole (no difference coding on first edge yet)
-      currentOffset = compressEdge((char *)edges, currentOffset, savedEdges[nWritten]);
+      // Compress the first edge whole, which is signed difference coded
+      currentOffset = compressFirstEdge((char *)edges, currentOffset, 
+                                        i, savedEdges[nWritten]);
       for (uintT edgeI=1; edgeI < degree; edgeI++) {
         // Store difference between cur and prev edge. 
-        intE difference = savedEdges[nWritten + edgeI] - savedEdges[nWritten + edgeI - 1];
+        intE difference = savedEdges[nWritten + edgeI] - 
+                          savedEdges[nWritten + edgeI - 1];
         currentOffset = compressEdge((char *)edges, currentOffset, difference);
       }
       // Increment nWritten after all of vertex n's neighbors are written
