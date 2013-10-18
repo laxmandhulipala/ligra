@@ -48,6 +48,9 @@ intE eatFirstEdge(char *start, uintE *curOffset, uintE source) {
   return (source + edgeRead);
 }
 
+/*
+  Reads any edge of an out-edge list after the first edge. 
+*/
 intE eatEdge(char* start, uintE *curOffset) {
   int bytesEaten = 0;
   intE edgeRead = 0;
@@ -66,15 +69,21 @@ intE eatEdge(char* start, uintE *curOffset) {
   return edgeRead;
 }
 
+/*
+  A dummy test fn to debug/print things. 
+*/
 struct dummyT {
   bool srcTarg(intE src, intE target, intT edgeNumber) {
-    if (src == 1) {
-      cout << "targ = " << target << endl;
-    }
     return true;
   }
 };
 
+
+/*
+  The main decoding work-horse. First eats the specially coded first 
+  edge, and then eats the remaining |d-1| many edges that are normally
+  coded. 
+*/
 template <class T>
 void decode(T t, char* edgeStart, intE source, uintT degree) {
   int edgesRead = 0;
@@ -98,7 +107,9 @@ void decode(T t, char* edgeStart, intE source, uintT degree) {
   }
 }
 
-// Compresses the first edge, writing target-source and a sign bit. 
+/*
+  Compresses the first edge, writing target-source and a sign bit. 
+*/
 uintE compressFirstEdge(char *start, uintE offset, intE source, intE target) {
   char* saveStart = start;
   uintE saveOffset = offset;
@@ -137,7 +148,9 @@ uintE compressFirstEdge(char *start, uintE offset, intE source, intE target) {
   return offset;
 }
 
-// Should provide the difference between this edge and the previous edge
+/*
+  Should provide the difference between this edge and the previous edge
+*/
 uintE compressEdge(char *start, uintE curOffset, intE e) {
   int shift = 0;
   char curByte = e & 0x7f;
@@ -219,7 +232,6 @@ void sequentialCompressEdges(intE *edges, intT *offsets, long n, long m) {
         // Store difference between cur and prev edge. 
         intE difference = savedEdges[nWritten + edgeI] - 
                           savedEdges[nWritten + edgeI - 1];
-
         uintE prevOffset = currentOffset;
         currentOffset = compressEdge((char *)edges, currentOffset, difference);
       }
@@ -227,8 +239,8 @@ void sequentialCompressEdges(intE *edges, intT *offsets, long n, long m) {
       nWritten += degree;
     }
 
-//    We've written - let's test this with the dummyT. 
-//    decode(dummyT(), ((char *)edges) + offsets[i], i, degree);
+    // We've written - let's test this with the dummyT. 
+    decode(dummyT(), ((char *)edges) + offsets[i], i, degree);
   }
   free(oldOffsets);
   free(savedEdges);
