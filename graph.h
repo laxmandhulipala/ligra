@@ -19,8 +19,8 @@ struct symmetricVertex {
 symmetricVertex(intE* n, intT d) : neighbors(n), degree(d) {}
   intE* getInNeighbors() { return neighbors; }
   intE* getOutNeighbors() { return neighbors; }
-  uintE getInNeighbor(intT j) { return neighbors[j]; }
-  uintE getOutNeighbor(intT j) { return neighbors[j]; }
+  uintE getInNeighbor(intT j) { return neighbors[j]; } 
+  uintE getOutNeighbor(intT j) { return neighbors[j]; } 
   intT getInDegree() { return degree; }
   intT getOutDegree() { return degree; }
   void setInNeighbors(intE* _i) { neighbors = _i; }
