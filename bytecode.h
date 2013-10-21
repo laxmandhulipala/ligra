@@ -74,6 +74,7 @@ intE eatEdge(char* start, uintE *curOffset) {
 */
 struct dummyT {
   bool srcTarg(intE src, intE target, intT edgeNumber) {
+    cout << "(s,t) = (" << src << "," << target << ")" << endl;
     return true;
   }
 };
@@ -190,18 +191,35 @@ void compressEdgeSet(intE source, intE *edgeStart, uintT degree) {
   free(savedEdges);
 }
 
-/*
-  Compresses the edge set in parallel. Does not modify offsets - empty space 
-  can now be left between the end of adjacency lists. 
-*/
-void parallelCompressEdges(intE *edges, intT *offsets, long n, long m) {
-  {parallel_for(intE i=0; i<n; i++) {
-    intE *edgesStart = edges + offsets[i];
-    uintT degree = ((i == n-1) ? m : offsets[i+1])-offsets[i];
-    compressEdgeSet(i, edgesStart, degree);
-  }}
-}
 
+
+
+/*
+  Takes: 
+    1. The edge array of chars to write into
+    2. The current offset into this array
+    3. The vertices degree
+    4. The vertices vertex number
+    5. The array of saved out-edges we're compressing
+  Returns:
+    The new offset into the edge array
+*/
+uintE sequentialCompressEdgeSet(char *edgeArray, uintE currentOffset, uintT degree, 
+                                intE vertexNum, intE *savedEdges) {
+  if (degree > 0) {
+    // Compress the first edge whole, which is signed difference coded
+    currentOffset = compressFirstEdge(edgeArray, currentOffset, 
+                                       vertexNum, savedEdges[0]);
+    for (uintT edgeI=1; edgeI < degree; edgeI++) {
+      // Store difference between cur and prev edge. 
+      intE difference = savedEdges[edgeI] - 
+                        savedEdges[edgeI - 1];
+      currentOffset = compressEdge(edgeArray, currentOffset, difference);
+    }
+    // Increment nWritten after all of vertex n's neighbors are written
+  }
+  return currentOffset;
+}
 
 /*
   Performs a sequential compression. This guarantees the adjacencies for vertex 
@@ -214,6 +232,14 @@ void sequentialCompressEdges(intE *edges, intT *offsets, long n, long m) {
   {parallel_for(long i=0; i < m; i++) savedEdges[i] = edges[i];}
   {parallel_for(intT i=0; i < n; i++) oldOffsets[i] = offsets[i];}
 
+  intE *degrees = newA(intT, n);
+  {parallel_for(intE i=0; i<n; i++) { 
+    uintT degree = ((i == n-1) ? m : offsets[i+1])-offsets[i];
+    degrees[i] = degree;
+  }}
+  sequence::plusScan(degrees,degrees, n);
+
+
   // Offset into edges where the next compressed edge should be written
   uintE currentOffset = 0; 
   uintE nWritten = 0;
@@ -224,20 +250,24 @@ void sequentialCompressEdges(intE *edges, intT *offsets, long n, long m) {
     // The start of vertex i's edge list is from currentOffset
     offsets[i] = currentOffset;
 
-    if (degree > 0) {
-      // Compress the first edge whole, which is signed difference coded
-      currentOffset = compressFirstEdge((char *)edges, currentOffset, 
-                                        i, savedEdges[nWritten]);
-      for (uintT edgeI=1; edgeI < degree; edgeI++) {
-        // Store difference between cur and prev edge. 
-        intE difference = savedEdges[nWritten + edgeI] - 
-                          savedEdges[nWritten + edgeI - 1];
-        uintE prevOffset = currentOffset;
-        currentOffset = compressEdge((char *)edges, currentOffset, difference);
-      }
-      // Increment nWritten after all of vertex n's neighbors are written
-      nWritten += degree;
-    }
+    currentOffset = sequentialCompressEdgeSet((char *)edges, currentOffset,
+                                            degree, i, &(savedEdges[nWritten]));
+    nWritten += degree;
+
+//    if (degree > 0) {
+//      // Compress the first edge whole, which is signed difference coded
+//      currentOffset = compressFirstEdge((char *)edges, currentOffset, 
+//                                        i, savedEdges[nWritten]);
+//      for (uintT edgeI=1; edgeI < degree; edgeI++) {
+//        // Store difference between cur and prev edge. 
+//        intE difference = savedEdges[nWritten + edgeI] - 
+//                          savedEdges[nWritten + edgeI - 1];
+//        uintE prevOffset = currentOffset;
+//        currentOffset = compressEdge((char *)edges, currentOffset, difference);
+//      }
+//      // Increment nWritten after all of vertex n's neighbors are written
+//      nWritten += degree;
+//    }
 
     // We've written - let's test this with the dummyT. 
     decode(dummyT(), ((char *)edges) + offsets[i], i, degree);
@@ -245,5 +275,54 @@ void sequentialCompressEdges(intE *edges, intT *offsets, long n, long m) {
   free(oldOffsets);
   free(savedEdges);
 }
+
+/*
+  Compresses the edge set in parallel. Does not modify offsets - empty space 
+  can now be left between the end of adjacency lists. 
+*/
+intE *parallelCompressEdges(intE *edges, intT *offsets, long n, long m) {
+  cout << "parallel compressing, (n,m) = (" << n << "," << m << ")" << endl;
+  intE **edgePts = newA(intE*, n);
+  intE *degrees = newA(intT, n);
+  intE *charsUsedArr = newA(intE, n);
+  intE *compressionStarts = newA(intE, n);
+  {parallel_for(intE i=0; i<n; i++) { 
+    uintT degree = ((i == n-1) ? m : offsets[i+1])-offsets[i];
+    degrees[i] = degree;
+  }}
+  sequence::plusScan(degrees,degrees, n);
+  {parallel_for(intE i=0; i<n; i++) {
+    uintT degree = ((i == n-1) ? m : offsets[i+1])-offsets[i];
+    long toAlloc = ceil((degree * 9) / 8);
+    intE *iEdges = newA(intE, toAlloc);
+    edgePts[i] = iEdges;
+    uintE charsUsed = sequentialCompressEdgeSet((char *)iEdges, 0, degree,
+                                                i, &(edges[degrees[i]]));
+    charsUsedArr[i] = (intE)charsUsed;
+  }}
+  // produce the total space needed for all compressed lists in chars. 
+  intE totalSpace = sequence::plusScan(charsUsedArr, compressionStarts, n);
+
+  char *finalArr = newA(char, totalSpace);
+  {parallel_for(intE i=0; i<n; i++) {
+    memcpy(finalArr + compressionStarts[i], (char *)(edgePts[i]), charsUsedArr[i]);
+    offsets[i] = compressionStarts[i];
+    free(edgePts[i]);
+  }}
+//  for (intE i=0; i < n; i++) {
+//    uintT degree = ((i == n-1) ? m : degrees[i+1])-degrees[i];
+//    cout << "degree is " << degree << endl;
+//    decode(dummyT(), finalArr + offsets[i], i, degree);
+//  }
+
+  free(edgePts);
+  free(degrees);
+  free(charsUsedArr);
+  free(compressionStarts);
+  cout << "finished compressing, bytes used = " << totalSpace << endl;
+  cout << "would have been, " << (m * 8) << endl;
+  return ((intE *)finalArr);
+}
+
 
 #endif
