@@ -72,4 +72,6 @@ void quickSort(E* A, intT n, BinPred f) {
   }
 }
 
+#define compSort(__A, __n, __f) (quickSort(__A, __n, __f))
+
 #endif // _A_QSORT_INCLUDED
