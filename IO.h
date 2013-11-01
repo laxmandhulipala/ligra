@@ -29,11 +29,124 @@
 #include "parallel.h"
 #include "bytecode.h"
 #include "quickSort.h"
+#define graph sepGraph
+#define __ii ___ii
+#define __jj ___jj
+#define wghGraph sepwghGraph
+#define sequence aSequence
+#define _seq __seq
+#define words __words__
+#define isSpace __isSpace
+#define readStringFromFile rsfFile
+#define readGraphFromFile rgfFile
+#define stringToWords stWords
+#include "/home/ldhulipa/separator0/parallelSeparator/Separator.h"
+#include "/home/ldhulipa/separator0/parallelSeparator/Separator.C"
+#include "/home/ldhulipa/separator0/parallelSeparator/blockRadixSort.h"
+#include "/home/ldhulipa/separator0/parallelSeparator/graphUtils.h"
+#include "/home/ldhulipa/separator0/parallelSeparator/graphIO.h"
+#undef stringToWords
+#undef readStringFromFile
+#undef readGraphFromFile
+#undef isSpace
+#undef words
+#undef _seq
+#undef sequence
+#undef graph
+#undef __ii
+#undef __jj
+#undef wghGraph
 using namespace std;
 
 typedef pair<uintE,uintE> intPair;
 
 typedef pair<uintE, pair<uintE,intE> > intTriple;
+
+struct edgeArrayT {
+  edge<intT> *E;
+  intT k;
+edgeArrayT(edge<intT> *eP, intT kP) : E(eP), k(kP) {}
+  
+  bool srcTarg(intE src, intE target, intT edgeNumber) {
+    E[k++] = edge<intT>(src, target);
+    return true;
+  }
+};
+
+struct printT {
+  bool srcTarg(intE src, intE target, intT edgeNumber) {
+    cout << "print : (src,targ) = (" << src << "," << target << ")" << endl;
+    return true;
+  }
+};
+
+template <class vertex>
+void printGraph(graph<vertex> G) {
+  vertex *V = G.V;
+  for (intT i = 0; i < G.n; i++) {
+    char *nghArr = (char *)(V[i].getOutNeighbors());
+    intT d = V[i].getOutDegree();
+    decode(printT(), nghArr, i, d);
+  }
+}
+
+template <class intT>
+sepGraph<intT> graphFromEdges(edgeArray<intT> EA) {
+  edgeArray<intT> A;
+
+  edge<intT> *E = newA(edge<intT>,EA.nonZeros);
+  parallel_for (intT i=0; i < EA.nonZeros; i++) E[i] = EA.E[i];
+  A = edgeArray<intT>(E,EA.numRows,EA.numCols,EA.nonZeros);
+
+  intT m = A.nonZeros;
+  intT n = max<intT>(A.numCols,A.numRows);
+  intT* offsets = newA(intT,n*2);
+  intSort::iSort(A.E,offsets,m,n,getuF<intT>());
+  intT *X = newA(intT,m);
+  vertex<intT> *v = newA(vertex<intT>,n);
+  parallel_for (intT i=0; i < n; i++) {
+    intT o = offsets[i];
+    intT l = ((i == n-1) ? m : offsets[i+1])-offsets[i];
+    v[i].degree = l;
+    v[i].Neighbors = X+o;
+    for (intT j=0; j < l; j++) {
+      v[i].Neighbors[j] = A.E[o+j].v;
+    }
+  }
+  A.del();
+  free(offsets);
+  return sepGraph<intT>(v,n,m,X);
+}
+
+template <class intT, class vertex>
+edgeArray<intT> toEdgeArray(graph<vertex> G) {
+  intT numRows = G.n;
+  intT nonZeros = G.m;
+  vertex *V = G.V;
+  edge<intT> *E = newA(edge<intT>, nonZeros);
+  intT k = 0;
+  edgeArrayT initialState = edgeArrayT(E, 0);
+  for (intT j=0; j < numRows; j++) {
+    char *nghArr = (char *)(V[j].getOutNeighbors());
+    intT d = V[j].getOutDegree();
+    decode(initialState, nghArr, j, d);
+//     for (intT i = 0; i < V[j].getOutDegree(); i++) {
+//       E[k++] = edge<intT>(j,V[j].Neighbors[i]);
+//     }
+  }
+  edgeArray<intT> ea = edgeArray<intT>(E, numRows, numRows, nonZeros);
+//  printEdgeArray(ea);
+  return ea;
+}
+
+void printEdgeArray(edgeArray<intT> ea) {
+  for (intT i = 0; i < ea.nonZeros; i++) {
+    edge<intT> e = ea.E[i];
+    intT src = e.u;
+    intT targ = e.v;
+    cout << "edge = (" << src << "," << targ << ")" << endl;
+  }
+}
 
 template <class E>
 struct pairFirstCmp {
@@ -59,13 +172,6 @@ struct singletonCmp {
 
 void compressEdges(intE *edges, intT *offsets, long n, long m) {
   sequentialCompressEdges(edges, offsets, n, m);
-  // Parallel mode - in order to tightly compact the edges, we need to 
-  // perform the compression sequentially
-//  {parallel_for(intE i=0; i<n; i++) {
-//    intE *edgesStart = edges + offsets[i];
-//    uintT degree = ((i == n-1) ? m : offsets[i+1])-offsets[i];
-//    compressEdgeSet(i, edgesStart, degree);
-//  }}
 }
 
 // A structure that keeps a sequence of strings all allocated from
@@ -141,6 +247,10 @@ logT(double* costP) : cost(costP) {}
 };
 
 
+/*
+  Generates the log-cost for a graph. This is an estimate of the 
+  degree of locality utilized by this specific labeling of the graph.
+*/
 template <class vertex>
 double logCost(graph<vertex> GA) {
   double logs = 0.0;
@@ -156,8 +266,50 @@ double logCost(graph<vertex> GA) {
   return logs/(GA.m*log(2.0));
 }
 
+/*
+  Generates a new edge-list, frees the old edge list, and modifies offsets
+  based on the vertex permutation, I. 
+*/
+intE *reorderEdges(intE *edges, intT *offsets, intT *I, intT n, intT m) {
+  intE *nEdges = newA(intE, m);
+  intT *nOffsets = newA(intT, n);
+  {parallel_for(intE i=0; i<n; i++) {
+    intT degree = ((i == n-1) ? m : offsets[i+1])-offsets[i];
+    nOffsets[I[i]] = degree; // new mapping for i now has i's degree. 
+  }}
+  intT total = sequence::plusScan(nOffsets, nOffsets, n);
+  {parallel_for(intE i=0; i<n; i++) {
+    intT degree = ((i == n-1) ? m : offsets[i+1])-offsets[i];
+    for (intT edg=0; edg<degree; edg++) {
+      // Put the old i's edg# edge into the new i's edg# edge. 
+      nEdges[nOffsets[I[i]] + edg] = edges[offsets[i] + edg];
+    }
+    // Done with offsets[i] - we can now move nOffsets[i] -> offsets[i]
+  }}
+  {parallel_for(intE i=0; i<n; i++) {
+    offsets[i] = nOffsets[i];
+  }}
+  free(nOffsets);
+  free(edges);
+  return nEdges;
+}
+
 template <class vertex>
 graph<vertex> readGraphFromFile(char* fname, bool isSymmetric) {
+  sepGraph<intT> sGraph = rgfFile<intT>(fname);
+  double lc = logCost(sGraph);
+  int cons = graphCheckConsistency(sGraph);
+
+  intT *sep = separator(sGraph);
+  sepGraph<intT> reordGraph = graphReorder<intT>(sGraph, sep);
+  double lc2 = logCost(reordGraph);
+
+  cout << "Consistency : " << cons << endl;
+  cout << "InitLogCost: " << lc << endl;
+  cout << "PostSepLogCost: " << lc2 << endl;
+
+  cout << "Vertex 1 moved to : " << sep[1] << endl;
+
   _seq<char> S = readStringFromFile(fname);
   words W = stringToWords(S.A, S.n);
   if (W.Strings[0] != (string) "AdjacencyGraph") {
@@ -177,7 +329,11 @@ graph<vertex> readGraphFromFile(char* fname, bool isSymmetric) {
   intE* edges = newA(intE,m);
 
   {parallel_for(long i=0; i < n; i++) offsets[i] = atol(W.Strings[i + 3]);}
-  {parallel_for(long i=0; i<m; i++) edges[i] = atol(W.Strings[i+n+3]); }
+  {parallel_for(long i=0; i<m; i++) edges[i] = sep[atol(W.Strings[i+n+3])];}
+//  {parallel_for(long i=0; i<m; i++) edges[i] = atol(W.Strings[i+n+3]);}
+
+  edges = reorderEdges(edges, offsets, sep, n, m);
+
   //W.del(); // to deal with performance bug in malloc
 
   /* Steps : 
@@ -185,15 +341,13 @@ graph<vertex> readGraphFromFile(char* fname, bool isSymmetric) {
       2. sequentially compress edges using difference coding  
   */
 
-    
-  vertex* v = newA(vertex,n);
+  vertex* vPreSep = newA(vertex,n);
 
   {parallel_for (uintT i=0; i < n; i++) {
     uintT o = offsets[i];
     uintT l = ((i == n-1) ? m : offsets[i+1])-offsets[i];
-    v[i].setOutDegree(l); 
-    v[i].setOutNeighbors(edges+o);     
-    // Quicksort within this vertex's out-edge bucket
+    vPreSep[i].setOutDegree(l); 
+    vPreSep[i].setOutNeighbors(edges+o);     
     quickSort(edges+o, l, singletonCmp<intE>());
     }}
 
@@ -205,14 +359,26 @@ graph<vertex> readGraphFromFile(char* fname, bool isSymmetric) {
     // Create m many new intPairs. 
     {parallel_for(intT i=0;i<n;i++){
       uintT o = offsets[i];
-      for(intT j=0;j<v[i].getOutDegree();j++){	  
-	temp[o+j] = make_pair(v[i].getOutNeighbor(j),i);
+      for(intT j=0;j<vPreSep[i].getOutDegree();j++){	  
+	      temp[o+j] = make_pair(vPreSep[i].getOutNeighbor(j),i);
       }
-      }}
+    }}
 
-    compressEdges(edges, offsets, n, m);
+    // Compress the out-edges. 
+    intE *nEdges = parallelCompressEdges(edges, offsets, n, m);
+    {parallel_for(uintT i=0; i < n; i++) {
+      vPreSep[i].setOutNeighbors((intE *)(((char *)nEdges) + offsets[i]));
+    }}
 
+//    compressEdges(edges, offsets, n, m);
+//    for (uintT i = 0; i < n; i++) {
+//      vPreSep[i].setOutNeighbors((intE *)(((char *)edges) + offsets[i]));
+//    }
+
+    free(edges);
     free(offsets);
+    
+    edges = nEdges;
 
     /* From here on-out, we use temp, and tOffsets to guarantee 
        stability as after compression offsets is no longer a reliable source
@@ -225,9 +391,9 @@ graph<vertex> readGraphFromFile(char* fname, bool isSymmetric) {
     {parallel_for(intT i=1;i<m;i++) {
       inEdges[i] = temp[i].second;
       if(temp[i].first != temp[i-1].first) {
-	tOffsets[temp[i].first] = i;
+      	tOffsets[temp[i].first] = i;
       }
-      }}
+    }}
     free(temp);
 
     uintT currOffset = m;
@@ -239,22 +405,58 @@ graph<vertex> readGraphFromFile(char* fname, bool isSymmetric) {
     {parallel_for(uintT i=0;i<n;i++){
       uintT o = tOffsets[i];
       uintT l = ((i == n-1) ? m : tOffsets[i+1])-tOffsets[i];
-      v[i].setInDegree(l);
-      v[i].setInNeighbors(inEdges+o);
+      vPreSep[i].setInDegree(l);
+      vPreSep[i].setInNeighbors(inEdges+o);
       }}
 
-    compressEdges(inEdges, tOffsets, n, m);
+
+    intE *ninEdges = parallelCompressEdges(inEdges, tOffsets, n, m);
+    for (uintT i = 0; i < n; i++) {
+      vPreSep[i].setInNeighbors((intE *)(((char *)ninEdges)+ tOffsets[i]));
+    }
+
+//    compressEdges(inEdges, tOffsets, n, m);
+//    for (uintT i = 0; i < n; i++) {
+//      vPreSep[i].setInNeighbors((intE *)(((char *)inEdges)+ tOffsets[i]));
+//    }
+
+//   vertex* v = newA(vertex, n);
+//
+//   {parallel_for (uintT i=0; i < n; i++) {
+//     vertex old = vPreSep[sep[i]];
+//     intT outD = old.getOutDegree();
+//     intT inD = old.getInDegree();
+//     intE *outNeighbors = old.getOutNeighbors();
+//     intE *inNeighbors = old.getInNeighbors();
+//     v[i].setOutDegree(outD); 
+//     v[i].setOutNeighbors(outNeighbors);
+//     v[i].setInDegree(inD);
+//     v[i].setInNeighbors(inNeighbors);
+//    }}
+
+//    free(vPreSep);
 
     free(tOffsets);
     cout << "finished reading graph" << endl;
-    return graph<vertex>(v,(intT)n,m,edges,inEdges);
+
+    graph<vertex> preSep = graph<vertex>(vPreSep,(intT)n,m,edges,inEdges);
+
+    double costOurs = logCost<vertex>(preSep);
+    cout << "logCostOurs = " << costOurs << endl;
+
+    return preSep;
   }
 
   else {
     compressEdges(edges, offsets, n, m);
     free(offsets);
     cout << "finished reading graph" << endl;
-    return graph<vertex>(v,(intT)n,m,edges);
+    graph<vertex> preSep =  graph<vertex>(vPreSep,(intT)n,m,edges);
+    edgeArray<intT> r = toEdgeArray<intT, vertex>(preSep); 
+    sepGraph<intT> sGraph = graphFromEdges(r);
+    graphCheckConsistency(sGraph);
+    intT *sep = separator(sGraph);
+    return preSep;
   }
 }
 
@@ -316,9 +518,9 @@ wghGraph<vertex> readWghGraphFromFile(char* fname, bool isSymmetric) {
       inEdgesAndWghs[2*i] = temp[i].second.first; 
       inEdgesAndWghs[2*i+1] = temp[i].second.second;
       if(temp[i].first != temp[i-1].first) {
-	tOffsets[temp[i].first] = i;
+	      tOffsets[temp[i].first] = i;
       }
-      }}
+     }}
 
     free(temp);
 
@@ -374,7 +576,7 @@ graph<vertex> readGraphFromBinary(char* iFile, bool isSymmetric) {
   in2.read(s,size);
   in2.close();
   
-  uintE* edges = (uintE*) s;
+  intE* edges = (intE*) s;
   ifstream in3(idxFile,ifstream::in | ios::binary); //stored as longs
   in3.seekg(0, ios::end);
   size = in3.tellg();
@@ -434,6 +636,10 @@ graph<vertex> readGraphFromBinary(char* iFile, bool isSymmetric) {
       }}
     free(tOffsets);
     return graph<vertex>(v,(intT)n,m,(intE*)edges, (intE*)inEdges);
+  }
+  compressEdges(edges, offsets, n, m);
+  for (uintT i = 0; i < n; i++) {
+    v[i].setOutNeighbors((intE *)(((char *)edges) + offsets[i]));
   }
   free(offsets);
   return graph<vertex>(v,n,m,(intE*)edges);
@@ -505,7 +711,7 @@ wghGraph<vertex> readWghGraphFromBinary(char* iFile, bool isSymmetric) {
     {parallel_for(intT i=0;i<n;i++){
       uintT o = offsets[i];
       for(intT j=0;j<V[i].getOutDegree();j++){
-	temp[o+j] = make_pair(V[i].getOutNeighbor(j),i);
+      	temp[o+j] = make_pair(V[i].getOutNeighbor(j),i);
       }
       }}
 
@@ -518,7 +724,7 @@ wghGraph<vertex> readWghGraphFromBinary(char* iFile, bool isSymmetric) {
       inEdgesAndWghs[2*i] = temp[i].second;
       inEdgesAndWghs[2*i+1] = 1;
       if(temp[i].first != temp[i-1].first) {
-	tOffsets[temp[i].first] = i;
+      	tOffsets[temp[i].first] = i;
       }
       }}
     free(temp);
@@ -537,6 +743,7 @@ wghGraph<vertex> readWghGraphFromBinary(char* iFile, bool isSymmetric) {
     free(tOffsets);
     return wghGraph<vertex>(V,(intT)n,m,edges,inEdgesAndWghs);
   }
+
   free(offsets);
   return wghGraph<vertex>(V,n,m,edgesAndWeights);
 }
