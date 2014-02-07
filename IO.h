@@ -40,11 +40,11 @@
 #define readStringFromFile rsfFile
 #define readGraphFromFile rgfFile
 #define stringToWords stWords
-#include "/home/ldhulipa/separator0/parallelSeparator/Separator.h"
-#include "/home/ldhulipa/separator0/parallelSeparator/Separator.C"
-#include "/home/ldhulipa/separator0/parallelSeparator/blockRadixSort.h"
-#include "/home/ldhulipa/separator0/parallelSeparator/graphUtils.h"
-#include "/home/ldhulipa/separator0/parallelSeparator/graphIO.h"
+#include "../benchmarks/separator0/common/Separator.h"
+#include "../benchmarks/separator0/parallelSeparator/Separator.C"
+#include "../benchmarks/separator0/parallelSeparator/blockRadixSort.h"
+#include "../benchmarks/common/graphUtils.h"
+#include "../benchmarks/common/graphIO.h"
 #undef stringToWords
 #undef readStringFromFile
 #undef readGraphFromFile
@@ -296,19 +296,19 @@ intE *reorderEdges(intE *edges, intT *offsets, intT *I, intT n, intT m) {
 
 template <class vertex>
 graph<vertex> readGraphFromFile(char* fname, bool isSymmetric) {
-  sepGraph<intT> sGraph = rgfFile<intT>(fname);
-  double lc = logCost(sGraph);
-  int cons = graphCheckConsistency(sGraph);
+//  sepGraph<intT> sGraph = rgfFile<intT>(fname);
+//  double lc = logCost(sGraph);
+//  int cons = graphCheckConsistency(sGraph);
+//
+//  intT *sep = separator(sGraph);
+//  sepGraph<intT> reordGraph = graphReorder<intT>(sGraph, sep);
+//  double lc2 = logCost(reordGraph);
 
-  intT *sep = separator(sGraph);
-  sepGraph<intT> reordGraph = graphReorder<intT>(sGraph, sep);
-  double lc2 = logCost(reordGraph);
-
-  cout << "Consistency : " << cons << endl;
-  cout << "InitLogCost: " << lc << endl;
-  cout << "PostSepLogCost: " << lc2 << endl;
-
-  cout << "Vertex 1 moved to : " << sep[1] << endl;
+//  cout << "Consistency : " << cons << endl;
+//  cout << "InitLogCost: " << lc << endl;
+//  cout << "PostSepLogCost: " << lc2 << endl;
+//
+//  cout << "Vertex 1 moved to : " << sep[1] << endl;
 
   _seq<char> S = readStringFromFile(fname);
   words W = stringToWords(S.A, S.n);
@@ -329,10 +329,10 @@ graph<vertex> readGraphFromFile(char* fname, bool isSymmetric) {
   intE* edges = newA(intE,m);
 
   {parallel_for(long i=0; i < n; i++) offsets[i] = atol(W.Strings[i + 3]);}
-  {parallel_for(long i=0; i<m; i++) edges[i] = sep[atol(W.Strings[i+n+3])];}
-//  {parallel_for(long i=0; i<m; i++) edges[i] = atol(W.Strings[i+n+3]);}
+//  {parallel_for(long i=0; i<m; i++) edges[i] = sep[atol(W.Strings[i+n+3])];}
+  {parallel_for(long i=0; i<m; i++) edges[i] = atol(W.Strings[i+n+3]);}
 
-  edges = reorderEdges(edges, offsets, sep, n, m);
+//  edges = reorderEdges(edges, offsets, sep, n, m);
 
   //W.del(); // to deal with performance bug in malloc
 
@@ -347,7 +347,7 @@ graph<vertex> readGraphFromFile(char* fname, bool isSymmetric) {
     uintT o = offsets[i];
     uintT l = ((i == n-1) ? m : offsets[i+1])-offsets[i];
     vPreSep[i].setOutDegree(l); 
-    vPreSep[i].setOutNeighbors(edges+o);     
+    vPreSep[i].setOutNeighbors(edges+o);
     quickSort(edges+o, l, singletonCmp<intE>());
     }}
 
@@ -359,7 +359,7 @@ graph<vertex> readGraphFromFile(char* fname, bool isSymmetric) {
     // Create m many new intPairs. 
     {parallel_for(intT i=0;i<n;i++){
       uintT o = offsets[i];
-      for(intT j=0;j<vPreSep[i].getOutDegree();j++){	  
+      for(intT j=0;j<vPreSep[i].getOutDegree();j++){
 	      temp[o+j] = make_pair(vPreSep[i].getOutNeighbor(j),i);
       }
     }}

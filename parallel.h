@@ -22,6 +22,9 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+#ifndef _PARALLEL_H
+#define _PARALLEL_H
+
 #if defined(CILK)
 #include <cilk/cilk.h>
 #define parallel_main main
@@ -79,3 +82,5 @@ typedef unsigned long uintE;
 typedef int intE;
 typedef unsigned int uintE;
 #endif
+
+#endif // _PARALLEL_H
