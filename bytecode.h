@@ -232,7 +232,7 @@ void sequentialCompressEdges(intE *edges, intT *offsets, long n, long m) {
   {parallel_for(long i=0; i < m; i++) savedEdges[i] = edges[i];}
   {parallel_for(intT i=0; i < n; i++) oldOffsets[i] = offsets[i];}
 
-  intE *degrees = newA(intT, n);
+  intE *degrees = newA(intE, n);
   {parallel_for(intE i=0; i<n; i++) { 
     uintT degree = ((i == n-1) ? m : offsets[i+1])-offsets[i];
     degrees[i] = degree;
@@ -277,15 +277,14 @@ void sequentialCompressEdges(intE *edges, intT *offsets, long n, long m) {
 }
 
 /*
-  Compresses the edge set in parallel. Does not modify offsets - empty space 
-  can now be left between the end of adjacency lists. 
+  Compresses the edge set in parallel. 
 */
 intE *parallelCompressEdges(intE *edges, intT *offsets, long n, long m) {
   cout << "parallel compressing, (n,m) = (" << n << "," << m << ")" << endl;
   intE **edgePts = newA(intE*, n);
-  intE *degrees = newA(intT, n);
-  intE *charsUsedArr = newA(intE, n);
-  intE *compressionStarts = newA(intE, n);
+  intE *degrees = newA(intE, n);
+  long *charsUsedArr = newA(long, n);
+  long *compressionStarts = newA(long, n);
   {parallel_for(intE i=0; i<n; i++) { 
     uintT degree = ((i == n-1) ? m : offsets[i+1])-offsets[i];
     degrees[i] = degree;
@@ -298,17 +297,22 @@ intE *parallelCompressEdges(intE *edges, intT *offsets, long n, long m) {
     edgePts[i] = iEdges;
     uintE charsUsed = sequentialCompressEdgeSet((char *)iEdges, 0, degree,
                                                 i, &(edges[degrees[i]]));
-    charsUsedArr[i] = (intE)charsUsed;
+    charsUsedArr[i] = (long)charsUsed;
   }}
+
   // produce the total space needed for all compressed lists in chars. 
-  intE totalSpace = sequence::plusScan(charsUsedArr, compressionStarts, n);
+  long totalSpace = sequence::plusScan(charsUsedArr, compressionStarts, n);
+
+  cout << "total space requested is : " << totalSpace << endl;
 
   char *finalArr = newA(char, totalSpace);
+  cout << "total space requested is : " << totalSpace << endl;
   {parallel_for(intE i=0; i<n; i++) {
     memcpy(finalArr + compressionStarts[i], (char *)(edgePts[i]), charsUsedArr[i]);
     offsets[i] = compressionStarts[i];
     free(edgePts[i]);
   }}
+  
 //  for (intE i=0; i < n; i++) {
 //    uintT degree = ((i == n-1) ? m : degrees[i+1])-degrees[i];
 //    cout << "degree is " << degree << endl;
