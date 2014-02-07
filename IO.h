@@ -448,14 +448,18 @@ graph<vertex> readGraphFromFile(char* fname, bool isSymmetric) {
   }
 
   else {
-    compressEdges(edges, offsets, n, m);
+//    compressEdges(edges, offsets, n, m);
+    edges = parallelCompressEdges(edges, offsets, n, m);
+    {parallel_for(uintT i=0; i < n; i++) {
+      vPreSep[i].setOutNeighbors((intE *)(((char *)edges) + offsets[i]));
+    }}
     free(offsets);
     cout << "finished reading graph" << endl;
     graph<vertex> preSep =  graph<vertex>(vPreSep,(intT)n,m,edges);
-    edgeArray<intT> r = toEdgeArray<intT, vertex>(preSep); 
-    sepGraph<intT> sGraph = graphFromEdges(r);
-    graphCheckConsistency(sGraph);
-    intT *sep = separator(sGraph);
+//    edgeArray<intT> r = toEdgeArray<intT, vertex>(preSep); 
+//    sepGraph<intT> sGraph = graphFromEdges(r);
+//    graphCheckConsistency(sGraph);
+//    intT *sep = separator(sGraph);
     return preSep;
   }
 }
