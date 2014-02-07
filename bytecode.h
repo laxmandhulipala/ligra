@@ -87,7 +87,7 @@ struct dummyT {
 */
 template <class T>
 void decode(T t, char* edgeStart, intE source, uintT degree) {
-  int edgesRead = 0;
+  intE edgesRead = 0;
   uintE curOffset = 0;
   if (degree > 0) {
     // Eat first edge, which is compressed specially
@@ -96,7 +96,7 @@ void decode(T t, char* edgeStart, intE source, uintT degree) {
       return;
     }
     intE prevEdge = startEdge;
-    for (int edgesRead = 1; edgesRead < degree; edgesRead++) {
+    for (intE edgesRead = 1; edgesRead < degree; edgesRead++) {
       // Eat the next 'edge', which is a difference, and reconstruct edge.
       intE edgeDiff = eatEdge(edgeStart, &curOffset);
       intE edge = prevEdge + edgeDiff;
