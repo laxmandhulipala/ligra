@@ -296,20 +296,6 @@ intE *reorderEdges(intE *edges, intT *offsets, intT *I, intT n, intT m) {
 
 template <class vertex>
 graph<vertex> readGraphFromFile(char* fname, bool isSymmetric) {
-//  sepGraph<intT> sGraph = rgfFile<intT>(fname);
-//  double lc = logCost(sGraph);
-//  int cons = graphCheckConsistency(sGraph);
-//
-//  intT *sep = separator(sGraph);
-//  sepGraph<intT> reordGraph = graphReorder<intT>(sGraph, sep);
-//  double lc2 = logCost(reordGraph);
-
-//  cout << "Consistency : " << cons << endl;
-//  cout << "InitLogCost: " << lc << endl;
-//  cout << "PostSepLogCost: " << lc2 << endl;
-//
-//  cout << "Vertex 1 moved to : " << sep[1] << endl;
-
   _seq<char> S = readStringFromFile(fname);
   words W = stringToWords(S.A, S.n);
   if (W.Strings[0] != (string) "AdjacencyGraph") {
@@ -329,10 +315,7 @@ graph<vertex> readGraphFromFile(char* fname, bool isSymmetric) {
   intE* edges = newA(intE,m);
 
   {parallel_for(long i=0; i < n; i++) offsets[i] = atol(W.Strings[i + 3]);}
-//  {parallel_for(long i=0; i<m; i++) edges[i] = sep[atol(W.Strings[i+n+3])];}
   {parallel_for(long i=0; i<m; i++) edges[i] = atol(W.Strings[i+n+3]);}
-
-//  edges = reorderEdges(edges, offsets, sep, n, m);
 
   //W.del(); // to deal with performance bug in malloc
 
@@ -370,11 +353,6 @@ graph<vertex> readGraphFromFile(char* fname, bool isSymmetric) {
       vPreSep[i].setOutNeighbors((intE *)(((char *)nEdges) + offsets[i]));
     }}
 
-//    compressEdges(edges, offsets, n, m);
-//    for (uintT i = 0; i < n; i++) {
-//      vPreSep[i].setOutNeighbors((intE *)(((char *)edges) + offsets[i]));
-//    }
-
     free(edges);
     free(offsets);
     
@@ -384,7 +362,6 @@ graph<vertex> readGraphFromFile(char* fname, bool isSymmetric) {
        stability as after compression offsets is no longer a reliable source
        of degree information. */
 
-    // Use pairBothCmp to get sortedness within an adj-list.
     quickSort(temp,m,pairBothCmp<intE>());
  
     tOffsets[0] = 0; inEdges[0] = temp[0].second;
@@ -415,27 +392,6 @@ graph<vertex> readGraphFromFile(char* fname, bool isSymmetric) {
       vPreSep[i].setInNeighbors((intE *)(((char *)ninEdges)+ tOffsets[i]));
     }
 
-//    compressEdges(inEdges, tOffsets, n, m);
-//    for (uintT i = 0; i < n; i++) {
-//      vPreSep[i].setInNeighbors((intE *)(((char *)inEdges)+ tOffsets[i]));
-//    }
-
-//   vertex* v = newA(vertex, n);
-//
-//   {parallel_for (uintT i=0; i < n; i++) {
-//     vertex old = vPreSep[sep[i]];
-//     intT outD = old.getOutDegree();
-//     intT inD = old.getInDegree();
-//     intE *outNeighbors = old.getOutNeighbors();
-//     intE *inNeighbors = old.getInNeighbors();
-//     v[i].setOutDegree(outD); 
-//     v[i].setOutNeighbors(outNeighbors);
-//     v[i].setInDegree(inD);
-//     v[i].setInNeighbors(inNeighbors);
-//    }}
-
-//    free(vPreSep);
-
     free(tOffsets);
     cout << "finished reading graph" << endl;
 
@@ -448,7 +404,6 @@ graph<vertex> readGraphFromFile(char* fname, bool isSymmetric) {
   }
 
   else {
-//    compressEdges(edges, offsets, n, m);
     edges = parallelCompressEdges(edges, offsets, n, m);
     {parallel_for(uintT i=0; i < n; i++) {
       vPreSep[i].setOutNeighbors((intE *)(((char *)edges) + offsets[i]));
@@ -456,10 +411,6 @@ graph<vertex> readGraphFromFile(char* fname, bool isSymmetric) {
     free(offsets);
     cout << "finished reading graph" << endl;
     graph<vertex> preSep =  graph<vertex>(vPreSep,(intT)n,m,edges);
-//    edgeArray<intT> r = toEdgeArray<intT, vertex>(preSep); 
-//    sepGraph<intT> sGraph = graphFromEdges(r);
-//    graphCheckConsistency(sGraph);
-//    intT *sep = separator(sGraph);
     return preSep;
   }
 }
