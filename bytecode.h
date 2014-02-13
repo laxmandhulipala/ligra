@@ -96,7 +96,7 @@ void decode(T t, char* edgeStart, intE source, uintT degree) {
       return;
     }
     intE prevEdge = startEdge;
-    for (intE edgesRead = 1; edgesRead < degree; edgesRead++) {
+    for (edgesRead = 1; edgesRead < degree; edgesRead++) {
       // Eat the next 'edge', which is a difference, and reconstruct edge.
       intE edgeDiff = eatEdge(edgeStart, &curOffset);
       intE edge = prevEdge + edgeDiff;
@@ -192,8 +192,6 @@ void compressEdgeSet(intE source, intE *edgeStart, uintT degree) {
 }
 
 
-
-
 /*
   Takes: 
     1. The edge array of chars to write into
@@ -254,21 +252,6 @@ void sequentialCompressEdges(intE *edges, intT *offsets, long n, long m) {
                                             degree, i, &(savedEdges[nWritten]));
     nWritten += degree;
 
-//    if (degree > 0) {
-//      // Compress the first edge whole, which is signed difference coded
-//      currentOffset = compressFirstEdge((char *)edges, currentOffset, 
-//                                        i, savedEdges[nWritten]);
-//      for (uintT edgeI=1; edgeI < degree; edgeI++) {
-//        // Store difference between cur and prev edge. 
-//        intE difference = savedEdges[nWritten + edgeI] - 
-//                          savedEdges[nWritten + edgeI - 1];
-//        uintE prevOffset = currentOffset;
-//        currentOffset = compressEdge((char *)edges, currentOffset, difference);
-//      }
-//      // Increment nWritten after all of vertex n's neighbors are written
-//      nWritten += degree;
-//    }
-
     // We've written - let's test this with the dummyT. 
     decode(dummyT(), ((char *)edges) + offsets[i], i, degree);
   }
@@ -327,6 +310,5 @@ intE *parallelCompressEdges(intE *edges, intT *offsets, long n, long m) {
   cout << "would have been, " << (m * 8) << endl;
   return ((intE *)finalArr);
 }
-
 
 #endif
