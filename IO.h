@@ -328,10 +328,10 @@ graph<vertex> readGraphFromFile(char* fname, bool isSymmetric) {
 
   {parallel_for (uintT i=0; i < n; i++) {
     uintT o = offsets[i];
-    uintT l = ((i == n-1) ? m : offsets[i+1])-offsets[i];
-    vPreSep[i].setOutDegree(l); 
+    uintT d = ((i == n-1) ? m : offsets[i+1])-offsets[i];
+    vPreSep[i].setOutDegree(d); 
     vPreSep[i].setOutNeighbors(edges+o);
-    quickSort(edges+o, l, singletonCmp<intE>());
+    quickSort(edges+o, d, singletonCmp<intE>());
     }}
 
   if(!isSymmetric) {
@@ -389,7 +389,7 @@ graph<vertex> readGraphFromFile(char* fname, bool isSymmetric) {
 
     intE *ninEdges = parallelCompressEdges(inEdges, tOffsets, n, m);
     for (uintT i = 0; i < n; i++) {
-      vPreSep[i].setInNeighbors((intE *)(((char *)ninEdges)+ tOffsets[i]));
+      vPreSep[i].setInNeighbors((intE *)(((char *)ninEdges) + tOffsets[i]));
     }
 
     free(tOffsets);
