@@ -311,7 +311,7 @@ graph<vertex> readGraphFromFile(char* fname, bool isSymmetric) {
     abort();
   }
 
-  intT* offsets = newA(intT,n);
+  long* offsets = newA(long,n);
   intE* edges = newA(intE,m);
 
   {parallel_for(long i=0; i < n; i++) offsets[i] = atol(W.Strings[i + 3]);}
@@ -335,7 +335,7 @@ graph<vertex> readGraphFromFile(char* fname, bool isSymmetric) {
     }}
 
   if(!isSymmetric) {
-    intT* tOffsets = newA(intT,n);
+    long* tOffsets = newA(long,n);
     {parallel_for(intT i=0;i<n;i++) tOffsets[i] = INT_T_MAX;}
     intE* inEdges = newA(intE,m);
     intPair* temp = newA(intPair,m);
@@ -362,6 +362,7 @@ graph<vertex> readGraphFromFile(char* fname, bool isSymmetric) {
        stability as after compression offsets is no longer a reliable source
        of degree information. */
 
+    // Use pairBothCmp because when encoding we need monotonicity 
     quickSort(temp,m,pairBothCmp<intE>());
  
     tOffsets[0] = 0; inEdges[0] = temp[0].second;
@@ -385,7 +386,6 @@ graph<vertex> readGraphFromFile(char* fname, bool isSymmetric) {
       vPreSep[i].setInDegree(l);
       vPreSep[i].setInNeighbors(inEdges+o);
       }}
-
 
     intE *ninEdges = parallelCompressEdges(inEdges, tOffsets, n, m);
     for (uintT i = 0; i < n; i++) {
