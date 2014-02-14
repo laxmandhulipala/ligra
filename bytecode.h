@@ -262,7 +262,7 @@ void sequentialCompressEdges(intE *edges, intT *offsets, long n, long m) {
 /*
   Compresses the edge set in parallel. 
 */
-intE *parallelCompressEdges(intE *edges, intT *offsets, long n, long m) {
+intE *parallelCompressEdges(intE *edges, long *offsets, long n, long m) {
   cout << "parallel compressing, (n,m) = (" << n << "," << m << ")" << endl;
   intE **edgePts = newA(intE*, n);
   intE *degrees = newA(intE, n);
@@ -307,7 +307,7 @@ intE *parallelCompressEdges(intE *edges, intT *offsets, long n, long m) {
   free(charsUsedArr);
   free(compressionStarts);
   cout << "finished compressing, bytes used = " << totalSpace << endl;
-  cout << "would have been, " << (m * 8) << endl;
+  cout << "would have been, " << (m * 4) << endl;
   return ((intE *)finalArr);
 }
 

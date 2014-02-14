@@ -332,11 +332,11 @@ graph<vertex> readGraphFromFile(char* fname, bool isSymmetric) {
     vPreSep[i].setOutDegree(d); 
     vPreSep[i].setOutNeighbors(edges+o);
     quickSort(edges+o, d, singletonCmp<intE>());
-    }}
+   }}
 
-  if(!isSymmetric) {
+  if (!isSymmetric) {
     long* tOffsets = newA(long,n);
-    {parallel_for(intT i=0;i<n;i++) tOffsets[i] = INT_T_MAX;}
+    {parallel_for(intT i=0;i<n;i++) tOffsets[i] = LONG_MAX;}
     intE* inEdges = newA(intE,m);
     intPair* temp = newA(intPair,m);
     // Create m many new intPairs. 
@@ -362,7 +362,7 @@ graph<vertex> readGraphFromFile(char* fname, bool isSymmetric) {
        stability as after compression offsets is no longer a reliable source
        of degree information. */
 
-    // Use pairBothCmp because when encoding we need monotonicity 
+    // Use pairBothCmp because when encoding we need monotonicity within an edge list.
     quickSort(temp,m,pairBothCmp<intE>());
  
     tOffsets[0] = 0; inEdges[0] = temp[0].second;
@@ -376,7 +376,7 @@ graph<vertex> readGraphFromFile(char* fname, bool isSymmetric) {
 
     uintT currOffset = m;
     for(intT i=n-1;i>=0;i--) {
-      if(tOffsets[i] == INT_T_MAX) tOffsets[i] = currOffset;
+      if (tOffsets[i] == LONG_MAX) tOffsets[i] = currOffset;
       else currOffset = tOffsets[i];
     }
 
@@ -385,14 +385,18 @@ graph<vertex> readGraphFromFile(char* fname, bool isSymmetric) {
       uintT l = ((i == n-1) ? m : tOffsets[i+1])-tOffsets[i];
       vPreSep[i].setInDegree(l);
       vPreSep[i].setInNeighbors(inEdges+o);
-      }}
+    }}
 
     intE *ninEdges = parallelCompressEdges(inEdges, tOffsets, n, m);
     for (uintT i = 0; i < n; i++) {
       vPreSep[i].setInNeighbors((intE *)(((char *)ninEdges) + tOffsets[i]));
     }
 
+    free(inEdges);
     free(tOffsets);
+
+    inEdges = ninEdges;
+
     cout << "finished reading graph" << endl;
 
     graph<vertex> preSep = graph<vertex>(vPreSep,(intT)n,m,edges,inEdges);
@@ -404,13 +408,14 @@ graph<vertex> readGraphFromFile(char* fname, bool isSymmetric) {
   }
 
   else {
-    edges = parallelCompressEdges(edges, offsets, n, m);
+    intE *nEdges = parallelCompressEdges(edges, offsets, n, m);
     {parallel_for(uintT i=0; i < n; i++) {
-      vPreSep[i].setOutNeighbors((intE *)(((char *)edges) + offsets[i]));
+      vPreSep[i].setOutNeighbors((intE *)(((char *)nEdges) + offsets[i]));
     }}
+//    free(edges);
     free(offsets);
     cout << "finished reading graph" << endl;
-    graph<vertex> preSep =  graph<vertex>(vPreSep,(intT)n,m,edges);
+    graph<vertex> preSep =  graph<vertex>(vPreSep,(intT)n,m,nEdges);
     return preSep;
   }
 }
@@ -459,7 +464,7 @@ wghGraph<vertex> readWghGraphFromFile(char* fname, bool isSymmetric) {
     {parallel_for(intT i=0;i<n;i++){
       uintT o = offsets[i];
       for(intT j=0;j<v[i].getOutDegree();j++){	  
-	temp[o+j] = make_pair(v[i].getOutNeighbor(j),make_pair(i,v[i].getOutWeight(j)));
+      	temp[o+j] = make_pair(v[i].getOutNeighbor(j),make_pair(i,v[i].getOutWeight(j)));
       }
       }}
     free(offsets);
