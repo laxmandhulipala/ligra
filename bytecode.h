@@ -286,21 +286,16 @@ intE *parallelCompressEdges(intE *edges, long *offsets, long n, long m) {
   // produce the total space needed for all compressed lists in chars. 
   long totalSpace = sequence::plusScan(charsUsedArr, compressionStarts, n);
 
-  cout << "total space requested is : " << totalSpace << endl;
-
   char *finalArr = newA(char, totalSpace);
   cout << "total space requested is : " << totalSpace << endl;
+  float avgBytesPerEdge = (float)totalSpace / (float)m; 
+  cout << "Average bytes per edge: " << avgBytesPerEdge << endl;
+
   {parallel_for(intE i=0; i<n; i++) {
     memcpy(finalArr + compressionStarts[i], (char *)(edgePts[i]), charsUsedArr[i]);
     offsets[i] = compressionStarts[i];
     free(edgePts[i]);
   }}
-  
-//  for (intE i=0; i < n; i++) {
-//    uintT degree = ((i == n-1) ? m : degrees[i+1])-degrees[i];
-//    cout << "degree is " << degree << endl;
-//    decode(dummyT(), finalArr + offsets[i], i, degree);
-//  }
 
   free(edgePts);
   free(degrees);
