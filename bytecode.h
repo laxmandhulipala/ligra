@@ -86,9 +86,10 @@ struct dummyT {
   coded. 
 */
 template <class T>
-void decode(T t, char* edgeStart, intE source, uintT degree) {
+void decode(T t, char* edgeStart, intE source) {
   intE edgesRead = 0;
   uintE curOffset = 0;
+  intE degree = eatFirstEdge(edgeStart, &curOffset, 2);
   if (degree > 0) {
     // Eat first edge, which is compressed specially
     intE startEdge = eatFirstEdge(edgeStart, &curOffset, source);
@@ -192,6 +193,13 @@ void compressEdgeSet(intE source, intE *edgeStart, uintT degree) {
 }
 
 
+intT getCompressedDegree(intE* neighbors) {
+  char *start = (char *)neighbors;
+  uintE curOffset = 0;
+  intE degree = eatFirstEdge(start, &curOffset, 2);
+  return degree;  
+}
+
 /*
   Takes: 
     1. The edge array of chars to write into
@@ -204,6 +212,8 @@ void compressEdgeSet(intE source, intE *edgeStart, uintT degree) {
 */
 uintE sequentialCompressEdgeSet(char *edgeArray, uintE currentOffset, uintT degree, 
                                 intE vertexNum, intE *savedEdges) {
+  currentOffset = compressFirstEdge(edgeArray, currentOffset, 
+                                      2, degree);
   if (degree > 0) {
     // Compress the first edge whole, which is signed difference coded
     currentOffset = compressFirstEdge(edgeArray, currentOffset, 
@@ -253,7 +263,7 @@ void sequentialCompressEdges(intE *edges, intT *offsets, long n, long m) {
     nWritten += degree;
 
     // We've written - let's test this with the dummyT. 
-    decode(dummyT(), ((char *)edges) + offsets[i], i, degree);
+    decode(dummyT(), ((char *)edges) + offsets[i], i);
   }
   free(oldOffsets);
   free(savedEdges);
@@ -273,9 +283,9 @@ intE *parallelCompressEdges(intE *edges, long *offsets, long n, long m) {
     degrees[i] = degree;
   }}
   sequence::plusScan(degrees,degrees, n);
-  {parallel_for(intE i=0; i<n; i++) {
+  {for(intE i=0; i<n; i++) {
     uintT degree = ((i == n-1) ? m : offsets[i+1])-offsets[i];
-    long toAlloc = ceil((degree * 9) / 8);
+    long toAlloc = ceil((degree * 9) / 8) + 4;
     intE *iEdges = newA(intE, toAlloc);
     edgePts[i] = iEdges;
     uintE charsUsed = sequentialCompressEdgeSet((char *)iEdges, 0, degree,

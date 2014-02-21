@@ -181,9 +181,9 @@ template <class F, class vertex>
   {parallel_for (intT i=0; i<numVertices; i++){
     next[i] = 0;
     if (f.cond(i)) { 
-      intT d = G[i].getInDegree();
+//      intT d = G[i].getInDegree();
       char *nghArr = (char *)(G[i].getInNeighbors());
-      decode(denseT<F>(&f, next, vertices), nghArr, i, d);
+      decode(denseT<F>(&f, next, vertices), nghArr, i);
     }
     }}
   return next;
@@ -208,9 +208,9 @@ bool* edgeMapDenseForward(graph<vertex> GA, bool* vertices, F f) {
   bool* next = newA(bool,numVertices);
   {parallel_for(long i=0;i<numVertices;i++) next[i] = 0;}
   {parallel_for (long i=0; i<numVertices; i++) {
-    intT d = G[i].getOutDegree();
+//    intT d = G[i].getOutDegree();
     char *nghArr = (char *)(G[i].getOutNeighbors());
-    decode(denseForwardT<F>(&f, next, vertices), nghArr, i, d);
+    decode(denseForwardT<F>(&f, next, vertices), nghArr, i);
   }}
   return next;
 }
@@ -249,10 +249,10 @@ pair<uintT,intT*> edgeMapSparse(vertex* frontierVertices, intT* indices,
     intT v = indices[i];
     intT o = offsets[i];
     vertex vert = frontierVertices[i]; 
-    intT d = vert.getOutDegree();
+//    intT d = vert.getOutDegree();
     char *nghArr = (char *)(vert.getOutNeighbors());
     // Decode, with src = v, and degree d, applying sparseT
-    decode(sparseT<F>(&f, v, o, outEdges), nghArr, v, d);
+    decode(sparseT<F>(&f, v, o, outEdges), nghArr, v);
   }}
 
   intT* nextIndices = newA(intT, outEdgeCount);

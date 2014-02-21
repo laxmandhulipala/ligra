@@ -85,8 +85,8 @@ void printGraph(graph<vertex> G) {
   vertex *V = G.V;
   for (intT i = 0; i < G.n; i++) {
     char *nghArr = (char *)(V[i].getOutNeighbors());
-    intT d = V[i].getOutDegree();
-    decode(printT(), nghArr, i, d);
+//    intT d = V[i].getOutDegree();
+    decode(printT(), nghArr, i);
   }
 }
 
@@ -128,8 +128,8 @@ edgeArray<intT> toEdgeArray(graph<vertex> G) {
   edgeArrayT initialState = edgeArrayT(E, 0);
   for (intT j=0; j < numRows; j++) {
     char *nghArr = (char *)(V[j].getOutNeighbors());
-    intT d = V[j].getOutDegree();
-    decode(initialState, nghArr, j, d);
+//    intT d = V[j].getOutDegree();
+    decode(initialState, nghArr, j);
 //     for (intT i = 0; i < V[j].getOutDegree(); i++) {
 //       E[k++] = edge<intT>(j,V[j].Neighbors[i]);
 //     }
@@ -256,10 +256,10 @@ double logCost(graph<vertex> GA) {
   double logs = 0.0;
   vertex *G = GA.V;
   for (intT i = 0; i < GA.n; i++) {
-    intT d = G[i].getInDegree();
+//    intT d = G[i].getInDegree();
     char *nghArr = (char *)(G[i].getInNeighbors());
     double costP = 0.0;
-    decode(logT(&costP), nghArr, i, d);
+    decode(logT(&costP), nghArr, i);
     logs += costP;
   }
   cout << "logs == " << logs << endl;
@@ -342,7 +342,8 @@ graph<vertex> readGraphFromFile(char* fname, bool isSymmetric) {
     // Create m many new intPairs. 
     {parallel_for(intT i=0;i<n;i++){
       uintT o = offsets[i];
-      for(intT j=0;j<vPreSep[i].getOutDegree();j++){
+      uintT d = ((i == n-1) ? m : offsets[i+1])-offsets[i];
+      for(intT j=0;j<d;j++){
 	      temp[o+j] = make_pair(vPreSep[i].getOutNeighbor(j),i);
       }
     }}
