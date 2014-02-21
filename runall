@@ -39,7 +39,8 @@ testfiles = ["randLocal_J_10000000_O","rMat_J_10000000_O","3D_Graph_J_10000000_O
 
 wtestfiles = ["randLocalGraph_WJ_5_10000000","rMatGraph_WJ_5_10000000","3Dgrid_WJ_10000000"]
 
-processors = [1,2,4]+range(8,80+1,8)
+processors = [80]
+#processors = [1,2,4]+range(8,80+1,8)
 #processors = range(48,80+1,8)
 #processors= []
 
