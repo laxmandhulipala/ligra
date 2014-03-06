@@ -91,7 +91,7 @@ struct dummyF {
   coded. 
 */
 template <class T, class F>
-void decode(T t, F f, char* edgeStart, intE source, uintT degree) {
+void decode(T t, F f, char* edgeStart, intE source) {
   intE edgesRead = 0;
   uintE curOffset = 0;
   intE degree = eatFirstEdge(edgeStart, &curOffset, 2);
@@ -268,7 +268,7 @@ void sequentialCompressEdges(intE *edges, intT *offsets, long n, long m) {
     nWritten += degree;
 
     // We've written - let's test this with the dummyT. 
-    decode(dummyT<dummyF>(), dummyF(), ((char *)edges) + offsets[i], i, degree);
+    decode(dummyT<dummyF>(), dummyF(), ((char *)edges) + offsets[i], i);
   }
   free(oldOffsets);
   free(savedEdges);

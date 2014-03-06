@@ -265,7 +265,7 @@ double logCost(graph<vertex> GA) {
 //    intT d = G[i].getInDegree();
     char *nghArr = (char *)(G[i].getInNeighbors());
     double costP = 0.0;
-    decode(logT<logF>(&costP), logF(), nghArr, i, d);
+    decode(logT<logF>(&costP), logF(), nghArr, i);
     logs += costP;
   }
   cout << "logs == " << logs << endl;
