@@ -72,11 +72,16 @@ intE eatEdge(char* start, uintE *curOffset) {
 /*
   A dummy test fn to debug/print things. 
 */
+template<class F>
 struct dummyT {
-  bool srcTarg(intE src, intE target, intT edgeNumber) {
+  bool srcTarg(F f, intE src, intE target, intT edgeNumber) {
     cout << "(s,t) = (" << src << "," << target << ")" << endl;
     return true;
   }
+};
+
+struct dummyF {
+
 };
 
 
@@ -85,14 +90,14 @@ struct dummyT {
   edge, and then eats the remaining |d-1| many edges that are normally
   coded. 
 */
-template <class T>
-void decode(T t, char* edgeStart, intE source, uintT degree) {
+template <class T, class F>
+void decode(T t, F f, char* edgeStart, intE source, uintT degree) {
   intE edgesRead = 0;
   uintE curOffset = 0;
   if (degree > 0) {
     // Eat first edge, which is compressed specially
     intE startEdge = eatFirstEdge(edgeStart, &curOffset, source);
-    if (!t.srcTarg(source,startEdge,edgesRead)) {
+    if (!t.srcTarg(f, source,startEdge,edgesRead)) {
       return;
     }
     intE prevEdge = startEdge;
@@ -101,7 +106,7 @@ void decode(T t, char* edgeStart, intE source, uintT degree) {
       intE edgeDiff = eatEdge(edgeStart, &curOffset);
       intE edge = prevEdge + edgeDiff;
       prevEdge = edge;
-      if (!t.srcTarg(source, edge, edgesRead)) {
+      if (!t.srcTarg(f, source, edge, edgesRead)) {
         break; 
       }
     }
@@ -253,7 +258,7 @@ void sequentialCompressEdges(intE *edges, intT *offsets, long n, long m) {
     nWritten += degree;
 
     // We've written - let's test this with the dummyT. 
-    decode(dummyT(), ((char *)edges) + offsets[i], i, degree);
+    decode(dummyT<dummyF>(), dummyF(), ((char *)edges) + offsets[i], i, degree);
   }
   free(oldOffsets);
   free(savedEdges);

@@ -161,13 +161,12 @@ void remDuplicates(intT* indices, intT* flags, intT m, intT n) {
 
 template <class F>
 struct denseT {
-  F *f;
   bool* nextArr;
   bool* vertexArr;
-denseT(F* fp, bool* np, bool* vp) : f(fp), nextArr(np), vertexArr(vp) {}
-  bool srcTarg(intE src, intE target, intT edgeNumber) {
-    if (vertexArr[target] && (*f).update(target, src)) nextArr[src] = 1;
-    if (!(*f).cond(src)) return false;
+denseT(bool* np, bool* vp) : nextArr(np), vertexArr(vp) {}
+  bool srcTarg(F f, intE src, intE target, intT edgeNumber) {
+    if (vertexArr[target] && f.update(target, src)) nextArr[src] = 1;
+    if (!f.cond(src)) return false;
     return true;
   }
 };
@@ -183,7 +182,7 @@ template <class F, class vertex>
     if (f.cond(i)) { 
       intT d = G[i].getInDegree();
       char *nghArr = (char *)(G[i].getInNeighbors());
-      decode(denseT<F>(&f, next, vertices), nghArr, i, d);
+      decode(denseT<F>(next, vertices), f, nghArr, i, d);
     }
     }}
   return next;
@@ -191,12 +190,11 @@ template <class F, class vertex>
 
 template <class F>
 struct denseForwardT {
-  F *f;
   bool* nextArr;
   bool* vertexArr;
-denseForwardT(F* fp, bool* np, bool* vp) : f(fp), nextArr(np), vertexArr(vp) {}
-  bool srcTarg(intE src, intE target, intT edgeNumber) {
-    if ((*f).cond(target) && (*f).updateAtomic(src,target)) nextArr[target] = 1;
+denseForwardT(bool* np, bool* vp) : nextArr(np), vertexArr(vp) {}
+  bool srcTarg(F f, intE src, intE target, intT edgeNumber) {
+    if (f.cond(target) && f.updateAtomic(src,target)) nextArr[target] = 1;
     return true;
   }
 };
@@ -210,20 +208,19 @@ bool* edgeMapDenseForward(graph<vertex> GA, bool* vertices, F f) {
   {parallel_for (long i=0; i<numVertices; i++) {
     intT d = G[i].getOutDegree();
     char *nghArr = (char *)(G[i].getOutNeighbors());
-    decode(denseForwardT<F>(&f, next, vertices), nghArr, i, d);
+    decode(denseForwardT<F>(next, vertices), f, nghArr, i, d);
   }}
   return next;
 }
 
 template <class F>
 struct sparseT {
-  F *f;
   intT v;
   intT o;
   intT *outEdges;
-sparseT(F *fP, intT vP, intT oP, intT *outEdgesP) : f(fP), v(vP), o(oP), outEdges(outEdgesP) {}
-  bool srcTarg(intE src, intE target, intT edgeNumber) {
-    if ((*f).cond(target) && (*f).updateAtomic(v, target)) {
+sparseT(intT vP, intT oP, intT *outEdgesP) : v(vP), o(oP), outEdges(outEdgesP) {}
+  bool srcTarg(F f, intE src, intE target, intT edgeNumber) {
+    if (f.cond(target) && f.updateAtomic(v, target)) {
       outEdges[o + edgeNumber] = target;
     }
     else {
@@ -252,7 +249,7 @@ pair<uintT,intT*> edgeMapSparse(vertex* frontierVertices, intT* indices,
     intT d = vert.getOutDegree();
     char *nghArr = (char *)(vert.getOutNeighbors());
     // Decode, with src = v, and degree d, applying sparseT
-    decode(sparseT<F>(&f, v, o, outEdges), nghArr, v, d);
+    decode(sparseT<F>(v, o, outEdges), f, nghArr, v, d);
   }}
 
   intT* nextIndices = newA(intT, outEdgeCount);

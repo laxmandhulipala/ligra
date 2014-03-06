@@ -236,10 +236,16 @@ words stringToWords(char *Str, long n) {
   return words(Str,n,SA,m);
 }
 
+
+struct logF {
+  
+};
+
+template<class F>
 struct logT {
   double* cost;
 logT(double* costP) : cost(costP) {}
-  bool srcTarg(intE src, intE target, intT edgeNumber) {
+  bool srcTarg(F f, intE src, intE target, intT edgeNumber) {
     double logcost = log(((double) abs(src - target)) + 1);
     *cost = (*cost) + logcost;
     return true;
@@ -259,7 +265,7 @@ double logCost(graph<vertex> GA) {
     intT d = G[i].getInDegree();
     char *nghArr = (char *)(G[i].getInNeighbors());
     double costP = 0.0;
-    decode(logT(&costP), nghArr, i, d);
+    decode(logT<logF>(&costP), logF(), nghArr, i, d);
     logs += costP;
   }
   cout << "logs == " << logs << endl;
