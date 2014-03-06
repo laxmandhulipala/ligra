@@ -4,6 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <stdlib.h>
+#include "bytecode.h"
 #include "parallel.h"
 
 using namespace std;
@@ -14,40 +15,61 @@ using namespace std;
 
 struct symmetricVertex {
   intE* neighbors;
-  intT degree;
+//  intT degree;
   void del() {free(neighbors); }
-symmetricVertex(intE* n, intT d) : neighbors(n), degree(d) {}
+symmetricVertex(intE* n, intT d) : neighbors(n) {}
   intE* getInNeighbors() { return neighbors; }
   intE* getOutNeighbors() { return neighbors; }
   uintE getInNeighbor(intT j) { return neighbors[j]; } 
   uintE getOutNeighbor(intT j) { return neighbors[j]; } 
-  intT getInDegree() { return degree; }
-  intT getOutDegree() { return degree; }
+//  intT getInDegree() { return degree; }
+  intT getInDegree() {
+    return getCompressedDegree(neighbors);
+  }
+  intT getOutDegree() {
+     return getCompressedDegree(neighbors);
+   }
   void setInNeighbors(intE* _i) { neighbors = _i; }
   void setOutNeighbors(intE* _i) { neighbors = _i; }
-  void setInDegree(intT _d) { degree = _d; }
-  void setOutDegree(intT _d) { degree = _d; }
+  void setInDegree(intT _d) { 
+//    degree = _d; 
+  }
+  void setOutDegree(intT _d) { 
+//    degree = _d; 
+  }
   void flipEdges() {}
 };
 
 struct asymmetricVertex {
   intE* inNeighbors;
   intE* outNeighbors;
-  intT outDegree;
-  intT inDegree;
+//  intT outDegree;
+//  intT inDegree;
   void del() {free(inNeighbors); free(outNeighbors);}
-asymmetricVertex(intE* iN, intE* oN, intT id, intT od) : inNeighbors(iN), outNeighbors(oN), inDegree(id), outDegree(od) {}
+asymmetricVertex(intE* iN, intE* oN, intT id, intT od) : inNeighbors(iN), outNeighbors(oN) {}
   intE* getInNeighbors() { return inNeighbors; }
   intE* getOutNeighbors() { return outNeighbors; }
   uintE getInNeighbor(intT j) { return inNeighbors[j]; }
   uintE getOutNeighbor(intT j) { return outNeighbors[j]; }
-  intT getInDegree() { return inDegree; }
-  intT getOutDegree() { return outDegree; }
+//  intT getInDegree() { return inDegree; }
+//  intT getOutDegree() { return outDegree; }
+  intT getInDegree() {
+    return getCompressedDegree(inNeighbors);
+  }
+  intT getOutDegree() {
+     return getCompressedDegree(outNeighbors);
+   }
   void setInNeighbors(intE* _i) { inNeighbors = _i; }
   void setOutNeighbors(intE* _i) { outNeighbors = _i; }
-  void setInDegree(intT _d) { inDegree = _d; }
-  void setOutDegree(intT _d) { outDegree = _d; }
-  void flipEdges() { swap(inNeighbors,outNeighbors); swap(inDegree,outDegree); }
+  void setInDegree(intT _d) { 
+   // inDegree = _d; 
+    }
+  void setOutDegree(intT _d) { 
+   // outDegree = _d; 
+    }
+  void flipEdges() { swap(inNeighbors,outNeighbors); 
+//  swap(inDegree,outDegree); 
+  }
 };
 
 template <class vertex>
