@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+  <title>Web Contents</title>
+  <meta name='description' content='Build cross platform desktop apps with web technologies'>
+
+  <link rel='shortcut icon' href='/images/favicon.ico'/>
+  <link rel='stylesheet' href='/css/normalize.css'>
+  <link rel='stylesheet' href='/css/skeleton.css'>
+  <link rel='stylesheet' href='/css/main.css'>
+  <link rel='stylesheet' href='/css/octicons/octicons.css'>
+  <link rel='stylesheet' href='/css/pygments.css'>
+  <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+  <link rel='canonical' href='/docs/v0.34.0/api/web-contents/'>
+  <link rel='alternate' type='application/rss+xml' title='Electron' href='/feed.xml' />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-3769691-57', 'auto');
+    ga('send', 'pageview');
+  </script>
+</head>
+
+
+  <body>
+
+    <header>
+  <div class='top-bar'>
+    <div class='container'>
+      <div class='row'>
+        <div class='four columns'>
+          <ul class='navigation inline-list'>
+            <li><a href='/#built-on-electron'>Built on Electron</a></li>
+            <li><a href='/#get-started'>Get Started</a></li>
+          </ul>
+        </div>
+        <div class='eight columns text-right'>
+          <ul class='navigation inline-list'>
+            <li><a href='https://github.com/atom/electron'>Repository</a></li>
+            <li><a href='/docs/v0.36.5'>Documentation</a></li>
+            <li><a href='http://blog.atom.io'>Blog</a></li>
+            <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+    <div class='page-content'>
+      <div class='wrapper'>
+        <div class='page-template web-contents'>
+  <section class='jump-to-release is-compact'>
+  <div class='container'>
+    <div class='row'>
+      <div class='twelve columns'>
+      <h1><img class="electron-icon" src='/images/electron-icon.svg'>Electron Documentation</h1>
+      
+      <a href='/docs/v0.34.0/'>v0.34.0  </a> |
+      <a href='https://github.com/atom/electron/blob/master/docs/api/web-contents.md'>Document Source</a>
+      
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class='docs'>
+  <div class='container'>
+    <div class='row'>
+      <div class='ten columns release offset-by-one'>
+        
+        <h6 class='docs-breadcrumb'>v0.34.0 / API
+           / Web Contents </h6>
+        
+
+        <h1 id="webcontents">webContents</h1>
+
+<p><code>webContents</code> is an
+<a href="http://nodejs.org/api/events.html#events_class_events_eventemitter">EventEmitter</a>.</p>
+
+<p>It is responsible for rendering and controlling a web page and is a property of
+the <a href="http://electron.atom.io/docs/v0.34.0/api/browser-window"><code>BrowserWindow</code></a> object. An example of accessing the
+<code>webContents</code> object:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">BrowserWindow</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;browser-window&#39;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">win</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">BrowserWindow</span><span class="p">({</span><span class="nx">width</span><span class="o">:</span> <span class="mi">800</span><span class="p">,</span> <span class="nx">height</span><span class="o">:</span> <span class="mi">1500</span><span class="p">});</span>
+<span class="nx">win</span><span class="p">.</span><span class="nx">loadUrl</span><span class="p">(</span><span class="s2">&quot;http://github.com&quot;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">webContents</span> <span class="o">=</span> <span class="nx">win</span><span class="p">.</span><span class="nx">webContents</span><span class="p">;</span>
+</code></pre></div>
+<h2 id="events">Events</h2>
+
+<p>The <code>webContents</code> object emits the following events:</p>
+
+<h3 id="event:-&#39;did-finish-load&#39;">Event: &#39;did-finish-load&#39;</h3>
+
+<p>Emitted when the navigation is done, i.e. the spinner of the tab has stopped
+spinning, and the <code>onload</code> event was dispatched.</p>
+
+<h3 id="event:-&#39;did-fail-load&#39;">Event: &#39;did-fail-load&#39;</h3>
+
+<p>Returns:</p>
+
+<ul>
+<li><code>event</code> Event</li>
+<li><code>errorCode</code> Integer</li>
+<li><code>errorDescription</code> String</li>
+<li><code>validatedUrl</code> String</li>
+</ul>
+
+<p>This event is like <code>did-finish-load</code> but emitted when the load failed or was
+cancelled, e.g. <code>window.stop()</code> is invoked.</p>
+
+<h3 id="event:-&#39;did-frame-finish-load&#39;">Event: &#39;did-frame-finish-load&#39;</h3>
+
+<p>Returns:</p>
+
+<ul>
+<li><code>event</code> Event</li>
+<li><code>isMainFrame</code> Boolean</li>
+</ul>
+
+<p>Emitted when a frame has done navigation.</p>
+
+<h3 id="event:-&#39;did-start-loading&#39;">Event: &#39;did-start-loading&#39;</h3>
+
+<p>Corresponds to the points in time when the spinner of the tab started spinning.</p>
+
+<h3 id="event:-&#39;did-stop-loading&#39;">Event: &#39;did-stop-loading&#39;</h3>
+
+<p>Corresponds to the points in time when the spinner of the tab stopped spinning.</p>
+
+<h3 id="event:-&#39;did-get-response-details&#39;">Event: &#39;did-get-response-details&#39;</h3>
+
+<p>Returns:</p>
+
+<ul>
+<li><code>event</code> Event</li>
+<li><code>status</code> Boolean</li>
+<li><code>newUrl</code> String</li>
+<li><code>originalUrl</code> String</li>
+<li><code>httpResponseCode</code> Integer</li>
+<li><code>requestMethod</code> String</li>
+<li><code>referrer</code> String</li>
+<li><code>headers</code> Object</li>
+</ul>
+
+<p>Emitted when details regarding a requested resource are available.
+<code>status</code> indicates the socket connection to download the resource.</p>
+
+<h3 id="event:-&#39;did-get-redirect-request&#39;">Event: &#39;did-get-redirect-request&#39;</h3>
+
+<p>Returns:</p>
+
+<ul>
+<li><code>event</code> Event</li>
+<li><code>oldUrl</code> String</li>
+<li><code>newUrl</code> String</li>
+<li><code>isMainFrame</code> Boolean</li>
+<li><code>httpResponseCode</code> Integer</li>
+<li><code>requestMethod</code> String</li>
+<li><code>referrer</code> String</li>
+<li><code>headers</code> Object</li>
+</ul>
+
+<p>Emitted when a redirect is received while requesting a resource.</p>
+
+<h3 id="event:-&#39;dom-ready&#39;">Event: &#39;dom-ready&#39;</h3>
+
+<p>Returns:</p>
+
+<ul>
+<li><code>event</code> Event</li>
+</ul>
+
+<p>Emitted when the document in the given frame is loaded.</p>
+
+<h3 id="event:-&#39;page-favicon-updated&#39;">Event: &#39;page-favicon-updated&#39;</h3>
+
+<p>Returns:</p>
+
+<ul>
+<li><code>event</code> Event</li>
+<li><code>favicons</code> Array - Array of Urls</li>
+</ul>
+
+<p>Emitted when page receives favicon urls.</p>
+
+<h3 id="event:-&#39;new-window&#39;">Event: &#39;new-window&#39;</h3>
+
+<p>Returns:</p>
+
+<ul>
+<li><code>event</code> Event</li>
+<li><code>url</code> String</li>
+<li><code>frameName</code> String</li>
+<li><code>disposition</code> String - Can be <code>default</code>, <code>foreground-tab</code>, <code>background-tab</code>,
+<code>new-window</code> and <code>other</code>.</li>
+<li><code>options</code> Object - The options which will be used for creating the new
+<code>BrowserWindow</code>.</li>
+</ul>
+
+<p>Emitted when the page requests to open a new window for a <code>url</code>. It could be
+requested by <code>window.open</code> or an external link like <code>&lt;a target=&#39;_blank&#39;&gt;</code>.</p>
+
+<p>By default a new <code>BrowserWindow</code> will be created for the <code>url</code>.</p>
+
+<p>Calling <code>event.preventDefault()</code> will prevent creating new windows.</p>
+
+<h3 id="event:-&#39;will-navigate&#39;">Event: &#39;will-navigate&#39;</h3>
+
+<p>Returns:</p>
+
+<ul>
+<li><code>event</code> Event</li>
+<li><code>url</code> String</li>
+</ul>
+
+<p>Emitted when a user or the page wants to start navigation. It can happen when the
+<code>window.location</code> object is changed or a user clicks a link in the page.</p>
+
+<p>This event will not emit when the navigation is started programmatically with
+APIs like <code>webContents.loadUrl</code> and <code>webContents.back</code>.</p>
+
+<p>Calling <code>event.preventDefault()</code> will prevent the navigation.</p>
+
+<h3 id="event:-&#39;crashed&#39;">Event: &#39;crashed&#39;</h3>
+
+<p>Emitted when the renderer process has crashed.</p>
+
+<h3 id="event:-&#39;plugin-crashed&#39;">Event: &#39;plugin-crashed&#39;</h3>
+
+<p>Returns:</p>
+
+<ul>
+<li><code>event</code> Event</li>
+<li><code>name</code> String</li>
+<li><code>version</code> String</li>
+</ul>
+
+<p>Emitted when a plugin process has crashed.</p>
+
+<h3 id="event:-&#39;destroyed&#39;">Event: &#39;destroyed&#39;</h3>
+
+<p>Emitted when <code>webContents</code> is destroyed.</p>
+
+<h3 id="event:-&#39;devtools-opened&#39;">Event: &#39;devtools-opened&#39;</h3>
+
+<p>Emitted when DevTools is opened.</p>
+
+<h3 id="event:-&#39;devtools-closed&#39;">Event: &#39;devtools-closed&#39;</h3>
+
+<p>Emitted when DevTools is closed.</p>
+
+<h3 id="event:-&#39;devtools-focused&#39;">Event: &#39;devtools-focused&#39;</h3>
+
+<p>Emitted when DevTools is focused / opened.</p>
+
+<h2 id="instance-methods">Instance Methods</h2>
+
+<p>The <code>webContents</code> object has the following instance methods:</p>
+
+<h3 id="webcontents.session"><code>webContents.session</code></h3>
+
+<p>Returns the <code>session</code> object used by this webContents.</p>
+
+<p>See <a href="http://electron.atom.io/docs/v0.34.0/api/session">session documentation</a> for this object&#39;s methods.</p>
+
+<h3 id="webcontents.loadurl(url[,-options])"><code>webContents.loadUrl(url[, options])</code></h3>
+
+<ul>
+<li><code>url</code> URL</li>
+<li><code>options</code> Object (optional), properties:
+
+<ul>
+<li><code>httpReferrer</code> String - A HTTP Referrer url.</li>
+<li><code>userAgent</code> String - A user agent originating the request.</li>
+</ul></li>
+</ul>
+
+<p>Loads the <code>url</code> in the window, the <code>url</code> must contain the protocol prefix,
+e.g. the <code>http://</code> or <code>file://</code>.</p>
+
+<h3 id="webcontents.geturl()"><code>webContents.getUrl()</code></h3>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">BrowserWindow</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;browser-window&#39;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">win</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">BrowserWindow</span><span class="p">({</span><span class="nx">width</span><span class="o">:</span> <span class="mi">800</span><span class="p">,</span> <span class="nx">height</span><span class="o">:</span> <span class="mi">600</span><span class="p">});</span>
+<span class="nx">win</span><span class="p">.</span><span class="nx">loadUrl</span><span class="p">(</span><span class="s2">&quot;http://github.com&quot;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">currentUrl</span> <span class="o">=</span> <span class="nx">win</span><span class="p">.</span><span class="nx">webContents</span><span class="p">.</span><span class="nx">getUrl</span><span class="p">();</span>
+</code></pre></div>
+<p>Returns URL of the current web page.</p>
+
+<h3 id="webcontents.gettitle()"><code>webContents.getTitle()</code></h3>
+
+<p>Returns the title of the current web page.</p>
+
+<h3 id="webcontents.isloading()"><code>webContents.isLoading()</code></h3>
+
+<p>Returns whether web page is still loading resources.</p>
+
+<h3 id="webcontents.iswaitingforresponse()"><code>webContents.isWaitingForResponse()</code></h3>
+
+<p>Returns whether the web page is waiting for a first-response from the main
+resource of the page.</p>
+
+<h3 id="webcontents.stop()"><code>webContents.stop()</code></h3>
+
+<p>Stops any pending navigation.</p>
+
+<h3 id="webcontents.reload()"><code>webContents.reload()</code></h3>
+
+<p>Reloads the current web page.</p>
+
+<h3 id="webcontents.reloadignoringcache()"><code>webContents.reloadIgnoringCache()</code></h3>
+
+<p>Reloads current page and ignores cache.</p>
+
+<h3 id="webcontents.cangoback()"><code>webContents.canGoBack()</code></h3>
+
+<p>Returns whether the browser can go back to previous web page.</p>
+
+<h3 id="webcontents.cangoforward()"><code>webContents.canGoForward()</code></h3>
+
+<p>Returns whether the browser can go forward to next web page.</p>
+
+<h3 id="webcontents.cangotooffset(offset)"><code>webContents.canGoToOffset(offset)</code></h3>
+
+<ul>
+<li><code>offset</code> Integer</li>
+</ul>
+
+<p>Returns whether the web page can go to <code>offset</code>.</p>
+
+<h3 id="webcontents.clearhistory()"><code>webContents.clearHistory()</code></h3>
+
+<p>Clears the navigation history.</p>
+
+<h3 id="webcontents.goback()"><code>webContents.goBack()</code></h3>
+
+<p>Makes the browser go back a web page.</p>
+
+<h3 id="webcontents.goforward()"><code>webContents.goForward()</code></h3>
+
+<p>Makes the browser go forward a web page.</p>
+
+<h3 id="webcontents.gotoindex(index)"><code>webContents.goToIndex(index)</code></h3>
+
+<ul>
+<li><code>index</code> Integer</li>
+</ul>
+
+<p>Navigates browser to the specified absolute web page index.</p>
+
+<h3 id="webcontents.gotooffset(offset)"><code>webContents.goToOffset(offset)</code></h3>
+
+<ul>
+<li><code>offset</code> Integer</li>
+</ul>
+
+<p>Navigates to the specified offset from the &quot;current entry&quot;.</p>
+
+<h3 id="webcontents.iscrashed()"><code>webContents.isCrashed()</code></h3>
+
+<p>Whether the renderer process has crashed.</p>
+
+<h3 id="webcontents.setuseragent(useragent)"><code>webContents.setUserAgent(userAgent)</code></h3>
+
+<ul>
+<li><code>userAgent</code> String</li>
+</ul>
+
+<p>Overrides the user agent for this web page.</p>
+
+<h3 id="webcontents.getuseragent()"><code>webContents.getUserAgent()</code></h3>
+
+<p>Returns a <code>String</code> representing the user agent for this web page.</p>
+
+<h3 id="webcontents.insertcss(css)"><code>webContents.insertCSS(css)</code></h3>
+
+<ul>
+<li><code>css</code> String</li>
+</ul>
+
+<p>Injects CSS into the current web page.</p>
+
+<h3 id="webcontents.executejavascript(code[,-usergesture])"><code>webContents.executeJavaScript(code[, userGesture])</code></h3>
+
+<ul>
+<li><code>code</code> String</li>
+<li><code>userGesture</code> Boolean (optional)</li>
+</ul>
+
+<p>Evaluates <code>code</code> in page.</p>
+
+<p>In the browser window some HTML APIs like <code>requestFullScreen</code> can only be
+invoked by a gesture from the user. Setting <code>userGesture</code> to <code>true</code> will remove
+this limitation.</p>
+
+<h3 id="webcontents.setaudiomuted(muted)"><code>webContents.setAudioMuted(muted)</code></h3>
+
+<ul>
+<li><code>muted</code> Boolean</li>
+</ul>
+
+<p>Mute the audio on the current web page.</p>
+
+<h3 id="webcontents.isaudiomuted()"><code>webContents.isAudioMuted()</code></h3>
+
+<p>Returns whether this page has been muted.</p>
+
+<h3 id="webcontents.undo()"><code>webContents.undo()</code></h3>
+
+<p>Executes the editing command <code>undo</code> in web page.</p>
+
+<h3 id="webcontents.redo()"><code>webContents.redo()</code></h3>
+
+<p>Executes the editing command <code>redo</code> in web page.</p>
+
+<h3 id="webcontents.cut()"><code>webContents.cut()</code></h3>
+
+<p>Executes the editing command <code>cut</code> in web page.</p>
+
+<h3 id="webcontents.copy()"><code>webContents.copy()</code></h3>
+
+<p>Executes the editing command <code>copy</code> in web page.</p>
+
+<h3 id="webcontents.paste()"><code>webContents.paste()</code></h3>
+
+<p>Executes the editing command <code>paste</code> in web page.</p>
+
+<h3 id="webcontents.pasteandmatchstyle()"><code>webContents.pasteAndMatchStyle()</code></h3>
+
+<p>Executes the editing command <code>pasteAndMatchStyle</code> in web page.</p>
+
+<h3 id="webcontents.delete()"><code>webContents.delete()</code></h3>
+
+<p>Executes the editing command <code>delete</code> in web page.</p>
+
+<h3 id="webcontents.selectall()"><code>webContents.selectAll()</code></h3>
+
+<p>Executes the editing command <code>selectAll</code> in web page.</p>
+
+<h3 id="webcontents.unselect()"><code>webContents.unselect()</code></h3>
+
+<p>Executes the editing command <code>unselect</code> in web page.</p>
+
+<h3 id="webcontents.replace(text)"><code>webContents.replace(text)</code></h3>
+
+<ul>
+<li><code>text</code> String</li>
+</ul>
+
+<p>Executes the editing command <code>replace</code> in web page.</p>
+
+<h3 id="webcontents.replacemisspelling(text)"><code>webContents.replaceMisspelling(text)</code></h3>
+
+<ul>
+<li><code>text</code> String</li>
+</ul>
+
+<p>Executes the editing command <code>replaceMisspelling</code> in web page.</p>
+
+<h3 id="webcontents.hasserviceworker(callback)"><code>webContents.hasServiceWorker(callback)</code></h3>
+
+<ul>
+<li><code>callback</code> Function</li>
+</ul>
+
+<p>Checks if any ServiceWorker is registered and returns a boolean as
+response to <code>callback</code>.</p>
+
+<h3 id="webcontents.unregisterserviceworker(callback)"><code>webContents.unregisterServiceWorker(callback)</code></h3>
+
+<ul>
+<li><code>callback</code> Function</li>
+</ul>
+
+<p>Unregisters any ServiceWorker if present and returns a boolean as
+response to <code>callback</code> when the JS promise is fulfilled or false
+when the JS promise is rejected.</p>
+
+<h3 id="webcontents.print([options])"><code>webContents.print([options])</code></h3>
+
+<p><code>options</code> Object (optional), properties:</p>
+
+<ul>
+<li><code>silent</code> Boolean - Don&#39;t ask user for print settings, defaults to <code>false</code></li>
+<li><code>printBackground</code> Boolean - Also prints the background color and image of
+the web page, defaults to <code>false</code>.</li>
+</ul>
+
+<p>Prints window&#39;s web page. When <code>silent</code> is set to <code>false</code>, Electron will pick
+up system&#39;s default printer and default settings for printing.</p>
+
+<p>Calling <code>window.print()</code> in web page is equivalent to calling
+<code>webContents.print({silent: false, printBackground: false})</code>.</p>
+
+<p><strong>Note:</strong> On Windows, the print API relies on <code>pdf.dll</code>. If your application
+doesn&#39;t need the print feature, you can safely remove <code>pdf.dll</code> to reduce binary
+size.</p>
+
+<h3 id="webcontents.printtopdf(options,-callback)"><code>webContents.printToPDF(options, callback)</code></h3>
+
+<p><code>options</code> Object, properties:</p>
+
+<ul>
+<li><code>marginsType</code> Integer - Specify the type of margins to use
+
+<ul>
+<li>0 - default</li>
+<li>1 - none</li>
+<li>2 - minimum</li>
+</ul></li>
+<li><code>pageSize</code> String - Specify page size of the generated PDF.
+
+<ul>
+<li><code>A4</code></li>
+<li><code>A3</code></li>
+<li><code>Legal</code></li>
+<li><code>Letter</code></li>
+<li><code>Tabloid</code></li>
+</ul></li>
+<li><code>printBackground</code> Boolean - Whether to print CSS backgrounds.</li>
+<li><code>printSelectionOnly</code> Boolean - Whether to print selection only.</li>
+<li><code>landscape</code> Boolean - <code>true</code> for landscape, <code>false</code> for portrait.</li>
+</ul>
+
+<p><code>callback</code> Function - <code>function(error, data) {}</code></p>
+
+<ul>
+<li><code>error</code> Error</li>
+<li><code>data</code> Buffer - PDF file content.</li>
+</ul>
+
+<p>Prints window&#39;s web page as PDF with Chromium&#39;s preview printing custom
+settings.</p>
+
+<p>By default, an empty <code>options</code> will be regarded as:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="p">{</span>
+  <span class="nx">marginsType</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="nx">printBackground</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+  <span class="nx">printSelectionOnly</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+  <span class="nx">landscape</span><span class="o">:</span> <span class="kc">false</span>
+<span class="p">}</span>
+</code></pre></div><div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">BrowserWindow</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;browser-window&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">win</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">BrowserWindow</span><span class="p">({</span><span class="nx">width</span><span class="o">:</span> <span class="mi">800</span><span class="p">,</span> <span class="nx">height</span><span class="o">:</span> <span class="mi">600</span><span class="p">});</span>
+<span class="nx">win</span><span class="p">.</span><span class="nx">loadUrl</span><span class="p">(</span><span class="s2">&quot;http://github.com&quot;</span><span class="p">);</span>
+
+<span class="nx">win</span><span class="p">.</span><span class="nx">webContents</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;did-finish-load&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// Use default printing options</span>
+  <span class="nx">win</span><span class="p">.</span><span class="nx">webContents</span><span class="p">.</span><span class="nx">printToPDF</span><span class="p">({},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="k">throw</span> <span class="nx">error</span><span class="p">;</span>
+    <span class="nx">fs</span><span class="p">.</span><span class="nx">writeFile</span><span class="p">(</span><span class="s2">&quot;/tmp/print.pdf&quot;</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span>
+        <span class="k">throw</span> <span class="nx">error</span><span class="p">;</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Write PDF successfully.&quot;</span><span class="p">);</span>
+    <span class="p">})</span>
+  <span class="p">})</span>
+<span class="p">});</span>
+</code></pre></div>
+<h3 id="webcontents.addworkspace(path)"><code>webContents.addWorkSpace(path)</code></h3>
+
+<ul>
+<li><code>path</code> String</li>
+</ul>
+
+<p>Adds the specified path to DevTools workspace.</p>
+
+<h3 id="webcontents.removeworkspace(path)"><code>webContents.removeWorkSpace(path)</code></h3>
+
+<ul>
+<li><code>path</code> String</li>
+</ul>
+
+<p>Removes the specified path from DevTools workspace.</p>
+
+<h3 id="webcontents.opendevtools([options])"><code>webContents.openDevTools([options])</code></h3>
+
+<ul>
+<li><code>options</code> Object (optional). Properties:
+
+<ul>
+<li><code>detach</code> Boolean - opens DevTools in a new window</li>
+</ul></li>
+</ul>
+
+<p>Opens the developer tools.</p>
+
+<h3 id="webcontents.closedevtools()"><code>webContents.closeDevTools()</code></h3>
+
+<p>Closes the developer tools.</p>
+
+<h3 id="webcontents.isdevtoolsopened()"><code>webContents.isDevToolsOpened()</code></h3>
+
+<p>Returns whether the developer tools are opened.</p>
+
+<h3 id="webcontents.toggledevtools()"><code>webContents.toggleDevTools()</code></h3>
+
+<p>Toggles the developer tools.</p>
+
+<h3 id="webcontents.isdevtoolsfocused()"><code>webContents.isDevToolsFocused()</code></h3>
+
+<p>Returns whether the developer tools is focused.</p>
+
+<h3 id="webcontents.inspectelement(x,-y)"><code>webContents.inspectElement(x, y)</code></h3>
+
+<ul>
+<li><code>x</code> Integer</li>
+<li><code>y</code> Integer</li>
+</ul>
+
+<p>Starts inspecting element at position (<code>x</code>, <code>y</code>).</p>
+
+<h3 id="webcontents.inspectserviceworker()"><code>webContents.inspectServiceWorker()</code></h3>
+
+<p>Opens the developer tools for the service worker context.</p>
+
+<h3 id="webcontents.send(channel[,-args...])"><code>webContents.send(channel[, args...])</code></h3>
+
+<ul>
+<li><code>channel</code> String</li>
+<li><code>args...</code> (optional)</li>
+</ul>
+
+<p>Send <code>args...</code> to the web page via <code>channel</code> in an asynchronous message, the web
+page can handle it by listening to the <code>channel</code> event of the <code>ipc</code> module.</p>
+
+<p>An example of sending messages from the main process to the renderer process:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// In the main process.</span>
+<span class="kd">var</span> <span class="nb">window</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;ready&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nb">window</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">BrowserWindow</span><span class="p">({</span><span class="nx">width</span><span class="o">:</span> <span class="mi">800</span><span class="p">,</span> <span class="nx">height</span><span class="o">:</span> <span class="mi">600</span><span class="p">});</span>
+  <span class="nb">window</span><span class="p">.</span><span class="nx">loadUrl</span><span class="p">(</span><span class="s1">&#39;file://&#39;</span> <span class="o">+</span> <span class="nx">__dirname</span> <span class="o">+</span> <span class="s1">&#39;/index.html&#39;</span><span class="p">);</span>
+  <span class="nb">window</span><span class="p">.</span><span class="nx">webContents</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;did-finish-load&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nb">window</span><span class="p">.</span><span class="nx">webContents</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="s1">&#39;ping&#39;</span><span class="p">,</span> <span class="s1">&#39;whoooooooh!&#39;</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</code></pre></div><div class="highlight"><pre><code class="language-html" data-lang="html"><span class="c">&lt;!-- index.html --&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+  <span class="nt">&lt;script&gt;</span>
+    <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;ipc&#39;</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;ping&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">message</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">message</span><span class="p">);</span>  <span class="c1">// Prints &quot;whoooooooh!&quot;</span>
+    <span class="p">});</span>
+  <span class="nt">&lt;/script&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div>
+<p><strong>Note:</strong></p>
+
+<ol>
+<li>The IPC message handler in web pages does not have an <code>event</code> parameter,
+which is different from the handlers in the main process.</li>
+<li>There is no way to send synchronous messages from the main process to a
+renderer process, because it would be very easy to cause dead locks.</li>
+</ol>
+
+<h3 id="webcontents.enabledeviceemulation(parameters)"><code>webContents.enableDeviceEmulation(parameters)</code></h3>
+
+<p><code>parameters</code> Object, properties:</p>
+
+<ul>
+<li><code>screenPosition</code> String - Specify the screen type to emulate
+(default: <code>desktop</code>)
+
+<ul>
+<li><code>desktop</code></li>
+<li><code>mobile</code></li>
+</ul></li>
+<li><code>screenSize</code> Object - Set the emulated screen size (screenPosition == mobile)
+
+<ul>
+<li><code>width</code> Integer - Set the emulated screen width</li>
+<li><code>height</code> Integer - Set the emulated screen height</li>
+</ul></li>
+<li><code>viewPosition</code> Object - Position the view on the screen
+(screenPosition == mobile) (default: <code>{x: 0, y: 0}</code>)
+
+<ul>
+<li><code>x</code> Integer - Set the x axis offset from top left corner</li>
+<li><code>y</code> Integer - Set the y axis offset from top left corner</li>
+</ul></li>
+<li><code>deviceScaleFactor</code> Integer - Set the device scale factor (if zero defaults to
+original device scale factor) (default: <code>0</code>)</li>
+<li><code>viewSize</code> Object - Set the emulated view size (empty means no override)
+
+<ul>
+<li><code>width</code> Integer - Set the emulated view width</li>
+<li><code>height</code> Integer - Set the emulated view height</li>
+</ul></li>
+<li><code>fitToView</code> Boolean - Whether emulated view should be scaled down if
+necessary to fit into available space (default: <code>false</code>)</li>
+<li><code>offset</code> Object - Offset of the emulated view inside available space (not in
+fit to view mode) (default: <code>{x: 0, y: 0}</code>)
+
+<ul>
+<li><code>x</code> Float - Set the x axis offset from top left corner</li>
+<li><code>y</code> Float - Set the y axis offset from top left corner</li>
+</ul></li>
+<li><code>scale</code> Float - Scale of emulated view inside available space (not in fit to
+view mode) (default: <code>1</code>)</li>
+</ul>
+
+<p>Enable device emulation with the given parameters.</p>
+
+<h3 id="webcontents.disabledeviceemulation()"><code>webContents.disableDeviceEmulation()</code></h3>
+
+<p>Disable device emulation enabled by <code>webContents.enableDeviceEmulation</code>.</p>
+
+<h3 id="webcontents.sendinputevent(event)"><code>webContents.sendInputEvent(event)</code></h3>
+
+<ul>
+<li><code>event</code> Object
+
+<ul>
+<li><code>type</code> String (<strong>required</strong>) - The type of the event, can be <code>mouseDown</code>,
+<code>mouseUp</code>, <code>mouseEnter</code>, <code>mouseLeave</code>, <code>contextMenu</code>, <code>mouseWheel</code>,
+<code>keyDown</code>, <code>keyUp</code>, <code>char</code>.</li>
+<li><code>modifiers</code> Array - An array of modifiers of the event, can
+include <code>shift</code>, <code>control</code>, <code>alt</code>, <code>meta</code>, <code>isKeypad</code>, <code>isAutoRepeat</code>,
+<code>leftButtonDown</code>, <code>middleButtonDown</code>, <code>rightButtonDown</code>, <code>capsLock</code>,
+<code>numLock</code>, <code>left</code>, <code>right</code>.</li>
+</ul></li>
+</ul>
+
+<p>Sends an input <code>event</code> to the page.</p>
+
+<p>For keyboard events, the <code>event</code> object also have following properties:</p>
+
+<ul>
+<li><code>keyCode</code> String (<strong>required</strong>) - A single character that will be sent as
+keyboard event. Can be any UTF-8 character.</li>
+</ul>
+
+<p>For mouse events, the <code>event</code> object also have following properties:</p>
+
+<ul>
+<li><code>x</code> Integer (<strong>required</strong>)</li>
+<li><code>y</code> Integer (<strong>required</strong>)</li>
+<li><code>button</code> String - The button pressed, can be <code>left</code>, <code>middle</code>, <code>right</code></li>
+<li><code>globalX</code> Integer</li>
+<li><code>globalY</code> Integer</li>
+<li><code>movementX</code> Integer</li>
+<li><code>movementY</code> Integer</li>
+<li><code>clickCount</code> Integer</li>
+</ul>
+
+<p>For the <code>mouseWheel</code> event, the <code>event</code> object also have following properties:</p>
+
+<ul>
+<li><code>deltaX</code> Integer</li>
+<li><code>deltaY</code> Integer</li>
+<li><code>wheelTicksX</code> Integer</li>
+<li><code>wheelTicksY</code> Integer</li>
+<li><code>accelerationRatioX</code> Integer</li>
+<li><code>accelerationRatioY</code> Integer</li>
+<li><code>hasPreciseScrollingDeltas</code> Boolean</li>
+<li><code>canScroll</code> Boolean</li>
+</ul>
+
+<h3 id="webcontents.beginframesubscription(callback)"><code>webContents.beginFrameSubscription(callback)</code></h3>
+
+<ul>
+<li><code>callback</code> Function</li>
+</ul>
+
+<p>Begin subscribing for presentation events and captured frames, the <code>callback</code>
+will be called with <code>callback(frameBuffer)</code> when there is a presentation event.</p>
+
+<p>The <code>frameBuffer</code> is a <code>Buffer</code> that contains raw pixel data. On most machines,
+the pixel data is effectively stored in 32bit BGRA format, but the actual
+representation depends on the endianness of the processor (most modern
+processors are little-endian, on machines with big-endian processors the data
+is in 32bit ARGB format).</p>
+
+<h3 id="webcontents.endframesubscription()"><code>webContents.endFrameSubscription()</code></h3>
+
+<p>End subscribing for frame presentation events.</p>
+
+<h2 id="instance-properties">Instance Properties</h2>
+
+<p><code>WebContents</code> objects also have the following properties:</p>
+
+<h3 id="webcontents.devtoolswebcontents"><code>webContents.devToolsWebContents</code></h3>
+
+<p>Get the <code>WebContents</code> of DevTools for this <code>WebContents</code>.</p>
+
+<p><strong>Note:</strong> Users should never store this object because it may become <code>null</code>
+when the DevTools has been closed.</p>
+
+<h3 id="webcontents.savepage(fullpath,-savetype,-callback)"><code>webContents.savePage(fullPath, saveType, callback)</code></h3>
+
+<ul>
+<li><code>fullPath</code> String - The full file path.</li>
+<li><code>saveType</code> String - Specify the save type.
+
+<ul>
+<li><code>HTMLOnly</code> - Save only the HTML of the page.</li>
+<li><code>HTMLComplete</code> - Save complete-html page.</li>
+<li><code>MHTML</code> - Save complete-html page as MHTML.</li>
+</ul></li>
+<li><code>callback</code> Function - <code>function(error) {}</code>.
+
+<ul>
+<li><code>error</code> Error</li>
+</ul></li>
+</ul>
+
+<p>Returns true if the process of saving page has been initiated successfully.</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">win</span><span class="p">.</span><span class="nx">loadUrl</span><span class="p">(</span><span class="s1">&#39;https://github.com&#39;</span><span class="p">);</span>
+
+<span class="nx">win</span><span class="p">.</span><span class="nx">webContents</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;did-finish-load&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">win</span><span class="p">.</span><span class="nx">webContents</span><span class="p">.</span><span class="nx">savePage</span><span class="p">(</span><span class="s1">&#39;/tmp/test.html&#39;</span><span class="p">,</span> <span class="s1">&#39;HTMLComplete&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">error</span><span class="p">)</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Save page successfully&quot;</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</code></pre></div>
+
+      </div>
+    </div>
+    
+    <div class='row'>
+      <div class='ten columns release offset-by-one docs-footer'>
+        <span class="octicon octicon-pencil"></span>
+        See something that needs fixing? Propose a change on the <a href='https://github.com/atom/electron/blob/master/docs/api/web-contents.md'>source</a>.
+        <br>
+        <span class="octicon octicon-zap"></span>
+        Need a different version of the docs? See the <a href='/docs'>available versions</a>.
+      </div>
+    </div>
+    
+  </div>
+</section>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class='container'>
+    <div class='row'>
+      <div class='one-half column'>
+        <ul class='inline-list'>
+          <li><a href='https://github.com/atom/electron'>Repository</a></li>
+          <li><a href='/docs/v0.36.5'>Documentation</a></li>
+          <li><a href='/releases.html'>Releases</a></li>
+          <li><a href='http://blog.atom.io'>Blog</a></li>
+          <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+        </ul>
+      </div>
+
+      <div class='one-half column text-right'>
+        <a href='https://github.com' class="no-hover-dec"><span class='octicon octicon-code'></span> with <span class='octicon octicon-heart'></span> by <span class='octicon octicon-logo-github'></span></a>
+      </div>
+  </div>
+</footer>
+
+    <script>
+  var anchorForId = function (id) {
+    var anchor = document.createElement("a");
+    anchor.className = "header-link";
+    anchor.href      = "#" + id;
+    anchor.innerHTML = "<span class='octicon octicon-link'></span>";
+    anchor.title = "Permalink";
+    return anchor;
+  };
+
+  var linkifyAnchors = function (level, containingElement) {
+    var headers = containingElement.getElementsByTagName("h" + level);
+    for (var h = 0; h < headers.length; h++) {
+      var header = headers[h];
+
+      if (typeof header.id !== "undefined" && header.id !== "") {
+        header.appendChild(anchorForId(header.id));
+      }
+    }
+  };
+
+  document.onreadystatechange = function () {
+    if (this.readyState === "complete") {
+      var contentBlock = document.getElementsByClassName("docs")[0] || document.getElementsByClassName("news")[0];
+      if (!contentBlock) {
+        return;
+      }
+      for (var level = 1; level <= 6; level++) {
+        linkifyAnchors(level, contentBlock);
+      }
+    }
+  };
+</script>
+
+  </body>
+
+</html>

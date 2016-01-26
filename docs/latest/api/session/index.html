@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+  <title>Session</title>
+  <meta name='description' content='Build cross platform desktop apps with web technologies'>
+
+  <link rel='shortcut icon' href='/images/favicon.ico'/>
+  <link rel='stylesheet' href='/css/normalize.css'>
+  <link rel='stylesheet' href='/css/skeleton.css'>
+  <link rel='stylesheet' href='/css/main.css'>
+  <link rel='stylesheet' href='/css/octicons/octicons.css'>
+  <link rel='stylesheet' href='/css/pygments.css'>
+  <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+  <link rel='canonical' href='/docs/latest/api/session/'>
+  <link rel='alternate' type='application/rss+xml' title='Electron' href='/feed.xml' />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-3769691-57', 'auto');
+    ga('send', 'pageview');
+  </script>
+</head>
+
+
+  <body>
+
+    <header>
+  <div class='top-bar'>
+    <div class='container'>
+      <div class='row'>
+        <div class='four columns'>
+          <ul class='navigation inline-list'>
+            <li><a href='/#built-on-electron'>Built on Electron</a></li>
+            <li><a href='/#get-started'>Get Started</a></li>
+          </ul>
+        </div>
+        <div class='eight columns text-right'>
+          <ul class='navigation inline-list'>
+            <li><a href='https://github.com/atom/electron'>Repository</a></li>
+            <li><a href='/docs/v0.36.5'>Documentation</a></li>
+            <li><a href='http://blog.atom.io'>Blog</a></li>
+            <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+    <div class='page-content'>
+      <div class='wrapper'>
+        <div class='page-template session'>
+  <section class='jump-to-release is-compact'>
+  <div class='container'>
+    <div class='row'>
+      <div class='twelve columns'>
+      <h1><img class="electron-icon" src='/images/electron-icon.svg'>Electron Documentation</h1>
+      
+      <a href='/docs/v0.36.5/'>v0.36.5  (Latest)  </a> |
+      <a href='https://github.com/atom/electron/blob/master/docs/api/session.md'>Document Source</a>
+      
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class='docs'>
+  <div class='container'>
+    <div class='row'>
+      <div class='ten columns release offset-by-one'>
+        
+        <h6 class='docs-breadcrumb'>v0.36.5 / API
+           / Session </h6>
+        
+
+        <h1 id="session">session</h1>
+
+<p>The <code>session</code> module can be used to create new <code>Session</code> objects.</p>
+
+<p>You can also access the <code>session</code> of existing pages by using the <code>session</code>
+property of <a href="http://electron.atom.io/docs/v0.36.5/api/web-contents"><code>webContents</code></a> which is a property of
+<a href="http://electron.atom.io/docs/v0.36.5/api/browser-window"><code>BrowserWindow</code></a>.</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kr">const</span> <span class="nx">BrowserWindow</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;electron&#39;</span><span class="p">).</span><span class="nx">BrowserWindow</span><span class="p">;</span>
+
+<span class="kd">var</span> <span class="nx">win</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">BrowserWindow</span><span class="p">({</span> <span class="nx">width</span><span class="o">:</span> <span class="mi">800</span><span class="p">,</span> <span class="nx">height</span><span class="o">:</span> <span class="mi">600</span> <span class="p">});</span>
+<span class="nx">win</span><span class="p">.</span><span class="nx">loadURL</span><span class="p">(</span><span class="s2">&quot;http://github.com&quot;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">ses</span> <span class="o">=</span> <span class="nx">win</span><span class="p">.</span><span class="nx">webContents</span><span class="p">.</span><span class="nx">session</span><span class="p">;</span>
+</code></pre></div>
+<h2 id="methods">Methods</h2>
+
+<p>The <code>session</code> module has the following methods:</p>
+
+<h3 id="session.frompartition(partition)">session.fromPartition(partition)</h3>
+
+<ul>
+<li><code>partition</code> String</li>
+</ul>
+
+<p>Returns a new <code>Session</code> instance from <code>partition</code> string.</p>
+
+<p>If <code>partition</code> starts with <code>persist:</code>, the page will use a persistent session
+available to all pages in the app with the same <code>partition</code>. if there is no
+<code>persist:</code> prefix, the page will use an in-memory session. If the <code>partition</code> is
+empty then default session of the app will be returned.</p>
+
+<h2 id="properties">Properties</h2>
+
+<p>The <code>session</code> module has the following properties:</p>
+
+<h3 id="session.defaultsession">session.defaultSession</h3>
+
+<p>Returns the default session object of the app.</p>
+
+<h2 id="class:-session">Class: Session</h2>
+
+<p>You can create a <code>Session</code> object in the <code>session</code> module:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kr">const</span> <span class="nx">session</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;electron&#39;</span><span class="p">).</span><span class="nx">session</span><span class="p">;</span>
+
+<span class="kd">var</span> <span class="nx">ses</span> <span class="o">=</span> <span class="nx">session</span><span class="p">.</span><span class="nx">fromPartition</span><span class="p">(</span><span class="s1">&#39;persist:name&#39;</span><span class="p">);</span>
+</code></pre></div>
+<h3 id="instance-events">Instance Events</h3>
+
+<p>The following events are available on instances of <code>Session</code>:</p>
+
+<h4 id="event:-&#39;will-download&#39;">Event: &#39;will-download&#39;</h4>
+
+<ul>
+<li><code>event</code> Event</li>
+<li><code>item</code> <a href="http://electron.atom.io/docs/v0.36.5/api/download-item">DownloadItem</a></li>
+<li><code>webContents</code> <a href="http://electron.atom.io/docs/v0.36.5/api/web-contents">WebContents</a></li>
+</ul>
+
+<p>Emitted when Electron is about to download <code>item</code> in <code>webContents</code>.</p>
+
+<p>Calling <code>event.preventDefault()</code> will cancel the download.</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">session</span><span class="p">.</span><span class="nx">defaultSession</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;will-download&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">item</span><span class="p">,</span> <span class="nx">webContents</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span>
+  <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;request&#39;</span><span class="p">)(</span><span class="nx">item</span><span class="p">.</span><span class="nx">getURL</span><span class="p">(),</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">).</span><span class="nx">writeFileSync</span><span class="p">(</span><span class="s1">&#39;/somewhere&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</code></pre></div>
+<h3 id="instance-methods">Instance Methods</h3>
+
+<p>The following methods are available on instances of <code>Session</code>:</p>
+
+<h4 id="ses.cookies"><code>ses.cookies</code></h4>
+
+<p>The <code>cookies</code> gives you ability to query and modify cookies. For example:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// Query all cookies.</span>
+<span class="nx">session</span><span class="p">.</span><span class="nx">defaultSession</span><span class="p">.</span><span class="nx">cookies</span><span class="p">.</span><span class="nx">get</span><span class="p">({},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">cookies</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">cookies</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="c1">// Query all cookies associated with a specific url.</span>
+<span class="nx">session</span><span class="p">.</span><span class="nx">defaultSession</span><span class="p">.</span><span class="nx">cookies</span><span class="p">.</span><span class="nx">get</span><span class="p">({</span> <span class="nx">url</span> <span class="o">:</span> <span class="s2">&quot;http://www.github.com&quot;</span> <span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">cookies</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">cookies</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="c1">// Set a cookie with the given cookie data;</span>
+<span class="c1">// may overwrite equivalent cookies if they exist.</span>
+<span class="kd">var</span> <span class="nx">cookie</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">url</span> <span class="o">:</span> <span class="s2">&quot;http://www.github.com&quot;</span><span class="p">,</span> <span class="nx">name</span> <span class="o">:</span> <span class="s2">&quot;dummy_name&quot;</span><span class="p">,</span> <span class="nx">value</span> <span class="o">:</span> <span class="s2">&quot;dummy&quot;</span> <span class="p">};</span>
+<span class="nx">session</span><span class="p">.</span><span class="nx">defaultSession</span><span class="p">.</span><span class="nx">cookies</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="nx">cookie</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div>
+<h4 id="ses.cookies.get(filter,-callback)"><code>ses.cookies.get(filter, callback)</code></h4>
+
+<ul>
+<li><code>filter</code> Object
+
+<ul>
+<li><code>url</code> String (optional) - Retrieves cookies which are associated with
+<code>url</code>. Empty implies retrieving cookies of all urls.</li>
+<li><code>name</code> String (optional) - Filters cookies by name.</li>
+<li><code>domain</code> String (optional) - Retrieves cookies whose domains match or are
+subdomains of <code>domains</code></li>
+<li><code>path</code> String (optional) - Retrieves cookies whose path matches <code>path</code>.</li>
+<li><code>secure</code> Boolean (optional) - Filters cookies by their Secure property.</li>
+<li><code>session</code> Boolean (optional) - Filters out session or persistent cookies.</li>
+</ul></li>
+<li><code>callback</code> Function</li>
+</ul>
+
+<p>Sends a request to get all cookies matching <code>details</code>, <code>callback</code> will be called
+with <code>callback(error, cookies)</code> on complete.</p>
+
+<p><code>cookies</code> is an Array of <code>cookie</code> objects.</p>
+
+<ul>
+<li><code>cookie</code> Object
+
+<ul>
+<li> <code>name</code> String - The name of the cookie.</li>
+<li> <code>value</code> String - The value of the cookie.</li>
+<li> <code>domain</code> String - The domain of the cookie.</li>
+<li> <code>hostOnly</code> String - Whether the cookie is a host-only cookie.</li>
+<li> <code>path</code> String - The path of the cookie.</li>
+<li> <code>secure</code> Boolean - Whether the cookie is marked as secure.</li>
+<li> <code>httpOnly</code> Boolean - Whether the cookie is marked as HTTP only.</li>
+<li> <code>session</code> Boolean - Whether the cookie is a session cookie or a persistent
+cookie with an expiration date.</li>
+<li> <code>expirationDate</code> Double (optional) - The expiration date of the cookie as
+the number of seconds since the UNIX epoch. Not provided for session
+cookies.</li>
+</ul></li>
+</ul>
+
+<h4 id="ses.cookies.set(details,-callback)"><code>ses.cookies.set(details, callback)</code></h4>
+
+<ul>
+<li><code>details</code> Object
+
+<ul>
+<li><code>url</code> String - Retrieves cookies which are associated with <code>url</code></li>
+<li><code>name</code> String - The name of the cookie. Empty by default if omitted.</li>
+<li><code>value</code> String - The value of the cookie. Empty by default if omitted.</li>
+<li><code>domain</code> String - The domain of the cookie. Empty by default if omitted.</li>
+<li><code>path</code> String - The path of the cookie. Empty by default if omitted.</li>
+<li><code>secure</code> Boolean - Whether the cookie should be marked as Secure. Defaults to
+false.</li>
+<li><code>session</code> Boolean - Whether the cookie should be marked as HttpOnly. Defaults
+to false.</li>
+<li><code>expirationDate</code> Double -   The expiration date of the cookie as the number of
+seconds since the UNIX epoch. If omitted, the cookie becomes a session cookie.</li>
+</ul></li>
+<li><code>callback</code> Function</li>
+</ul>
+
+<p>Sets the cookie with <code>details</code>, <code>callback</code> will be called with <code>callback(error)</code>
+on complete.</p>
+
+<h4 id="ses.cookies.remove(url,-name,-callback)"><code>ses.cookies.remove(url, name, callback)</code></h4>
+
+<ul>
+<li><code>url</code> String - The URL associated with the cookie.</li>
+<li><code>name</code> String - The name of cookie to remove.</li>
+<li><code>callback</code> Function</li>
+</ul>
+
+<p>Removes the cookies matching <code>url</code> and <code>name</code>, <code>callback</code> will called with
+<code>callback()</code> on complete.</p>
+
+<h4 id="ses.getcachesize(callback)"><code>ses.getCacheSize(callback)</code></h4>
+
+<ul>
+<li><code>callback</code> Function
+
+<ul>
+<li><code>size</code> Integer - Cache size used in bytes.</li>
+</ul></li>
+</ul>
+
+<p>Returns the session&#39;s current cache size.</p>
+
+<h4 id="ses.clearcache(callback)"><code>ses.clearCache(callback)</code></h4>
+
+<ul>
+<li><code>callback</code> Function - Called when operation is done</li>
+</ul>
+
+<p>Clears the session’s HTTP cache.</p>
+
+<h4 id="ses.clearstoragedata([options,-]callback)"><code>ses.clearStorageData([options, ]callback)</code></h4>
+
+<ul>
+<li><code>options</code> Object (optional)
+
+<ul>
+<li><code>origin</code> String - Should follow <code>window.location.origin</code>’s representation
+<code>scheme://host:port</code>.</li>
+<li><code>storages</code> Array - The types of storages to clear, can contain:
+<code>appcache</code>, <code>cookies</code>, <code>filesystem</code>, <code>indexdb</code>, <code>local storage</code>,
+<code>shadercache</code>, <code>websql</code>, <code>serviceworkers</code></li>
+<li><code>quotas</code> Array - The types of quotas to clear, can contain:
+<code>temporary</code>, <code>persistent</code>, <code>syncable</code>.</li>
+</ul></li>
+<li><code>callback</code> Function - Called when operation is done.</li>
+</ul>
+
+<p>Clears the data of web storages.</p>
+
+<h4 id="ses.flushstoragedata()"><code>ses.flushStorageData()</code></h4>
+
+<p>Writes any unwritten DOMStorage data to disk.</p>
+
+<h4 id="ses.setproxy(config,-callback)"><code>ses.setProxy(config, callback)</code></h4>
+
+<ul>
+<li><code>config</code> Object
+
+<ul>
+<li><code>pacScript</code> String - The URL associated with the PAC file.</li>
+<li><code>proxyRules</code> String - Rules indicating which proxies to use.</li>
+</ul></li>
+<li><code>callback</code> Function - Called when operation is done.</li>
+</ul>
+
+<p>Sets the proxy settings.</p>
+
+<p>When <code>pacScript</code> and <code>proxyRules</code> are provided together, the <code>proxyRules</code>
+option is ignored and <code>pacScript</code> configuration is applied.</p>
+
+<p>The <code>proxyRules</code> has to follow the rules bellow:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">proxyRules = schemeProxies[&quot;;&quot;&lt;schemeProxies&gt;]
+schemeProxies = [&lt;urlScheme&gt;&quot;=&quot;]&lt;proxyURIList&gt;
+urlScheme = &quot;http&quot; | &quot;https&quot; | &quot;ftp&quot; | &quot;socks&quot;
+proxyURIList = &lt;proxyURL&gt;[&quot;,&quot;&lt;proxyURIList&gt;]
+proxyURL = [&lt;proxyScheme&gt;&quot;://&quot;]&lt;proxyHost&gt;[&quot;:&quot;&lt;proxyPort&gt;]
+</code></pre></div>
+<p>For example:
+* <code>http=foopy:80;ftp=foopy2</code> - Use HTTP proxy <code>foopy:80</code> for <code>http://</code> URLs, and
+  HTTP proxy <code>foopy2:80</code> for <code>ftp://</code> URLs.
+* <code>foopy:80</code> - Use HTTP proxy <code>foopy:80</code> for all URLs.
+* <code>foopy:80,bar,direct://</code> - Use HTTP proxy <code>foopy:80</code> for all URLs, failing
+  over to <code>bar</code> if <code>foopy:80</code> is unavailable, and after that using no proxy.
+* <code>socks4://foopy</code> - Use SOCKS v4 proxy <code>foopy:1080</code> for all URLs.
+* <code>http=foopy,socks5://bar.com</code> - Use HTTP proxy <code>foopy</code> for http URLs, and fail
+  over to the SOCKS5 proxy <code>bar.com</code> if <code>foopy</code> is unavailable.
+* <code>http=foopy,direct://</code> - Use HTTP proxy <code>foopy</code> for http URLs, and use no
+  proxy if <code>foopy</code> is unavailable.
+* <code>http=foopy;socks=foopy2</code> -  Use HTTP proxy <code>foopy</code> for http URLs, and use
+  <code>socks4://foopy2</code> for all other URLs.</p>
+
+<h3 id="ses.resolveproxy(url,-callback)"><code>ses.resolveProxy(url, callback)</code></h3>
+
+<ul>
+<li><code>url</code> URL</li>
+<li><code>callback</code> Function</li>
+</ul>
+
+<p>Resolves the proxy information for <code>url</code>. The <code>callback</code> will be called with
+<code>callback(proxy)</code> when the request is performed.</p>
+
+<h4 id="ses.setdownloadpath(path)"><code>ses.setDownloadPath(path)</code></h4>
+
+<ul>
+<li><code>path</code> String - The download location</li>
+</ul>
+
+<p>Sets download saving directory. By default, the download directory will be the
+<code>Downloads</code> under the respective app folder.</p>
+
+<h4 id="ses.enablenetworkemulation(options)"><code>ses.enableNetworkEmulation(options)</code></h4>
+
+<ul>
+<li><code>options</code> Object
+
+<ul>
+<li><code>offline</code> Boolean - Whether to emulate network outage.</li>
+<li><code>latency</code> Double - RTT in ms</li>
+<li><code>downloadThroughput</code> Double - Download rate in Bps</li>
+<li><code>uploadThroughput</code> Double - Upload rate in Bps</li>
+</ul></li>
+</ul>
+
+<p>Emulates network with the given configuration for the <code>session</code>.</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// To emulate a GPRS connection with 50kbps throughput and 500 ms latency.</span>
+<span class="nb">window</span><span class="p">.</span><span class="nx">webContents</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">enableNetworkEmulation</span><span class="p">({</span>
+    <span class="nx">latency</span><span class="o">:</span> <span class="mi">500</span><span class="p">,</span>
+    <span class="nx">downloadThroughput</span><span class="o">:</span> <span class="mi">6400</span><span class="p">,</span>
+    <span class="nx">uploadThroughput</span><span class="o">:</span> <span class="mi">6400</span>
+<span class="p">});</span>
+
+<span class="c1">// To emulate a network outage.</span>
+<span class="nb">window</span><span class="p">.</span><span class="nx">webContents</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">enableNetworkEmulation</span><span class="p">({</span><span class="nx">offline</span><span class="o">:</span> <span class="kc">true</span><span class="p">});</span>
+</code></pre></div>
+<h4 id="ses.disablenetworkemulation()"><code>ses.disableNetworkEmulation()</code></h4>
+
+<p>Disables any network emulation already active for the <code>session</code>. Resets to
+the original network configuration.</p>
+
+<h4 id="ses.setcertificateverifyproc(proc)"><code>ses.setCertificateVerifyProc(proc)</code></h4>
+
+<ul>
+<li><code>proc</code> Function</li>
+</ul>
+
+<p>Sets the certificate verify proc for <code>session</code>, the <code>proc</code> will be called with
+<code>proc(hostname, certificate, callback)</code> whenever a server certificate
+verification is requested. Calling <code>callback(true)</code> accepts the certificate,
+calling <code>callback(false)</code> rejects it.</p>
+
+<p>Calling <code>setCertificateVerifyProc(null)</code> will revert back to default certificate
+verify proc.</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">myWindow</span><span class="p">.</span><span class="nx">webContents</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">setCertificateVerifyProc</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">hostname</span><span class="p">,</span> <span class="nx">cert</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">hostname</span> <span class="o">==</span> <span class="s1">&#39;github.com&#39;</span><span class="p">)</span>
+    <span class="nx">callback</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+  <span class="k">else</span>
+    <span class="nx">callback</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div>
+<h4 id="ses.webrequest"><code>ses.webRequest</code></h4>
+
+<p>The <code>webRequest</code> API set allows to intercept and modify contents of a request at
+various stages of its lifetime.</p>
+
+<p>Each API accepts an optional <code>filter</code> and a <code>listener</code>, the <code>listener</code> will be
+called with <code>listener(details)</code> when the API&#39;s event has happened, the <code>details</code>
+is an object that describes the request. Passing <code>null</code> as <code>listener</code> will
+unsubscribe from the event.</p>
+
+<p>The <code>filter</code> is an object that has an <code>urls</code> property, which is an Array of URL
+patterns that will be used to filter out the requests that do not match the URL
+patterns. If the <code>filter</code> is omitted then all requests will be matched.</p>
+
+<p>For certain events the <code>listener</code> is passed with a <code>callback</code>, which should be
+called with an <code>response</code> object when <code>listener</code> has done its work.</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// Modify the user agent for all requests to the following urls.</span>
+<span class="kd">var</span> <span class="nx">filter</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">urls</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;https://*.github.com/*&quot;</span><span class="p">,</span> <span class="s2">&quot;*://electron.github.io&quot;</span><span class="p">]</span>
+<span class="p">};</span>
+
+<span class="nx">session</span><span class="p">.</span><span class="nx">defaultSession</span><span class="p">.</span><span class="nx">webRequest</span><span class="p">.</span><span class="nx">onBeforeSendHeaders</span><span class="p">(</span><span class="nx">filter</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">details</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">details</span><span class="p">.</span><span class="nx">requestHeaders</span><span class="p">[</span><span class="s1">&#39;User-Agent&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;MyAgent&quot;</span><span class="p">;</span>
+  <span class="nx">callback</span><span class="p">({</span><span class="nx">cancel</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span> <span class="nx">requestHeaders</span><span class="o">:</span> <span class="nx">details</span><span class="p">.</span><span class="nx">requestHeaders</span><span class="p">});</span>
+<span class="p">});</span>
+</code></pre></div>
+<h4 id="ses.webrequest.onbeforerequest([filter,-]listener)"><code>ses.webRequest.onBeforeRequest([filter, ]listener)</code></h4>
+
+<ul>
+<li><code>filter</code> Object</li>
+<li><code>listener</code> Function</li>
+</ul>
+
+<p>The <code>listener</code> will be called with <code>listener(details, callback)</code> when a request
+is about to occur.</p>
+
+<ul>
+<li><code>details</code> Object
+
+<ul>
+<li><code>id</code> Integer</li>
+<li><code>url</code> String</li>
+<li><code>method</code> String</li>
+<li><code>resourceType</code> String</li>
+<li><code>timestamp</code> Double</li>
+</ul></li>
+</ul>
+
+<p>The <code>callback</code> has to be called with an <code>response</code> object:</p>
+
+<ul>
+<li><code>response</code> Object
+
+<ul>
+<li><code>cancel</code> Boolean (optional)</li>
+<li><code>redirectURL</code> String (optional) - The original request is prevented from
+being sent or completed, and is instead redirected to the given URL.</li>
+</ul></li>
+</ul>
+
+<h4 id="ses.webrequest.onbeforesendheaders([filter,-]listener)"><code>ses.webRequest.onBeforeSendHeaders([filter, ]listener)</code></h4>
+
+<ul>
+<li><code>filter</code> Object</li>
+<li><code>listener</code> Function</li>
+</ul>
+
+<p>The <code>listener</code> will be called with <code>listener(details, callback)</code> before sending
+an HTTP request, once the request headers are available. This may occur after a
+TCP connection is made to the server, but before any http data is sent.</p>
+
+<ul>
+<li><code>details</code> Object
+
+<ul>
+<li><code>id</code> Integer</li>
+<li><code>url</code> String</li>
+<li><code>method</code> String</li>
+<li><code>resourceType</code> String</li>
+<li><code>timestamp</code> Double</li>
+<li><code>requestHeaders</code> Object</li>
+</ul></li>
+</ul>
+
+<p>The <code>callback</code> has to be called with an <code>response</code> object:</p>
+
+<ul>
+<li><code>response</code> Object
+
+<ul>
+<li><code>cancel</code> Boolean (optional)</li>
+<li><code>requestHeaders</code> Object (optional) - When provided, request will be made
+with these headers.</li>
+</ul></li>
+</ul>
+
+<h4 id="ses.webrequest.onsendheaders([filter,-]listener)"><code>ses.webRequest.onSendHeaders([filter, ]listener)</code></h4>
+
+<ul>
+<li><code>filter</code> Object</li>
+<li><code>listener</code> Function</li>
+</ul>
+
+<p>The <code>listener</code> will be called with <code>listener(details)</code> just before a request is
+going to be sent to the server, modifications of previous <code>onBeforeSendHeaders</code>
+response are visible by the time this listener is fired.</p>
+
+<ul>
+<li><code>details</code> Object
+
+<ul>
+<li><code>id</code> Integer</li>
+<li><code>url</code> String</li>
+<li><code>method</code> String</li>
+<li><code>resourceType</code> String</li>
+<li><code>timestamp</code> Double</li>
+<li><code>requestHeaders</code> Object</li>
+</ul></li>
+</ul>
+
+<h4 id="ses.webrequest.onheadersreceived([filter,]-listener)"><code>ses.webRequest.onHeadersReceived([filter,] listener)</code></h4>
+
+<ul>
+<li><code>filter</code> Object</li>
+<li><code>listener</code> Function</li>
+</ul>
+
+<p>The <code>listener</code> will be called with <code>listener(details, callback)</code> when HTTP
+response headers of a request have been received.</p>
+
+<ul>
+<li><code>details</code> Object
+
+<ul>
+<li><code>id</code> String</li>
+<li><code>url</code> String</li>
+<li><code>method</code> String</li>
+<li><code>resourceType</code> String</li>
+<li><code>timestamp</code> Double</li>
+<li><code>statusLine</code> String</li>
+<li><code>statusCode</code> Integer</li>
+<li><code>responseHeaders</code> Object</li>
+</ul></li>
+</ul>
+
+<p>The <code>callback</code> has to be called with an <code>response</code> object:</p>
+
+<ul>
+<li><code>response</code> Object
+
+<ul>
+<li><code>cancel</code> Boolean</li>
+<li><code>responseHeaders</code> Object (optional) - When provided, the server is assumed
+to have responded with these headers.</li>
+</ul></li>
+</ul>
+
+<h4 id="ses.webrequest.onresponsestarted([filter,-]listener)"><code>ses.webRequest.onResponseStarted([filter, ]listener)</code></h4>
+
+<ul>
+<li><code>filter</code> Object</li>
+<li><code>listener</code> Function</li>
+</ul>
+
+<p>The <code>listener</code> will be called with <code>listener(details)</code> when first byte of the
+response body is received. For HTTP requests, this means that the status line
+and response headers are available.</p>
+
+<ul>
+<li><code>details</code> Object
+
+<ul>
+<li><code>id</code> Integer</li>
+<li><code>url</code> String</li>
+<li><code>method</code> String</li>
+<li><code>resourceType</code> String</li>
+<li><code>timestamp</code> Double</li>
+<li><code>responseHeaders</code> Object</li>
+<li><code>fromCache</code> Boolean  - Indicates whether the response was fetched from disk
+cache.</li>
+<li><code>statusCode</code> Integer</li>
+<li><code>statusLine</code> String</li>
+</ul></li>
+</ul>
+
+<h4 id="ses.webrequest.onbeforeredirect([filter,-]listener)"><code>ses.webRequest.onBeforeRedirect([filter, ]listener)</code></h4>
+
+<ul>
+<li><code>filter</code> Object</li>
+<li><code>listener</code> Function</li>
+</ul>
+
+<p>The <code>listener</code> will be called with <code>listener(details)</code> when a server initiated
+redirect is about to occur.</p>
+
+<ul>
+<li><code>details</code> Object
+
+<ul>
+<li><code>id</code> String</li>
+<li><code>url</code> String</li>
+<li><code>method</code> String</li>
+<li><code>resourceType</code> String</li>
+<li><code>timestamp</code> Double</li>
+<li><code>redirectURL</code> String</li>
+<li><code>statusCode</code> Integer</li>
+<li><code>ip</code> String (optional) - The server IP address that the request was
+actually sent to.</li>
+<li><code>fromCache</code> Boolean</li>
+<li><code>responseHeaders</code> Object</li>
+</ul></li>
+</ul>
+
+<h4 id="ses.webrequest.oncompleted([filter,-]listener)"><code>ses.webRequest.onCompleted([filter, ]listener)</code></h4>
+
+<ul>
+<li><code>filter</code> Object</li>
+<li><code>listener</code> Function</li>
+</ul>
+
+<p>The <code>listener</code> will be called with <code>listener(details)</code> when a request is
+completed.</p>
+
+<ul>
+<li><code>details</code> Object
+
+<ul>
+<li><code>id</code> Integer</li>
+<li><code>url</code> String</li>
+<li><code>method</code> String</li>
+<li><code>resourceType</code> String</li>
+<li><code>timestamp</code> Double</li>
+<li><code>responseHeaders</code> Object</li>
+<li><code>fromCache</code> Boolean</li>
+<li><code>statusCode</code> Integer</li>
+<li><code>statusLine</code> String</li>
+</ul></li>
+</ul>
+
+<h4 id="ses.webrequest.onerroroccurred([filter,-]listener)"><code>ses.webRequest.onErrorOccurred([filter, ]listener)</code></h4>
+
+<ul>
+<li><code>filter</code> Object</li>
+<li><code>listener</code> Function</li>
+</ul>
+
+<p>The <code>listener</code> will be called with <code>listener(details)</code> when an error occurs.</p>
+
+<ul>
+<li><code>details</code> Object
+
+<ul>
+<li><code>id</code> Integer</li>
+<li><code>url</code> String</li>
+<li><code>method</code> String</li>
+<li><code>resourceType</code> String</li>
+<li><code>timestamp</code> Double</li>
+<li><code>fromCache</code> Boolean</li>
+<li><code>error</code> String - The error description.</li>
+</ul></li>
+</ul>
+
+
+      </div>
+    </div>
+    
+    <div class='row'>
+      <div class='ten columns release offset-by-one docs-footer'>
+        <span class="octicon octicon-pencil"></span>
+        See something that needs fixing? Propose a change on the <a href='https://github.com/atom/electron/blob/master/docs/api/session.md'>source</a>.
+        <br>
+        <span class="octicon octicon-zap"></span>
+        Need a different version of the docs? See the <a href='/docs'>available versions</a>.
+      </div>
+    </div>
+    
+  </div>
+</section>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class='container'>
+    <div class='row'>
+      <div class='one-half column'>
+        <ul class='inline-list'>
+          <li><a href='https://github.com/atom/electron'>Repository</a></li>
+          <li><a href='/docs/v0.36.5'>Documentation</a></li>
+          <li><a href='/releases.html'>Releases</a></li>
+          <li><a href='http://blog.atom.io'>Blog</a></li>
+          <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+        </ul>
+      </div>
+
+      <div class='one-half column text-right'>
+        <a href='https://github.com' class="no-hover-dec"><span class='octicon octicon-code'></span> with <span class='octicon octicon-heart'></span> by <span class='octicon octicon-logo-github'></span></a>
+      </div>
+  </div>
+</footer>
+
+    <script>
+  var anchorForId = function (id) {
+    var anchor = document.createElement("a");
+    anchor.className = "header-link";
+    anchor.href      = "#" + id;
+    anchor.innerHTML = "<span class='octicon octicon-link'></span>";
+    anchor.title = "Permalink";
+    return anchor;
+  };
+
+  var linkifyAnchors = function (level, containingElement) {
+    var headers = containingElement.getElementsByTagName("h" + level);
+    for (var h = 0; h < headers.length; h++) {
+      var header = headers[h];
+
+      if (typeof header.id !== "undefined" && header.id !== "") {
+        header.appendChild(anchorForId(header.id));
+      }
+    }
+  };
+
+  document.onreadystatechange = function () {
+    if (this.readyState === "complete") {
+      var contentBlock = document.getElementsByClassName("docs")[0] || document.getElementsByClassName("news")[0];
+      if (!contentBlock) {
+        return;
+      }
+      for (var level = 1; level <= 6; level++) {
+        linkifyAnchors(level, contentBlock);
+      }
+    }
+  };
+</script>
+
+  </body>
+
+</html>

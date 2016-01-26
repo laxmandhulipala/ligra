@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+  <title>Clipboard</title>
+  <meta name='description' content='Build cross platform desktop apps with web technologies'>
+
+  <link rel='shortcut icon' href='/images/favicon.ico'/>
+  <link rel='stylesheet' href='/css/normalize.css'>
+  <link rel='stylesheet' href='/css/skeleton.css'>
+  <link rel='stylesheet' href='/css/main.css'>
+  <link rel='stylesheet' href='/css/octicons/octicons.css'>
+  <link rel='stylesheet' href='/css/pygments.css'>
+  <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+  <link rel='canonical' href='/docs/v0.33.0/api/clipboard/'>
+  <link rel='alternate' type='application/rss+xml' title='Electron' href='/feed.xml' />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-3769691-57', 'auto');
+    ga('send', 'pageview');
+  </script>
+</head>
+
+
+  <body>
+
+    <header>
+  <div class='top-bar'>
+    <div class='container'>
+      <div class='row'>
+        <div class='four columns'>
+          <ul class='navigation inline-list'>
+            <li><a href='/#built-on-electron'>Built on Electron</a></li>
+            <li><a href='/#get-started'>Get Started</a></li>
+          </ul>
+        </div>
+        <div class='eight columns text-right'>
+          <ul class='navigation inline-list'>
+            <li><a href='https://github.com/atom/electron'>Repository</a></li>
+            <li><a href='/docs/v0.36.5'>Documentation</a></li>
+            <li><a href='http://blog.atom.io'>Blog</a></li>
+            <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+    <div class='page-content'>
+      <div class='wrapper'>
+        <div class='page-template clipboard'>
+  <section class='jump-to-release is-compact'>
+  <div class='container'>
+    <div class='row'>
+      <div class='twelve columns'>
+      <h1><img class="electron-icon" src='/images/electron-icon.svg'>Electron Documentation</h1>
+      
+      <a href='/docs/v0.33.0/'>v0.33.0  </a> |
+      <a href='https://github.com/atom/electron/blob/master/docs/api/clipboard.md'>Document Source</a>
+      
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class='docs'>
+  <div class='container'>
+    <div class='row'>
+      <div class='ten columns release offset-by-one'>
+        
+        <h6 class='docs-breadcrumb'>v0.33.0 / API
+           / Clipboard </h6>
+        
+
+        <h1 id="clipboard">clipboard</h1>
+
+<p>The <code>clipboard</code> module provides methods to perform copy and paste operations.
+The following example shows how to write a string to the clipboard:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">clipboard</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;clipboard&#39;</span><span class="p">);</span>
+<span class="nx">clipboard</span><span class="p">.</span><span class="nx">writeText</span><span class="p">(</span><span class="s1">&#39;Example String&#39;</span><span class="p">);</span>
+</code></pre></div>
+<p>On X Window systems, there is also a selection clipboard. To manipulate it
+you need to pass <code>selection</code> to each method:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">clipboard</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;clipboard&#39;</span><span class="p">);</span>
+<span class="nx">clipboard</span><span class="p">.</span><span class="nx">writeText</span><span class="p">(</span><span class="s1">&#39;Example String&#39;</span><span class="p">,</span> <span class="s1">&#39;selection&#39;</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">clipboard</span><span class="p">.</span><span class="nx">readText</span><span class="p">(</span><span class="s1">&#39;selection&#39;</span><span class="p">));</span>
+</code></pre></div>
+<h2 id="methods">Methods</h2>
+
+<p>The <code>clipboard</code> module has the following methods:</p>
+
+<p><strong>Note:</strong> Experimental APIs are marked as such and could be removed in future.</p>
+
+<h3 id="clipboard.readtext([type])"><code>clipboard.readText([type])</code></h3>
+
+<ul>
+<li><code>type</code> String (optional)</li>
+</ul>
+
+<p>Returns the content in the clipboard as plain text.</p>
+
+<h3 id="clipboard.writetext(text[,-type])"><code>clipboard.writeText(text[, type])</code></h3>
+
+<ul>
+<li><code>text</code> String</li>
+<li><code>type</code> String (optional)</li>
+</ul>
+
+<p>Writes the <code>text</code> into the clipboard as plain text.</p>
+
+<h3 id="clipboard.readhtml([type])"><code>clipboard.readHtml([type])</code></h3>
+
+<ul>
+<li><code>type</code> String (optional)</li>
+</ul>
+
+<p>Returns the content in the clipboard as markup.</p>
+
+<h3 id="clipboard.writehtml(markup[,-type])"><code>clipboard.writeHtml(markup[, type])</code></h3>
+
+<ul>
+<li><code>markup</code> String</li>
+<li><code>type</code> String (optional)</li>
+</ul>
+
+<p>Writes <code>markup</code> to the clipboard.</p>
+
+<h3 id="clipboard.readimage([type])"><code>clipboard.readImage([type])</code></h3>
+
+<ul>
+<li><code>type</code> String (optional)</li>
+</ul>
+
+<p>Returns the content in the clipboard as a <a href="http://electron.atom.io/docs/v0.33.0/api/native-image">NativeImage</a>.</p>
+
+<h3 id="clipboard.writeimage(image[,-type])"><code>clipboard.writeImage(image[, type])</code></h3>
+
+<ul>
+<li><code>image</code> <a href="http://electron.atom.io/docs/v0.33.0/api/native-image">NativeImage</a></li>
+<li><code>type</code> String (optional)</li>
+</ul>
+
+<p>Writes <code>image</code> to the clipboard.</p>
+
+<h3 id="clipboard.clear([type])"><code>clipboard.clear([type])</code></h3>
+
+<ul>
+<li><code>type</code> String (optional)</li>
+</ul>
+
+<p>Clears the clipboard content.</p>
+
+<h3 id="clipboard.availableformats([type])"><code>clipboard.availableFormats([type])</code></h3>
+
+<ul>
+<li><code>type</code> String (optional)</li>
+</ul>
+
+<p>Returns an array of supported formats for the clipboard <code>type</code>.</p>
+
+<h3 id="clipboard.has(data[,-type])-experimental"><code>clipboard.has(data[, type])</code> <em>Experimental</em></h3>
+
+<ul>
+<li><code>data</code> String</li>
+<li><code>type</code> String (optional)</li>
+</ul>
+
+<p>Returns whether the clipboard supports the format of specified <code>data</code>.</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">clipboard</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;clipboard&#39;</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">clipboard</span><span class="p">.</span><span class="nx">has</span><span class="p">(</span><span class="s1">&#39;&lt;p&gt;selection&lt;/p&gt;&#39;</span><span class="p">));</span>
+</code></pre></div>
+<h3 id="clipboard.read(data[,-type])-experimental"><code>clipboard.read(data[, type])</code> <em>Experimental</em></h3>
+
+<ul>
+<li><code>data</code> String</li>
+<li><code>type</code> String (optional)</li>
+</ul>
+
+<p>Reads <code>data</code> from the clipboard.</p>
+
+<h3 id="clipboard.write(data[,-type])"><code>clipboard.write(data[, type])</code></h3>
+
+<ul>
+<li><code>data</code> Object
+
+<ul>
+<li><code>text</code> String</li>
+<li><code>html</code> String</li>
+<li><code>image</code> <a href="http://electron.atom.io/docs/v0.33.0/api/native-image">NativeImage</a></li>
+</ul></li>
+<li><code>type</code> String (optional)</li>
+</ul>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">clipboard</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;clipboard&#39;</span><span class="p">);</span>
+<span class="nx">clipboard</span><span class="p">.</span><span class="nx">write</span><span class="p">({</span><span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="nx">html</span><span class="o">:</span> <span class="s2">&quot;&lt;b&gt;test&lt;/b&gt;&quot;</span><span class="p">});</span>
+</code></pre></div>
+<p>Writes <code>data</code> to the clipboard.</p>
+
+
+      </div>
+    </div>
+    
+    <div class='row'>
+      <div class='ten columns release offset-by-one docs-footer'>
+        <span class="octicon octicon-pencil"></span>
+        See something that needs fixing? Propose a change on the <a href='https://github.com/atom/electron/blob/master/docs/api/clipboard.md'>source</a>.
+        <br>
+        <span class="octicon octicon-zap"></span>
+        Need a different version of the docs? See the <a href='/docs'>available versions</a>.
+      </div>
+    </div>
+    
+  </div>
+</section>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class='container'>
+    <div class='row'>
+      <div class='one-half column'>
+        <ul class='inline-list'>
+          <li><a href='https://github.com/atom/electron'>Repository</a></li>
+          <li><a href='/docs/v0.36.5'>Documentation</a></li>
+          <li><a href='/releases.html'>Releases</a></li>
+          <li><a href='http://blog.atom.io'>Blog</a></li>
+          <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+        </ul>
+      </div>
+
+      <div class='one-half column text-right'>
+        <a href='https://github.com' class="no-hover-dec"><span class='octicon octicon-code'></span> with <span class='octicon octicon-heart'></span> by <span class='octicon octicon-logo-github'></span></a>
+      </div>
+  </div>
+</footer>
+
+    <script>
+  var anchorForId = function (id) {
+    var anchor = document.createElement("a");
+    anchor.className = "header-link";
+    anchor.href      = "#" + id;
+    anchor.innerHTML = "<span class='octicon octicon-link'></span>";
+    anchor.title = "Permalink";
+    return anchor;
+  };
+
+  var linkifyAnchors = function (level, containingElement) {
+    var headers = containingElement.getElementsByTagName("h" + level);
+    for (var h = 0; h < headers.length; h++) {
+      var header = headers[h];
+
+      if (typeof header.id !== "undefined" && header.id !== "") {
+        header.appendChild(anchorForId(header.id));
+      }
+    }
+  };
+
+  document.onreadystatechange = function () {
+    if (this.readyState === "complete") {
+      var contentBlock = document.getElementsByClassName("docs")[0] || document.getElementsByClassName("news")[0];
+      if (!contentBlock) {
+        return;
+      }
+      for (var level = 1; level <= 6; level++) {
+        linkifyAnchors(level, contentBlock);
+      }
+    }
+  };
+</script>
+
+  </body>
+
+</html>

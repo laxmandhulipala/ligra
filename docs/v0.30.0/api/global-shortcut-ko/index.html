@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+  <title>Global Shortcut Ko</title>
+  <meta name='description' content='Build cross platform desktop apps with web technologies'>
+
+  <link rel='shortcut icon' href='/images/favicon.ico'/>
+  <link rel='stylesheet' href='/css/normalize.css'>
+  <link rel='stylesheet' href='/css/skeleton.css'>
+  <link rel='stylesheet' href='/css/main.css'>
+  <link rel='stylesheet' href='/css/octicons/octicons.css'>
+  <link rel='stylesheet' href='/css/pygments.css'>
+  <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+  <link rel='canonical' href='/docs/v0.30.0/api/global-shortcut-ko/'>
+  <link rel='alternate' type='application/rss+xml' title='Electron' href='/feed.xml' />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-3769691-57', 'auto');
+    ga('send', 'pageview');
+  </script>
+</head>
+
+
+  <body>
+
+    <header>
+  <div class='top-bar'>
+    <div class='container'>
+      <div class='row'>
+        <div class='four columns'>
+          <ul class='navigation inline-list'>
+            <li><a href='/#built-on-electron'>Built on Electron</a></li>
+            <li><a href='/#get-started'>Get Started</a></li>
+          </ul>
+        </div>
+        <div class='eight columns text-right'>
+          <ul class='navigation inline-list'>
+            <li><a href='https://github.com/atom/electron'>Repository</a></li>
+            <li><a href='/docs/v0.36.5'>Documentation</a></li>
+            <li><a href='http://blog.atom.io'>Blog</a></li>
+            <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+    <div class='page-content'>
+      <div class='wrapper'>
+        <div class='page-template global-shortcut-ko'>
+  <section class='jump-to-release is-compact'>
+  <div class='container'>
+    <div class='row'>
+      <div class='twelve columns'>
+      <h1><img class="electron-icon" src='/images/electron-icon.svg'>Electron Documentation</h1>
+      
+      <a href='/docs/v0.30.0/'>v0.30.0  </a> |
+      <a href='https://github.com/atom/electron/blob/master/docs/api/global-shortcut-ko.md'>Document Source</a>
+      
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class='docs'>
+  <div class='container'>
+    <div class='row'>
+      <div class='ten columns release offset-by-one'>
+        
+        <h6 class='docs-breadcrumb'>v0.30.0 / API
+           / Global Shortcut Ko </h6>
+        
+
+        <h1 id="global-shortcut">global-shortcut</h1>
+
+<p><code>global-shortcut</code> 모듈은 사용자가 다양한 단축키 작업을 정의 할 수 있도록 운영체제의 전역 키보드 단축키를 설정 등록/해제 하는 방법을 제공합니다.
+참고로 설정된 단축키는 어플리케이션이 백그라운드로 작동(창이 포커스 되지 않음) 할 때도 여전히 계속 작동합니다.</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">globalShortcut</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;global-shortcut&#39;</span><span class="p">);</span>
+
+<span class="c1">// &#39;ctrl+x&#39; 단축키를 리스너에 등록합니다.</span>
+<span class="kd">var</span> <span class="nx">ret</span> <span class="o">=</span> <span class="nx">globalShortcut</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;ctrl+x&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;ctrl+x is pressed&#39;</span><span class="p">);</span> <span class="p">})</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">ret</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;registration failed&#39;</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// 단축키가 등록되었는지 확인합니다.</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">globalShortcut</span><span class="p">.</span><span class="nx">isRegistered</span><span class="p">(</span><span class="s1">&#39;ctrl+x&#39;</span><span class="p">));</span>
+
+<span class="c1">// 단축키의 등록을 해제합니다.</span>
+<span class="nx">globalShortcut</span><span class="p">.</span><span class="nx">unregister</span><span class="p">(</span><span class="s1">&#39;ctrl+x&#39;</span><span class="p">);</span>
+
+<span class="c1">// 모든 단축키의 등록을 해제합니다.</span>
+<span class="nx">globalShortcut</span><span class="p">.</span><span class="nx">unregisterAll</span><span class="p">();</span>
+</code></pre></div>
+<h2 id="globalshortcut.register(accelerator,-callback)">globalShortcut.register(accelerator, callback)</h2>
+
+<ul>
+<li><code>accelerator</code> <a href="http://electron.atom.io/docs/v0.30.0/api/accelerator-ko">Accelerator</a></li>
+<li><code>callback</code> Function</li>
+</ul>
+
+<p><code>accelerator</code>로 표현된 전역 단축키를 등록합니다. 유저로부터 등록된 단축키가 눌렸을 경우 <code>callback</code> 함수가 호출됩니다.</p>
+
+<h2 id="globalshortcut.isregistered(accelerator)">globalShortcut.isRegistered(accelerator)</h2>
+
+<ul>
+<li><code>accelerator</code> <a href="http://electron.atom.io/docs/v0.30.0/api/accelerator-ko">Accelerator</a></li>
+</ul>
+
+<p>지정된 <code>accelerator</code> 단축키가 등록되었는지 여부를 확인합니다. 반환값은 boolean(true, false) 입니다.</p>
+
+<h2 id="globalshortcut.unregister(accelerator)">globalShortcut.unregister(accelerator)</h2>
+
+<ul>
+<li><code>accelerator</code> <a href="http://electron.atom.io/docs/v0.30.0/api/accelerator-ko">Accelerator</a></li>
+</ul>
+
+<p><code>키코드</code>에 해당하는 전역 단축키를 등록 해제합니다.</p>
+
+<h2 id="globalshortcut.unregisterall()">globalShortcut.unregisterAll()</h2>
+
+<p>모든 전역 단축키 등록을 해제합니다.</p>
+
+
+      </div>
+    </div>
+    
+    <div class='row'>
+      <div class='ten columns release offset-by-one docs-footer'>
+        <span class="octicon octicon-pencil"></span>
+        See something that needs fixing? Propose a change on the <a href='https://github.com/atom/electron/blob/master/docs/api/global-shortcut-ko.md'>source</a>.
+        <br>
+        <span class="octicon octicon-zap"></span>
+        Need a different version of the docs? See the <a href='/docs'>available versions</a>.
+      </div>
+    </div>
+    
+  </div>
+</section>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class='container'>
+    <div class='row'>
+      <div class='one-half column'>
+        <ul class='inline-list'>
+          <li><a href='https://github.com/atom/electron'>Repository</a></li>
+          <li><a href='/docs/v0.36.5'>Documentation</a></li>
+          <li><a href='/releases.html'>Releases</a></li>
+          <li><a href='http://blog.atom.io'>Blog</a></li>
+          <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+        </ul>
+      </div>
+
+      <div class='one-half column text-right'>
+        <a href='https://github.com' class="no-hover-dec"><span class='octicon octicon-code'></span> with <span class='octicon octicon-heart'></span> by <span class='octicon octicon-logo-github'></span></a>
+      </div>
+  </div>
+</footer>
+
+    <script>
+  var anchorForId = function (id) {
+    var anchor = document.createElement("a");
+    anchor.className = "header-link";
+    anchor.href      = "#" + id;
+    anchor.innerHTML = "<span class='octicon octicon-link'></span>";
+    anchor.title = "Permalink";
+    return anchor;
+  };
+
+  var linkifyAnchors = function (level, containingElement) {
+    var headers = containingElement.getElementsByTagName("h" + level);
+    for (var h = 0; h < headers.length; h++) {
+      var header = headers[h];
+
+      if (typeof header.id !== "undefined" && header.id !== "") {
+        header.appendChild(anchorForId(header.id));
+      }
+    }
+  };
+
+  document.onreadystatechange = function () {
+    if (this.readyState === "complete") {
+      var contentBlock = document.getElementsByClassName("docs")[0] || document.getElementsByClassName("news")[0];
+      if (!contentBlock) {
+        return;
+      }
+      for (var level = 1; level <= 6; level++) {
+        linkifyAnchors(level, contentBlock);
+      }
+    }
+  };
+</script>
+
+  </body>
+
+</html>

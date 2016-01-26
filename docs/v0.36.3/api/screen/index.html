@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+  <title>Screen</title>
+  <meta name='description' content='Build cross platform desktop apps with web technologies'>
+
+  <link rel='shortcut icon' href='/images/favicon.ico'/>
+  <link rel='stylesheet' href='/css/normalize.css'>
+  <link rel='stylesheet' href='/css/skeleton.css'>
+  <link rel='stylesheet' href='/css/main.css'>
+  <link rel='stylesheet' href='/css/octicons/octicons.css'>
+  <link rel='stylesheet' href='/css/pygments.css'>
+  <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+  <link rel='canonical' href='/docs/v0.36.3/api/screen/'>
+  <link rel='alternate' type='application/rss+xml' title='Electron' href='/feed.xml' />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-3769691-57', 'auto');
+    ga('send', 'pageview');
+  </script>
+</head>
+
+
+  <body>
+
+    <header>
+  <div class='top-bar'>
+    <div class='container'>
+      <div class='row'>
+        <div class='four columns'>
+          <ul class='navigation inline-list'>
+            <li><a href='/#built-on-electron'>Built on Electron</a></li>
+            <li><a href='/#get-started'>Get Started</a></li>
+          </ul>
+        </div>
+        <div class='eight columns text-right'>
+          <ul class='navigation inline-list'>
+            <li><a href='https://github.com/atom/electron'>Repository</a></li>
+            <li><a href='/docs/v0.36.5'>Documentation</a></li>
+            <li><a href='http://blog.atom.io'>Blog</a></li>
+            <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+    <div class='page-content'>
+      <div class='wrapper'>
+        <div class='page-template screen'>
+  <section class='jump-to-release is-compact'>
+  <div class='container'>
+    <div class='row'>
+      <div class='twelve columns'>
+      <h1><img class="electron-icon" src='/images/electron-icon.svg'>Electron Documentation</h1>
+      
+      <a href='/docs/v0.36.3/'>v0.36.3  </a> |
+      <a href='https://github.com/atom/electron/blob/master/docs/api/screen.md'>Document Source</a>
+      
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class='docs'>
+  <div class='container'>
+    <div class='row'>
+      <div class='ten columns release offset-by-one'>
+        
+        <h6 class='docs-breadcrumb'>v0.36.3 / API
+           / Screen </h6>
+        
+
+        <h1 id="screen">screen</h1>
+
+<p>The <code>screen</code> module retrieves information about screen size, displays, cursor
+position, etc. You should not use this module until the <code>ready</code> event of the
+<code>app</code> module is emitted.</p>
+
+<p><code>screen</code> is an <a href="http://nodejs.org/api/events.html#events_class_events_eventemitter">EventEmitter</a>.</p>
+
+<p><strong>Note:</strong> In the renderer / DevTools, <code>window.screen</code> is a reserved DOM
+property, so writing <code>var screen = require(&#39;electron&#39;).screen</code> will not work.
+In our examples below, we use <code>electronScreen</code> as the variable name instead.
+An example of creating a window that fills the whole screen:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kr">const</span> <span class="nx">electron</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;electron&#39;</span><span class="p">);</span>
+<span class="kr">const</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">electron</span><span class="p">.</span><span class="nx">app</span><span class="p">;</span>
+<span class="kr">const</span> <span class="nx">BrowserWindow</span> <span class="o">=</span> <span class="nx">electron</span><span class="p">.</span><span class="nx">BrowserWindow</span><span class="p">;</span>
+
+<span class="kd">var</span> <span class="nx">mainWindow</span><span class="p">;</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;ready&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">electronScreen</span> <span class="o">=</span> <span class="nx">electron</span><span class="p">.</span><span class="nx">screen</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">size</span> <span class="o">=</span> <span class="nx">electronScreen</span><span class="p">.</span><span class="nx">getPrimaryDisplay</span><span class="p">().</span><span class="nx">workAreaSize</span><span class="p">;</span>
+  <span class="nx">mainWindow</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">BrowserWindow</span><span class="p">({</span> <span class="nx">width</span><span class="o">:</span> <span class="nx">size</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span> <span class="nx">height</span><span class="o">:</span> <span class="nx">size</span><span class="p">.</span><span class="nx">height</span> <span class="p">});</span>
+<span class="p">});</span>
+</code></pre></div>
+<p>Another example of creating a window in the external display:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kr">const</span> <span class="nx">electron</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;electron&#39;</span><span class="p">);</span>
+<span class="kr">const</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">electron</span><span class="p">.</span><span class="nx">app</span><span class="p">;</span>
+<span class="kr">const</span> <span class="nx">BrowserWindow</span> <span class="o">=</span> <span class="nx">electron</span><span class="p">.</span><span class="nx">BrowserWindow</span><span class="p">;</span>
+
+<span class="kd">var</span> <span class="nx">mainWindow</span><span class="p">;</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;ready&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">electronScreen</span> <span class="o">=</span> <span class="nx">electron</span><span class="p">.</span><span class="nx">screen</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">displays</span> <span class="o">=</span> <span class="nx">electronScreen</span><span class="p">.</span><span class="nx">getAllDisplays</span><span class="p">();</span>
+  <span class="kd">var</span> <span class="nx">externalDisplay</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="k">in</span> <span class="nx">displays</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">displays</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">bounds</span><span class="p">.</span><span class="nx">x</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">||</span> <span class="nx">displays</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">bounds</span><span class="p">.</span><span class="nx">y</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">externalDisplay</span> <span class="o">=</span> <span class="nx">displays</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+      <span class="k">break</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="nx">externalDisplay</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">mainWindow</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">BrowserWindow</span><span class="p">({</span>
+      <span class="nx">x</span><span class="o">:</span> <span class="nx">externalDisplay</span><span class="p">.</span><span class="nx">bounds</span><span class="p">.</span><span class="nx">x</span> <span class="o">+</span> <span class="mi">50</span><span class="p">,</span>
+      <span class="nx">y</span><span class="o">:</span> <span class="nx">externalDisplay</span><span class="p">.</span><span class="nx">bounds</span><span class="p">.</span><span class="nx">y</span> <span class="o">+</span> <span class="mi">50</span>
+    <span class="p">});</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</code></pre></div>
+<h2 id="the-display-object">The <code>Display</code> object</h2>
+
+<p>The <code>Display</code> object represents a physical display connected to the system. A
+fake <code>Display</code> may exist on a headless system, or a <code>Display</code> may correspond to
+a remote, virtual display.</p>
+
+<ul>
+<li><code>display</code> object
+
+<ul>
+<li><code>id</code> Integer - Unique identifier associated with the display.</li>
+<li><code>rotation</code> Integer - Can be 0, 1, 2, 3, each represents screen rotation in
+clock-wise degrees of 0, 90, 180, 270.</li>
+<li><code>scaleFactor</code> Number - Output device&#39;s pixel scale factor.</li>
+<li><code>touchSupport</code> String - Can be <code>available</code>, <code>unavailable</code>, <code>unknown</code>.</li>
+<li><code>bounds</code> Object</li>
+<li><code>size</code> Object</li>
+<li><code>workArea</code> Object</li>
+<li><code>workAreaSize</code> Object</li>
+</ul></li>
+</ul>
+
+<h2 id="events">Events</h2>
+
+<p>The <code>screen</code> module emits the following events:</p>
+
+<h3 id="event:-&#39;display-added&#39;">Event: &#39;display-added&#39;</h3>
+
+<p>Returns:</p>
+
+<ul>
+<li><code>event</code> Event</li>
+<li><code>newDisplay</code> Object</li>
+</ul>
+
+<p>Emitted when <code>newDisplay</code> has been added.</p>
+
+<h3 id="event:-&#39;display-removed&#39;">Event: &#39;display-removed&#39;</h3>
+
+<p>Returns:</p>
+
+<ul>
+<li><code>event</code> Event</li>
+<li><code>oldDisplay</code> Object</li>
+</ul>
+
+<p>Emitted when <code>oldDisplay</code> has been removed.</p>
+
+<h3 id="event:-&#39;display-metrics-changed&#39;">Event: &#39;display-metrics-changed&#39;</h3>
+
+<p>Returns:</p>
+
+<ul>
+<li><code>event</code> Event</li>
+<li><code>display</code> Object</li>
+<li><code>changedMetrics</code> Array</li>
+</ul>
+
+<p>Emitted when one or more metrics change in a <code>display</code>. The <code>changedMetrics</code> is
+an array of strings that describe the changes. Possible changes are <code>bounds</code>,
+<code>workArea</code>, <code>scaleFactor</code> and <code>rotation</code>.</p>
+
+<h2 id="methods">Methods</h2>
+
+<p>The <code>screen</code> module has the following methods:</p>
+
+<h3 id="screen.getcursorscreenpoint()"><code>screen.getCursorScreenPoint()</code></h3>
+
+<p>Returns the current absolute position of the mouse pointer.</p>
+
+<h3 id="screen.getprimarydisplay()"><code>screen.getPrimaryDisplay()</code></h3>
+
+<p>Returns the primary display.</p>
+
+<h3 id="screen.getalldisplays()"><code>screen.getAllDisplays()</code></h3>
+
+<p>Returns an array of displays that are currently available.</p>
+
+<h3 id="screen.getdisplaynearestpoint(point)"><code>screen.getDisplayNearestPoint(point)</code></h3>
+
+<ul>
+<li><code>point</code> Object
+
+<ul>
+<li><code>x</code> Integer</li>
+<li><code>y</code> Integer</li>
+</ul></li>
+</ul>
+
+<p>Returns the display nearest the specified point.</p>
+
+<h3 id="screen.getdisplaymatching(rect)"><code>screen.getDisplayMatching(rect)</code></h3>
+
+<ul>
+<li><code>rect</code> Object
+
+<ul>
+<li><code>x</code> Integer</li>
+<li><code>y</code> Integer</li>
+<li><code>width</code> Integer</li>
+<li><code>height</code> Integer</li>
+</ul></li>
+</ul>
+
+<p>Returns the display that most closely intersects the provided bounds.</p>
+
+
+      </div>
+    </div>
+    
+    <div class='row'>
+      <div class='ten columns release offset-by-one docs-footer'>
+        <span class="octicon octicon-pencil"></span>
+        See something that needs fixing? Propose a change on the <a href='https://github.com/atom/electron/blob/master/docs/api/screen.md'>source</a>.
+        <br>
+        <span class="octicon octicon-zap"></span>
+        Need a different version of the docs? See the <a href='/docs'>available versions</a>.
+      </div>
+    </div>
+    
+  </div>
+</section>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class='container'>
+    <div class='row'>
+      <div class='one-half column'>
+        <ul class='inline-list'>
+          <li><a href='https://github.com/atom/electron'>Repository</a></li>
+          <li><a href='/docs/v0.36.5'>Documentation</a></li>
+          <li><a href='/releases.html'>Releases</a></li>
+          <li><a href='http://blog.atom.io'>Blog</a></li>
+          <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+        </ul>
+      </div>
+
+      <div class='one-half column text-right'>
+        <a href='https://github.com' class="no-hover-dec"><span class='octicon octicon-code'></span> with <span class='octicon octicon-heart'></span> by <span class='octicon octicon-logo-github'></span></a>
+      </div>
+  </div>
+</footer>
+
+    <script>
+  var anchorForId = function (id) {
+    var anchor = document.createElement("a");
+    anchor.className = "header-link";
+    anchor.href      = "#" + id;
+    anchor.innerHTML = "<span class='octicon octicon-link'></span>";
+    anchor.title = "Permalink";
+    return anchor;
+  };
+
+  var linkifyAnchors = function (level, containingElement) {
+    var headers = containingElement.getElementsByTagName("h" + level);
+    for (var h = 0; h < headers.length; h++) {
+      var header = headers[h];
+
+      if (typeof header.id !== "undefined" && header.id !== "") {
+        header.appendChild(anchorForId(header.id));
+      }
+    }
+  };
+
+  document.onreadystatechange = function () {
+    if (this.readyState === "complete") {
+      var contentBlock = document.getElementsByClassName("docs")[0] || document.getElementsByClassName("news")[0];
+      if (!contentBlock) {
+        return;
+      }
+      for (var level = 1; level <= 6; level++) {
+        linkifyAnchors(level, contentBlock);
+      }
+    }
+  };
+</script>
+
+  </body>
+
+</html>

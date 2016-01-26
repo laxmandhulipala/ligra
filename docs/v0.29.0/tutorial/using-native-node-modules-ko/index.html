@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+  <title>Using Native Node Modules Ko</title>
+  <meta name='description' content='Build cross platform desktop apps with web technologies'>
+
+  <link rel='shortcut icon' href='/images/favicon.ico'/>
+  <link rel='stylesheet' href='/css/normalize.css'>
+  <link rel='stylesheet' href='/css/skeleton.css'>
+  <link rel='stylesheet' href='/css/main.css'>
+  <link rel='stylesheet' href='/css/octicons/octicons.css'>
+  <link rel='stylesheet' href='/css/pygments.css'>
+  <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+  <link rel='canonical' href='/docs/v0.29.0/tutorial/using-native-node-modules-ko/'>
+  <link rel='alternate' type='application/rss+xml' title='Electron' href='/feed.xml' />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-3769691-57', 'auto');
+    ga('send', 'pageview');
+  </script>
+</head>
+
+
+  <body>
+
+    <header>
+  <div class='top-bar'>
+    <div class='container'>
+      <div class='row'>
+        <div class='four columns'>
+          <ul class='navigation inline-list'>
+            <li><a href='/#built-on-electron'>Built on Electron</a></li>
+            <li><a href='/#get-started'>Get Started</a></li>
+          </ul>
+        </div>
+        <div class='eight columns text-right'>
+          <ul class='navigation inline-list'>
+            <li><a href='https://github.com/atom/electron'>Repository</a></li>
+            <li><a href='/docs/v0.36.5'>Documentation</a></li>
+            <li><a href='http://blog.atom.io'>Blog</a></li>
+            <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+    <div class='page-content'>
+      <div class='wrapper'>
+        <div class='page-template using-native-node-modules-ko'>
+  <section class='jump-to-release is-compact'>
+  <div class='container'>
+    <div class='row'>
+      <div class='twelve columns'>
+      <h1><img class="electron-icon" src='/images/electron-icon.svg'>Electron Documentation</h1>
+      
+      <a href='/docs/v0.29.0/'>v0.29.0  </a> |
+      <a href='https://github.com/atom/electron/blob/master/docs/tutorial/using-native-node-modules-ko.md'>Document Source</a>
+      
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class='docs'>
+  <div class='container'>
+    <div class='row'>
+      <div class='ten columns release offset-by-one'>
+        
+        <h6 class='docs-breadcrumb'>v0.29.0 / Tutorial
+           / Using Native Node Modules Ko </h6>
+        
+
+        <h1 id="네이티브-node-모듈-사용하기">네이티브 node 모듈 사용하기</h1>
+
+<p><strong>역자주: 현재 Electron은 node.js대신 io.js를 사용합니다. 문서에 기재된 버전과 다를 수 있습니다</strong></p>
+
+<p>Electron에선 node.js 네이티브 모듈이 지원됩니다. 하지만 Electron은 공식 node.js의 V8 엔진과는 달리 다른 V8 버전을 사용합니다.
+그런 이유로 네이티브 모듈을 사용하기 위해선 Electron의 V8 버전에 맞춰 네이티브 모듈을 다시 빌드하고 헤더를 변경해야 합니다.</p>
+
+<h2 id="네이티브-node-모듈-호환성">네이티브 node 모듈 호환성</h2>
+
+<p>Node v0.11.x 버전부터는 V8 API의 중대한 변경이 있었습니다. 하지만 일반적으로 모든 네이티브 모듈은 Node v0.10.x 버전을 타겟으로 작성 되었기 때문에
+Node v0.11.x 버전에선 작동하지 않습니다. Electron은 내부적으로 Node v0.11.13 버전을 사용합니다. 그래서 위에서 설명한 문제가 발생합니다.</p>
+
+<p>이 문제를 해결하기 위해, 모듈이 Node v0.11.x 버전을 지원할 수 있도록 해야합니다.
+현재 <a href="https://www.npmjs.org/browse/depended/nan">많은 모듈들</a>이 안정적으로 두 버전 모두 지원하고 있지만,
+오래된 모듈의 경우 Node v0.10.x 버전만을 지원하고 있습니다.
+예를들어 <a href="https://github.com/rvagg/nan">nan</a> 모듈을 사용해야 하는 경우, Node v0.11.x 버전으로 포팅 할 필요가 있습니다.</p>
+
+<h2 id="네이티브-모듈-설치하는-방법">네이티브 모듈 설치하는 방법</h2>
+
+<h3 id="쉬운-방법---권장">쉬운 방법 - 권장</h3>
+
+<p><a href="https://github.com/paulcbetts/electron-rebuild"><code>electron-rebuild</code></a> 패키지를 사용하면 아주 빠르고 정확하게 네이티브 모듈을 다시 빌드할 수 있습니다.
+다음의 간단한 절차를 통해 자동으로 헤더를 다운로드하고 네이티브 모듈을 빌드할 수 있습니다:</p>
+<div class="highlight"><pre><code class="language-sh" data-lang="sh">npm install --save-dev electron-rebuild
+
+<span class="c"># 필요한 네이티브 모듈을 `npm install`로 설치한 후 다음 작업을 실행하세요:</span>
+./node_modules/.bin/electron-rebuild
+</code></pre></div>
+<h3 id="node-gyp을-이용한-방법">node-gyp을 이용한 방법</h3>
+
+<p>Node 모듈을 <code>node-gyp</code>를 사용하여 Electron을 타겟으로 빌드할 땐, <code>node-gyp</code>에 헤더 다운로드 주소와 버전을 알려주어야합니다:</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span><span class="nb">cd</span> /path-to-module/
+<span class="nv">$ HOME</span><span class="o">=</span>~/.electron-gyp node-gyp rebuild --target<span class="o">=</span>0.25.0 --arch<span class="o">=</span>ia64 --dist-url<span class="o">=</span>https://atom.io/download/atom-shell
+</code></pre></div>
+<p><code>HOME=~/.electron-gyp</code>은 변경할 헤더의 위치를 찾습니다. <code>--target=0.25.0</code>은 Electron의 버전입니다.
+<code>--dist-url=...</code>은 헤더를 다운로드 하는 주소입니다. <code>--arch=ia64</code>는 64비트 시스템을 타겟으로 빌드 한다는 것을 <code>node-gyp</code>에게 알려줍니다.</p>
+
+<h3 id="npm을-이용한-방법">npm을 이용한 방법</h3>
+
+<p>또한 <code>npm</code>을 사용하여 모듈을 설치할 수도 있습니다.
+환경변수가 필요한 것을 제외하고는 일반 Node 모듈을 설치하는 방법과 완전히 똑같습니다:</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">export </span><span class="nv">npm_config_disturl</span><span class="o">=</span>https://atom.io/download/atom-shell
+<span class="nb">export </span><span class="nv">npm_config_target</span><span class="o">=</span>0.25.0
+<span class="nb">export </span><span class="nv">npm_config_arch</span><span class="o">=</span>x64
+<span class="nv">HOME</span><span class="o">=</span>~/.electron-gyp npm install module-name
+</code></pre></div>
+
+      </div>
+    </div>
+    
+    <div class='row'>
+      <div class='ten columns release offset-by-one docs-footer'>
+        <span class="octicon octicon-pencil"></span>
+        See something that needs fixing? Propose a change on the <a href='https://github.com/atom/electron/blob/master/docs/tutorial/using-native-node-modules-ko.md'>source</a>.
+        <br>
+        <span class="octicon octicon-zap"></span>
+        Need a different version of the docs? See the <a href='/docs'>available versions</a>.
+      </div>
+    </div>
+    
+  </div>
+</section>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class='container'>
+    <div class='row'>
+      <div class='one-half column'>
+        <ul class='inline-list'>
+          <li><a href='https://github.com/atom/electron'>Repository</a></li>
+          <li><a href='/docs/v0.36.5'>Documentation</a></li>
+          <li><a href='/releases.html'>Releases</a></li>
+          <li><a href='http://blog.atom.io'>Blog</a></li>
+          <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+        </ul>
+      </div>
+
+      <div class='one-half column text-right'>
+        <a href='https://github.com' class="no-hover-dec"><span class='octicon octicon-code'></span> with <span class='octicon octicon-heart'></span> by <span class='octicon octicon-logo-github'></span></a>
+      </div>
+  </div>
+</footer>
+
+    <script>
+  var anchorForId = function (id) {
+    var anchor = document.createElement("a");
+    anchor.className = "header-link";
+    anchor.href      = "#" + id;
+    anchor.innerHTML = "<span class='octicon octicon-link'></span>";
+    anchor.title = "Permalink";
+    return anchor;
+  };
+
+  var linkifyAnchors = function (level, containingElement) {
+    var headers = containingElement.getElementsByTagName("h" + level);
+    for (var h = 0; h < headers.length; h++) {
+      var header = headers[h];
+
+      if (typeof header.id !== "undefined" && header.id !== "") {
+        header.appendChild(anchorForId(header.id));
+      }
+    }
+  };
+
+  document.onreadystatechange = function () {
+    if (this.readyState === "complete") {
+      var contentBlock = document.getElementsByClassName("docs")[0] || document.getElementsByClassName("news")[0];
+      if (!contentBlock) {
+        return;
+      }
+      for (var level = 1; level <= 6; level++) {
+        linkifyAnchors(level, contentBlock);
+      }
+    }
+  };
+</script>
+
+  </body>
+
+</html>
