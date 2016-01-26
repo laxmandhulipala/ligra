@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+  <title>Desktop Capturer</title>
+  <meta name='description' content='Build cross platform desktop apps with web technologies'>
+
+  <link rel='shortcut icon' href='/images/favicon.ico'/>
+  <link rel='stylesheet' href='/css/normalize.css'>
+  <link rel='stylesheet' href='/css/skeleton.css'>
+  <link rel='stylesheet' href='/css/main.css'>
+  <link rel='stylesheet' href='/css/octicons/octicons.css'>
+  <link rel='stylesheet' href='/css/pygments.css'>
+  <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+  <link rel='canonical' href='/docs/v0.36.0/api/desktop-capturer/'>
+  <link rel='alternate' type='application/rss+xml' title='Ligra' href='/feed.xml' />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-3769691-57', 'auto');
+    ga('send', 'pageview');
+  </script>
+</head>
+
+
+  <body>
+
+    <header>
+  <div class='top-bar'>
+    <div class='container'>
+      <div class='row'>
+        <div class='four columns'>
+          <ul class='navigation inline-list'>
+            <li><a href='/#built-on-electron'>Built on Electron</a></li>
+            <li><a href='/#get-started'>Get Started</a></li>
+          </ul>
+        </div>
+        <div class='eight columns text-right'>
+          <ul class='navigation inline-list'>
+            <li><a href='https://github.com/atom/electron'>Repository</a></li>
+            <li><a href='/docs/v0.36.5'>Documentation</a></li>
+            <li><a href='http://blog.atom.io'>Blog</a></li>
+            <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+    <div class='page-content'>
+      <div class='wrapper'>
+        <div class='page-template desktop-capturer'>
+  <section class='jump-to-release is-compact'>
+  <div class='container'>
+    <div class='row'>
+      <div class='twelve columns'>
+      <h1><img class="electron-icon" src='/images/electron-icon.svg'>Electron Documentation</h1>
+      
+      <a href='/docs/v0.36.0/'>v0.36.0  </a> |
+      <a href='https://github.com/atom/electron/blob/master/docs/api/desktop-capturer.md'>Document Source</a>
+      
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class='docs'>
+  <div class='container'>
+    <div class='row'>
+      <div class='ten columns release offset-by-one'>
+        
+        <h6 class='docs-breadcrumb'>v0.36.0 / API
+           / Desktop Capturer </h6>
+        
+
+        <h1 id="desktopcapturer">desktopCapturer</h1>
+
+<p>The <code>desktopCapturer</code> module can be used to get available sources that can be
+used to be captured with <code>getUserMedia</code>.</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// In the renderer process.</span>
+<span class="kd">var</span> <span class="nx">desktopCapturer</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;electron&#39;</span><span class="p">).</span><span class="nx">desktopCapturer</span><span class="p">;</span>
+
+<span class="nx">desktopCapturer</span><span class="p">.</span><span class="nx">getSources</span><span class="p">({</span><span class="nx">types</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;window&#39;</span><span class="p">,</span> <span class="s1">&#39;screen&#39;</span><span class="p">]},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">sources</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="k">throw</span> <span class="nx">error</span><span class="p">;</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">sources</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">sources</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">name</span> <span class="o">==</span> <span class="s2">&quot;Electron&quot;</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">navigator</span><span class="p">.</span><span class="nx">webkitGetUserMedia</span><span class="p">({</span>
+        <span class="nx">audio</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="nx">video</span><span class="o">:</span> <span class="p">{</span>
+          <span class="nx">mandatory</span><span class="o">:</span> <span class="p">{</span>
+            <span class="nx">chromeMediaSource</span><span class="o">:</span> <span class="s1">&#39;desktop&#39;</span><span class="p">,</span>
+            <span class="nx">chromeMediaSourceId</span><span class="o">:</span> <span class="nx">sources</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">id</span><span class="p">,</span>
+            <span class="nx">minWidth</span><span class="o">:</span> <span class="mi">1280</span><span class="p">,</span>
+            <span class="nx">maxWidth</span><span class="o">:</span> <span class="mi">1280</span><span class="p">,</span>
+            <span class="nx">minHeight</span><span class="o">:</span> <span class="mi">720</span><span class="p">,</span>
+            <span class="nx">maxHeight</span><span class="o">:</span> <span class="mi">720</span>
+          <span class="p">}</span>
+        <span class="p">}</span>
+      <span class="p">},</span> <span class="nx">gotStream</span><span class="p">,</span> <span class="nx">getUserMediaError</span><span class="p">);</span>
+      <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+
+<span class="kd">function</span> <span class="nx">gotStream</span><span class="p">(</span><span class="nx">stream</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;video&#39;</span><span class="p">).</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">URL</span><span class="p">.</span><span class="nx">createObjectURL</span><span class="p">(</span><span class="nx">stream</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">getUserMediaError</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;getUserMediaError&#39;</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="methods">Methods</h2>
+
+<p>The <code>desktopCapturer</code> module has the following methods:</p>
+
+<h3 id="desktopcapturer.getsources(options,-callback)"><code>desktopCapturer.getSources(options, callback)</code></h3>
+
+<ul>
+<li><code>options</code> Object
+
+<ul>
+<li><code>types</code> Array - An array of String that lists the types of desktop sources
+to be captured, available types are <code>screen</code> and <code>window</code>.</li>
+<li><code>thumbnailSize</code> Object (optional) - The suggested size that thumbnail should
+be scaled, it is <code>{width: 150, height: 150}</code> by default.</li>
+</ul></li>
+<li><code>callback</code> Function</li>
+</ul>
+
+<p>Starts a request to get all desktop sources, <code>callback</code> will be called with
+<code>callback(error, sources)</code> when the request is completed.</p>
+
+<p>The <code>sources</code> is an array of <code>Source</code> objects, each <code>Source</code> represents a
+captured screen or individual window, and has following properties:
+* <code>id</code> String - The id of the captured window or screen used in
+  <code>navigator.webkitGetUserMedia</code>. The format looks like <code>window:XX</code> or
+  <code>screen:XX</code> where <code>XX</code> is a random generated number.
+* <code>name</code> String - The described name of the capturing screen or window. If the
+  source is a screen, the name will be <code>Entire Screen</code> or <code>Screen &lt;index&gt;</code>; if
+  it is a window, the name will be the window&#39;s title.
+* <code>thumbnail</code> <a href="http://electron.atom.io/docs/v0.36.0/api/NativeImage">NativeImage</a> - A thumbnail image.</p>
+
+<p><strong>Note:</strong> There is no guarantee that the size of <code>source.thumbnail</code> is always
+the same as the <code>thumnbailSize</code> in <code>options</code>. It also depends on the scale of
+the screen or window.</p>
+
+
+      </div>
+    </div>
+    
+    <div class='row'>
+      <div class='ten columns release offset-by-one docs-footer'>
+        <span class="octicon octicon-pencil"></span>
+        See something that needs fixing? Propose a change on the <a href='https://github.com/atom/electron/blob/master/docs/api/desktop-capturer.md'>source</a>.
+        <br>
+        <span class="octicon octicon-zap"></span>
+        Need a different version of the docs? See the <a href='/docs'>available versions</a>.
+      </div>
+    </div>
+    
+  </div>
+</section>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class='container'>
+    <div class='row'>
+      <div class='one-half column'>
+        <ul class='inline-list'>
+          <li><a href='https://github.com/atom/electron'>Repository</a></li>
+          <li><a href='/docs/v0.36.5'>Documentation</a></li>
+          <li><a href='/releases.html'>Releases</a></li>
+          <li><a href='http://blog.atom.io'>Blog</a></li>
+          <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+        </ul>
+      </div>
+
+      <div class='one-half column text-right'>
+        <a href='https://github.com' class="no-hover-dec"><span class='octicon octicon-code'></span> with <span class='octicon octicon-heart'></span> by <span class='octicon octicon-logo-github'></span></a>
+      </div>
+  </div>
+</footer>
+
+    <script>
+  var anchorForId = function (id) {
+    var anchor = document.createElement("a");
+    anchor.className = "header-link";
+    anchor.href      = "#" + id;
+    anchor.innerHTML = "<span class='octicon octicon-link'></span>";
+    anchor.title = "Permalink";
+    return anchor;
+  };
+
+  var linkifyAnchors = function (level, containingElement) {
+    var headers = containingElement.getElementsByTagName("h" + level);
+    for (var h = 0; h < headers.length; h++) {
+      var header = headers[h];
+
+      if (typeof header.id !== "undefined" && header.id !== "") {
+        header.appendChild(anchorForId(header.id));
+      }
+    }
+  };
+
+  document.onreadystatechange = function () {
+    if (this.readyState === "complete") {
+      var contentBlock = document.getElementsByClassName("docs")[0] || document.getElementsByClassName("news")[0];
+      if (!contentBlock) {
+        return;
+      }
+      for (var level = 1; level <= 6; level++) {
+        linkifyAnchors(level, contentBlock);
+      }
+    }
+  };
+</script>
+
+  </body>
+
+</html>

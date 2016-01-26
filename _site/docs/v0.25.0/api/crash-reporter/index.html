@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+  <title>Crash Reporter</title>
+  <meta name='description' content='Build cross platform desktop apps with web technologies'>
+
+  <link rel='shortcut icon' href='/images/favicon.ico'/>
+  <link rel='stylesheet' href='/css/normalize.css'>
+  <link rel='stylesheet' href='/css/skeleton.css'>
+  <link rel='stylesheet' href='/css/main.css'>
+  <link rel='stylesheet' href='/css/octicons/octicons.css'>
+  <link rel='stylesheet' href='/css/pygments.css'>
+  <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+  <link rel='canonical' href='/docs/v0.25.0/api/crash-reporter/'>
+  <link rel='alternate' type='application/rss+xml' title='Ligra' href='/feed.xml' />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-3769691-57', 'auto');
+    ga('send', 'pageview');
+  </script>
+</head>
+
+
+  <body>
+
+    <header>
+  <div class='top-bar'>
+    <div class='container'>
+      <div class='row'>
+        <div class='four columns'>
+          <ul class='navigation inline-list'>
+            <li><a href='/#built-on-electron'>Built on Electron</a></li>
+            <li><a href='/#get-started'>Get Started</a></li>
+          </ul>
+        </div>
+        <div class='eight columns text-right'>
+          <ul class='navigation inline-list'>
+            <li><a href='https://github.com/atom/electron'>Repository</a></li>
+            <li><a href='/docs/v0.36.5'>Documentation</a></li>
+            <li><a href='http://blog.atom.io'>Blog</a></li>
+            <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+    <div class='page-content'>
+      <div class='wrapper'>
+        <div class='page-template crash-reporter'>
+  <section class='jump-to-release is-compact'>
+  <div class='container'>
+    <div class='row'>
+      <div class='twelve columns'>
+      <h1><img class="electron-icon" src='/images/electron-icon.svg'>Electron Documentation</h1>
+      
+      <a href='/docs/v0.25.0/'>v0.25.0  </a> |
+      <a href='https://github.com/atom/electron/blob/master/docs/api/crash-reporter.md'>Document Source</a>
+      
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class='docs'>
+  <div class='container'>
+    <div class='row'>
+      <div class='ten columns release offset-by-one'>
+        
+        <h6 class='docs-breadcrumb'>v0.25.0 / API
+           / Crash Reporter </h6>
+        
+
+        <h1 id="crash-reporter">crash-reporter</h1>
+
+<p>An example of automatically submitting crash reporters to remote server:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">crashReporter</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;crash-reporter&#39;</span><span class="p">);</span>
+<span class="nx">crashReporter</span><span class="p">.</span><span class="nx">start</span><span class="p">({</span>
+  <span class="nx">productName</span><span class="o">:</span> <span class="s1">&#39;YourName&#39;</span><span class="p">,</span>
+  <span class="nx">companyName</span><span class="o">:</span> <span class="s1">&#39;YourCompany&#39;</span><span class="p">,</span>
+  <span class="nx">submitUrl</span><span class="o">:</span> <span class="s1">&#39;https://your-domain.com/url-to-submit&#39;</span><span class="p">,</span>
+  <span class="nx">autoSubmit</span><span class="o">:</span> <span class="kc">true</span>
+<span class="p">});</span>
+</code></pre></div>
+<h2 id="crashreporter.start(options)">crashReporter.start(options)</h2>
+
+<ul>
+<li><code>options</code> Object
+
+<ul>
+<li><code>productName</code> String, default: Electron</li>
+<li><code>companyName</code> String, default: GitHub, Inc</li>
+<li><code>submitUrl</code> String, default: http://54.249.141.255:1127/post</li>
+<li>URL that crash reports would be sent to as POST</li>
+<li><code>autoSubmit</code> Boolean, default: true</li>
+<li>Send the crash report without user interaction</li>
+<li><code>ignoreSystemCrashHandler</code> Boolean, default: false</li>
+<li><code>extra</code> Object</li>
+<li>An object you can define which content will be send along with the report.</li>
+<li>Only string properties are send correctly.</li>
+<li>Nested objects are not supported.</li>
+</ul></li>
+</ul>
+
+<h2 id="crashreporter.getlastcrashreport()">crashReporter.getLastCrashReport()</h2>
+
+<p>Returns the date and ID of last crash report, when there was no crash report
+sent or the crash reporter is not started, <code>null</code> will be returned.</p>
+
+<h1 id="crash-reporter-payload">crash-reporter payload</h1>
+
+<p>The crash reporter will send the following data to the <code>submitUrl</code> as <code>POST</code>:</p>
+
+<ul>
+<li><code>rept</code> String - e.g. &#39;electron-crash-service&#39;</li>
+<li><code>ver</code> String - The version of Electron</li>
+<li><code>platform</code> String - e.g. &#39;win32&#39;</li>
+<li><code>process_type</code> String - e.g. &#39;renderer&#39;</li>
+<li><code>ptime</code> Number</li>
+<li><code>_version</code> String - The version in <code>package.json</code></li>
+<li><code>_productName</code> String - The product name in the crashReporter <code>options</code> object</li>
+<li><code>prod</code> String - Name of the underlying product. In this case Electron</li>
+<li><code>_companyName</code> String - The company name in the crashReporter <code>options</code> object</li>
+<li><code>upload_file_minidump</code> File - The crashreport as file</li>
+<li>All level one properties of the <code>extra</code> object in the crashReporter <code>options</code> object</li>
+</ul>
+
+
+      </div>
+    </div>
+    
+    <div class='row'>
+      <div class='ten columns release offset-by-one docs-footer'>
+        <span class="octicon octicon-pencil"></span>
+        See something that needs fixing? Propose a change on the <a href='https://github.com/atom/electron/blob/master/docs/api/crash-reporter.md'>source</a>.
+        <br>
+        <span class="octicon octicon-zap"></span>
+        Need a different version of the docs? See the <a href='/docs'>available versions</a>.
+      </div>
+    </div>
+    
+  </div>
+</section>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class='container'>
+    <div class='row'>
+      <div class='one-half column'>
+        <ul class='inline-list'>
+          <li><a href='https://github.com/atom/electron'>Repository</a></li>
+          <li><a href='/docs/v0.36.5'>Documentation</a></li>
+          <li><a href='/releases.html'>Releases</a></li>
+          <li><a href='http://blog.atom.io'>Blog</a></li>
+          <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+        </ul>
+      </div>
+
+      <div class='one-half column text-right'>
+        <a href='https://github.com' class="no-hover-dec"><span class='octicon octicon-code'></span> with <span class='octicon octicon-heart'></span> by <span class='octicon octicon-logo-github'></span></a>
+      </div>
+  </div>
+</footer>
+
+    <script>
+  var anchorForId = function (id) {
+    var anchor = document.createElement("a");
+    anchor.className = "header-link";
+    anchor.href      = "#" + id;
+    anchor.innerHTML = "<span class='octicon octicon-link'></span>";
+    anchor.title = "Permalink";
+    return anchor;
+  };
+
+  var linkifyAnchors = function (level, containingElement) {
+    var headers = containingElement.getElementsByTagName("h" + level);
+    for (var h = 0; h < headers.length; h++) {
+      var header = headers[h];
+
+      if (typeof header.id !== "undefined" && header.id !== "") {
+        header.appendChild(anchorForId(header.id));
+      }
+    }
+  };
+
+  document.onreadystatechange = function () {
+    if (this.readyState === "complete") {
+      var contentBlock = document.getElementsByClassName("docs")[0] || document.getElementsByClassName("news")[0];
+      if (!contentBlock) {
+        return;
+      }
+      for (var level = 1; level <= 6; level++) {
+        linkifyAnchors(level, contentBlock);
+      }
+    }
+  };
+</script>
+
+  </body>
+
+</html>

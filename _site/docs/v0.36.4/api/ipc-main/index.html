@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+  <title>Ipc Main</title>
+  <meta name='description' content='Build cross platform desktop apps with web technologies'>
+
+  <link rel='shortcut icon' href='/images/favicon.ico'/>
+  <link rel='stylesheet' href='/css/normalize.css'>
+  <link rel='stylesheet' href='/css/skeleton.css'>
+  <link rel='stylesheet' href='/css/main.css'>
+  <link rel='stylesheet' href='/css/octicons/octicons.css'>
+  <link rel='stylesheet' href='/css/pygments.css'>
+  <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+  <link rel='canonical' href='/docs/v0.36.4/api/ipc-main/'>
+  <link rel='alternate' type='application/rss+xml' title='Ligra' href='/feed.xml' />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-3769691-57', 'auto');
+    ga('send', 'pageview');
+  </script>
+</head>
+
+
+  <body>
+
+    <header>
+  <div class='top-bar'>
+    <div class='container'>
+      <div class='row'>
+        <div class='four columns'>
+          <ul class='navigation inline-list'>
+            <li><a href='/#built-on-electron'>Built on Electron</a></li>
+            <li><a href='/#get-started'>Get Started</a></li>
+          </ul>
+        </div>
+        <div class='eight columns text-right'>
+          <ul class='navigation inline-list'>
+            <li><a href='https://github.com/atom/electron'>Repository</a></li>
+            <li><a href='/docs/v0.36.5'>Documentation</a></li>
+            <li><a href='http://blog.atom.io'>Blog</a></li>
+            <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+    <div class='page-content'>
+      <div class='wrapper'>
+        <div class='page-template ipc-main'>
+  <section class='jump-to-release is-compact'>
+  <div class='container'>
+    <div class='row'>
+      <div class='twelve columns'>
+      <h1><img class="electron-icon" src='/images/electron-icon.svg'>Electron Documentation</h1>
+      
+      <a href='/docs/v0.36.4/'>v0.36.4  </a> |
+      <a href='https://github.com/atom/electron/blob/master/docs/api/ipc-main.md'>Document Source</a>
+      
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class='docs'>
+  <div class='container'>
+    <div class='row'>
+      <div class='ten columns release offset-by-one'>
+        
+        <h6 class='docs-breadcrumb'>v0.36.4 / API
+           / Ipc Main </h6>
+        
+
+        <h1 id="ipcmain">ipcMain</h1>
+
+<p>The <code>ipcMain</code> module is an instance of the
+<a href="https://nodejs.org/api/events.html">EventEmitter</a> class. When used in the main
+process, it handles asynchronous and synchronous messages sent from a renderer
+process (web page). Messages sent from a renderer will be emitted to this
+module.</p>
+
+<h2 id="sending-messages">Sending Messages</h2>
+
+<p>It is also possible to send messages from the main process to the renderer
+process, see <a href="http://electron.atom.io/docs/v0.36.4/api/web-contents#webcontentssendchannel-arg1-arg2-">webContents.send</a> for more information.</p>
+
+<ul>
+<li>When sending a message, the event name is the <code>channel</code>.</li>
+<li>To reply a synchronous message, you need to set <code>event.returnValue</code>.</li>
+<li>To send an asynchronous back to the sender, you can use
+<code>event.sender.send(...)</code>.</li>
+</ul>
+
+<p>An example of sending and handling messages between the render and main
+processes:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// In main process.</span>
+<span class="kr">const</span> <span class="nx">ipcMain</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;electron&#39;</span><span class="p">).</span><span class="nx">ipcMain</span><span class="p">;</span>
+<span class="nx">ipcMain</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;asynchronous-message&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">arg</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">arg</span><span class="p">);</span>  <span class="c1">// prints &quot;ping&quot;</span>
+  <span class="nx">event</span><span class="p">.</span><span class="nx">sender</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="s1">&#39;asynchronous-reply&#39;</span><span class="p">,</span> <span class="s1">&#39;pong&#39;</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="nx">ipcMain</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;synchronous-message&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">arg</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">arg</span><span class="p">);</span>  <span class="c1">// prints &quot;ping&quot;</span>
+  <span class="nx">event</span><span class="p">.</span><span class="nx">returnValue</span> <span class="o">=</span> <span class="s1">&#39;pong&#39;</span><span class="p">;</span>
+<span class="p">});</span>
+</code></pre></div><div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// In renderer process (web page).</span>
+<span class="kr">const</span> <span class="nx">ipcRenderer</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;electron&#39;</span><span class="p">).</span><span class="nx">ipcRenderer</span><span class="p">;</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">ipcRenderer</span><span class="p">.</span><span class="nx">sendSync</span><span class="p">(</span><span class="s1">&#39;synchronous-message&#39;</span><span class="p">,</span> <span class="s1">&#39;ping&#39;</span><span class="p">));</span> <span class="c1">// prints &quot;pong&quot;</span>
+
+<span class="nx">ipcRenderer</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;asynchronous-reply&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">arg</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">arg</span><span class="p">);</span> <span class="c1">// prints &quot;pong&quot;</span>
+<span class="p">});</span>
+<span class="nx">ipcRenderer</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="s1">&#39;asynchronous-message&#39;</span><span class="p">,</span> <span class="s1">&#39;ping&#39;</span><span class="p">);</span>
+</code></pre></div>
+<h2 id="listening-for-messages">Listening for Messages</h2>
+
+<p>The <code>ipcMain</code> module has the following method to listen for events:</p>
+
+<h3 id="ipcmain.on(channel,-callback)"><code>ipcMain.on(channel, callback)</code></h3>
+
+<ul>
+<li><code>channel</code> String - The event name.</li>
+<li><code>callback</code> Function</li>
+</ul>
+
+<p>When the event occurs the <code>callback</code> is called with an <code>event</code> object and
+arbitrary arguments.</p>
+
+<h3 id="ipcmain.removelistener(channel,-callback)"><code>ipcMain.removeListener(channel, callback)</code></h3>
+
+<ul>
+<li><code>channel</code> String - The event name.</li>
+<li><code>callback</code> Function - The reference to the same function that you used for
+<code>ipcMain.on(channel, callback)</code></li>
+</ul>
+
+<p>Once done listening for messages, if you no longer want to activate this
+callback and for whatever reason can&#39;t merely stop sending messages on the
+channel, this function will remove the callback handler for the specified
+channel.</p>
+
+<h3 id="ipcmain.removealllisteners(channel)"><code>ipcMain.removeAllListeners(channel)</code></h3>
+
+<ul>
+<li><code>channel</code> String - The event name.</li>
+</ul>
+
+<p>This removes <em>all</em> handlers to this ipc channel.</p>
+
+<h3 id="ipcmain.once(channel,-callback)"><code>ipcMain.once(channel, callback)</code></h3>
+
+<p>Use this in place of <code>ipcMain.on()</code> to fire handlers meant to occur only once,
+as in, they won&#39;t be activated after one call of <code>callback</code></p>
+
+<h2 id="ipc-event">IPC Event</h2>
+
+<p>The <code>event</code> object passed to the <code>callback</code> has the following methods:</p>
+
+<h3 id="event.returnvalue"><code>event.returnValue</code></h3>
+
+<p>Set this to the value to be returned in a synchronous message.</p>
+
+<h3 id="event.sender"><code>event.sender</code></h3>
+
+<p>Returns the <code>webContents</code> that sent the message, you can call
+<code>event.sender.send</code> to reply to the asynchronous message, see
+<a href="http://electron.atom.io/docs/v0.36.4/api/web-contents#webcontentssendchannel-arg1-arg2-">webContents.send</a> for more information.</p>
+
+
+      </div>
+    </div>
+    
+    <div class='row'>
+      <div class='ten columns release offset-by-one docs-footer'>
+        <span class="octicon octicon-pencil"></span>
+        See something that needs fixing? Propose a change on the <a href='https://github.com/atom/electron/blob/master/docs/api/ipc-main.md'>source</a>.
+        <br>
+        <span class="octicon octicon-zap"></span>
+        Need a different version of the docs? See the <a href='/docs'>available versions</a>.
+      </div>
+    </div>
+    
+  </div>
+</section>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class='container'>
+    <div class='row'>
+      <div class='one-half column'>
+        <ul class='inline-list'>
+          <li><a href='https://github.com/atom/electron'>Repository</a></li>
+          <li><a href='/docs/v0.36.5'>Documentation</a></li>
+          <li><a href='/releases.html'>Releases</a></li>
+          <li><a href='http://blog.atom.io'>Blog</a></li>
+          <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+        </ul>
+      </div>
+
+      <div class='one-half column text-right'>
+        <a href='https://github.com' class="no-hover-dec"><span class='octicon octicon-code'></span> with <span class='octicon octicon-heart'></span> by <span class='octicon octicon-logo-github'></span></a>
+      </div>
+  </div>
+</footer>
+
+    <script>
+  var anchorForId = function (id) {
+    var anchor = document.createElement("a");
+    anchor.className = "header-link";
+    anchor.href      = "#" + id;
+    anchor.innerHTML = "<span class='octicon octicon-link'></span>";
+    anchor.title = "Permalink";
+    return anchor;
+  };
+
+  var linkifyAnchors = function (level, containingElement) {
+    var headers = containingElement.getElementsByTagName("h" + level);
+    for (var h = 0; h < headers.length; h++) {
+      var header = headers[h];
+
+      if (typeof header.id !== "undefined" && header.id !== "") {
+        header.appendChild(anchorForId(header.id));
+      }
+    }
+  };
+
+  document.onreadystatechange = function () {
+    if (this.readyState === "complete") {
+      var contentBlock = document.getElementsByClassName("docs")[0] || document.getElementsByClassName("news")[0];
+      if (!contentBlock) {
+        return;
+      }
+      for (var level = 1; level <= 6; level++) {
+        linkifyAnchors(level, contentBlock);
+      }
+    }
+  };
+</script>
+
+  </body>
+
+</html>

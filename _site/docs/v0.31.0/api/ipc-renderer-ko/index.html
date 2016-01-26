@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+  <title>Ipc Renderer Ko</title>
+  <meta name='description' content='Build cross platform desktop apps with web technologies'>
+
+  <link rel='shortcut icon' href='/images/favicon.ico'/>
+  <link rel='stylesheet' href='/css/normalize.css'>
+  <link rel='stylesheet' href='/css/skeleton.css'>
+  <link rel='stylesheet' href='/css/main.css'>
+  <link rel='stylesheet' href='/css/octicons/octicons.css'>
+  <link rel='stylesheet' href='/css/pygments.css'>
+  <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+  <link rel='canonical' href='/docs/v0.31.0/api/ipc-renderer-ko/'>
+  <link rel='alternate' type='application/rss+xml' title='Ligra' href='/feed.xml' />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-3769691-57', 'auto');
+    ga('send', 'pageview');
+  </script>
+</head>
+
+
+  <body>
+
+    <header>
+  <div class='top-bar'>
+    <div class='container'>
+      <div class='row'>
+        <div class='four columns'>
+          <ul class='navigation inline-list'>
+            <li><a href='/#built-on-electron'>Built on Electron</a></li>
+            <li><a href='/#get-started'>Get Started</a></li>
+          </ul>
+        </div>
+        <div class='eight columns text-right'>
+          <ul class='navigation inline-list'>
+            <li><a href='https://github.com/atom/electron'>Repository</a></li>
+            <li><a href='/docs/v0.36.5'>Documentation</a></li>
+            <li><a href='http://blog.atom.io'>Blog</a></li>
+            <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+    <div class='page-content'>
+      <div class='wrapper'>
+        <div class='page-template ipc-renderer-ko'>
+  <section class='jump-to-release is-compact'>
+  <div class='container'>
+    <div class='row'>
+      <div class='twelve columns'>
+      <h1><img class="electron-icon" src='/images/electron-icon.svg'>Electron Documentation</h1>
+      
+      <a href='/docs/v0.31.0/'>v0.31.0  </a> |
+      <a href='https://github.com/atom/electron/blob/master/docs/api/ipc-renderer-ko.md'>Document Source</a>
+      
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class='docs'>
+  <div class='container'>
+    <div class='row'>
+      <div class='ten columns release offset-by-one'>
+        
+        <h6 class='docs-breadcrumb'>v0.31.0 / API
+           / Ipc Renderer Ko </h6>
+        
+
+        <h1 id="ipc-(renderer)">ipc (renderer)</h1>
+
+<p><code>ipc</code> 모듈은 메인 프로세스로 메시지를 동기 또는 비동기로 보내고 받을 수 있는 몇 가지 방법을 제공합니다.
+만약 랜더러 프로세스에서 메인 프로세스의 모듈을 직접적으로 사용하고 싶다면 <a href="http://electron.atom.io/docs/v0.31.0/api/remote-ko">remote</a> 모듈을 사용하는 것을 고려해보는 것이 좋습니다.</p>
+
+<p><a href="http://electron.atom.io/docs/v0.31.0/api/ipc-main-process-ko">ipc (main process)</a>에서 예제를 볼 수 있습니다.</p>
+
+<h2 id="ipc.send(channel[,-args...])">ipc.send(channel[, args...])</h2>
+
+<p>지정한 <code>channel</code>을 통해 <code>args..</code>를 비동기로 메시지를 보냅니다. 메인 프로세스는 <code>ipc</code> 모듈의 <code>channel</code> 이벤트를 통해 메시지를 받을 수 있습니다.</p>
+
+<h2 id="ipc.sendsync(channel[,-args...])">ipc.sendSync(channel[, args...])</h2>
+
+<p>지정한 <code>channel</code>을 통해 <code>args..</code>를 동기로 메시지를 보냅니다. 그리고 메인 프로세스에서 보낸 결과를 반환합니다.
+메인 프로세스는 <code>ipc</code> 모듈의 <code>channel</code> 이벤트를 통해 메시지를 받을 수 있습니다. 그리고 <code>event.returnValue</code>를 통해 반환값을 설정할 수 있습니다.</p>
+
+<p>역자 주: <code>channel</code>은 이벤트 이름입니다.</p>
+
+<p><strong>알림:</strong> 보통 개발자들은 해당 API를 사용하려 하지 않습니다. 동기 ipc 작업은 랜더러 프로세스의 모든 작업을 중단시킵니다.</p>
+
+<h2 id="ipc.sendtohost(channel[,-args...])">ipc.sendToHost(channel[, args...])</h2>
+
+<p><code>ipc.send</code>와 비슷하지만 메시지를 메인 프로세스 대신 호스트 페이지로 보냅니다.</p>
+
+<p>이 메소드는 보통 <code>&lt;webview&gt;</code>와 호스트 페이지 간의 통신에 사용됩니다.</p>
+
+
+      </div>
+    </div>
+    
+    <div class='row'>
+      <div class='ten columns release offset-by-one docs-footer'>
+        <span class="octicon octicon-pencil"></span>
+        See something that needs fixing? Propose a change on the <a href='https://github.com/atom/electron/blob/master/docs/api/ipc-renderer-ko.md'>source</a>.
+        <br>
+        <span class="octicon octicon-zap"></span>
+        Need a different version of the docs? See the <a href='/docs'>available versions</a>.
+      </div>
+    </div>
+    
+  </div>
+</section>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class='container'>
+    <div class='row'>
+      <div class='one-half column'>
+        <ul class='inline-list'>
+          <li><a href='https://github.com/atom/electron'>Repository</a></li>
+          <li><a href='/docs/v0.36.5'>Documentation</a></li>
+          <li><a href='/releases.html'>Releases</a></li>
+          <li><a href='http://blog.atom.io'>Blog</a></li>
+          <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+        </ul>
+      </div>
+
+      <div class='one-half column text-right'>
+        <a href='https://github.com' class="no-hover-dec"><span class='octicon octicon-code'></span> with <span class='octicon octicon-heart'></span> by <span class='octicon octicon-logo-github'></span></a>
+      </div>
+  </div>
+</footer>
+
+    <script>
+  var anchorForId = function (id) {
+    var anchor = document.createElement("a");
+    anchor.className = "header-link";
+    anchor.href      = "#" + id;
+    anchor.innerHTML = "<span class='octicon octicon-link'></span>";
+    anchor.title = "Permalink";
+    return anchor;
+  };
+
+  var linkifyAnchors = function (level, containingElement) {
+    var headers = containingElement.getElementsByTagName("h" + level);
+    for (var h = 0; h < headers.length; h++) {
+      var header = headers[h];
+
+      if (typeof header.id !== "undefined" && header.id !== "") {
+        header.appendChild(anchorForId(header.id));
+      }
+    }
+  };
+
+  document.onreadystatechange = function () {
+    if (this.readyState === "complete") {
+      var contentBlock = document.getElementsByClassName("docs")[0] || document.getElementsByClassName("news")[0];
+      if (!contentBlock) {
+        return;
+      }
+      for (var level = 1; level <= 6; level++) {
+        linkifyAnchors(level, contentBlock);
+      }
+    }
+  };
+</script>
+
+  </body>
+
+</html>

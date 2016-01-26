@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+  <title>Using Widevine Cdm Plugin</title>
+  <meta name='description' content='Build cross platform desktop apps with web technologies'>
+
+  <link rel='shortcut icon' href='/images/favicon.ico'/>
+  <link rel='stylesheet' href='/css/normalize.css'>
+  <link rel='stylesheet' href='/css/skeleton.css'>
+  <link rel='stylesheet' href='/css/main.css'>
+  <link rel='stylesheet' href='/css/octicons/octicons.css'>
+  <link rel='stylesheet' href='/css/pygments.css'>
+  <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+  <link rel='canonical' href='/docs/v0.36.5/tutorial/using-widevine-cdm-plugin/'>
+  <link rel='alternate' type='application/rss+xml' title='Ligra' href='/feed.xml' />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-3769691-57', 'auto');
+    ga('send', 'pageview');
+  </script>
+</head>
+
+
+  <body>
+
+    <header>
+  <div class='top-bar'>
+    <div class='container'>
+      <div class='row'>
+        <div class='four columns'>
+          <ul class='navigation inline-list'>
+            <li><a href='/#built-on-electron'>Built on Electron</a></li>
+            <li><a href='/#get-started'>Get Started</a></li>
+          </ul>
+        </div>
+        <div class='eight columns text-right'>
+          <ul class='navigation inline-list'>
+            <li><a href='https://github.com/atom/electron'>Repository</a></li>
+            <li><a href='/docs/v0.36.5'>Documentation</a></li>
+            <li><a href='http://blog.atom.io'>Blog</a></li>
+            <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+    <div class='page-content'>
+      <div class='wrapper'>
+        <div class='page-template using-widevine-cdm-plugin'>
+  <section class='jump-to-release is-compact'>
+  <div class='container'>
+    <div class='row'>
+      <div class='twelve columns'>
+      <h1><img class="electron-icon" src='/images/electron-icon.svg'>Electron Documentation</h1>
+      
+      <a href='/docs/v0.36.5/'>v0.36.5  (Latest)  </a> |
+      <a href='https://github.com/atom/electron/blob/master/docs/tutorial/using-widevine-cdm-plugin.md'>Document Source</a>
+      
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class='docs'>
+  <div class='container'>
+    <div class='row'>
+      <div class='ten columns release offset-by-one'>
+        
+        <h6 class='docs-breadcrumb'>v0.36.5 / Tutorial
+           / Using Widevine Cdm Plugin </h6>
+        
+
+        <h1 id="using-widevine-cdm-plugin">Using Widevine CDM Plugin</h1>
+
+<p>In Electron you can use the Widevine CDM plugin shipped with Chrome browser.</p>
+
+<h2 id="getting-the-plugin">Getting the plugin</h2>
+
+<p>Electron doesn&#39;t ship with the Widevine CDM plugin for license reasons, to get
+it, you need to install the official Chrome browser first, which should match
+the architecture and Chrome version of the Electron build you use.</p>
+
+<h3 id="windows-&amp;-os-x">Windows &amp; OS X</h3>
+
+<p>Open <code>chrome://components/</code> in Chrome browser, find <code>WidevineCdm</code> and make
+sure it is up to date, then you can find all the plugin binaries from the
+<code>APP_DATA/Google/Chrome/WidevineCDM/VERSION/_platform_specific/PLATFORM_ARCH/</code>
+directory.</p>
+
+<p><code>APP_DATA</code> is system&#39;s location for storing app data, on Windows it is
+<code>%LOCALAPPDATA%</code>, on OS X it is <code>~/Library/Application Support</code>. <code>VERSION</code> is
+Widevine CDM plugin&#39;s version string, like <code>1.4.8.866</code>. <code>PLATFORM</code> is <code>mac</code> or
+<code>win</code>. <code>ARCH</code> is <code>x86</code> or <code>x64</code>.</p>
+
+<p>On Windows the required binaries are <code>widevinecdm.dll</code> and
+<code>widevinecdmadapter.dll</code>, on OS X they are <code>libwidevinecdm.dylib</code> and
+<code>widevinecdmadapter.plugin</code>. You can copy them to anywhere you like, but they
+have to be put together.</p>
+
+<h3 id="linux">Linux</h3>
+
+<p>On Linux the plugin binaries are shipped together with Chrome browser, you can
+find them under <code>/opt/google/chrome</code>, the filenames are <code>libwidevinecdm.so</code> and
+<code>libwidevinecdmadapter.so</code>.</p>
+
+<h2 id="using-the-plugin">Using the plugin</h2>
+
+<p>After getting the plugin files, you should pass the <code>widevinecdmadapter</code>&#39;s path
+to Electron with <code>--widevine-cdm-path</code> command line switch, and the plugin&#39;s
+version with <code>--widevine-cdm-version</code> switch.</p>
+
+<p><strong>Note:</strong> Though only the <code>widevinecdmadapter</code> binary is passed to Electron, the
+<code>widevinecdm</code> binary has to be put aside it.</p>
+
+<p>The command line switches have to be passed before the <code>ready</code> event of <code>app</code>
+module gets emitted, and the page that uses this plugin must have plugin
+enabled.</p>
+
+<p>Example code:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// You have to pass the filename of `widevinecdmadapter` here, it is</span>
+<span class="c1">// * `widevinecdmadapter.plugin` on OS X,</span>
+<span class="c1">// * `libwidevinecdmadapter.so` on Linux,</span>
+<span class="c1">// * `widevinecdmadapter.dll` on Windows.</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">commandLine</span><span class="p">.</span><span class="nx">appendSwitch</span><span class="p">(</span><span class="s1">&#39;widevine-cdm-path&#39;</span><span class="p">,</span> <span class="s1">&#39;/path/to/widevinecdmadapter.plugin&#39;</span><span class="p">);</span>
+<span class="c1">// The version of plugin can be got from `chrome://plugins` page in Chrome.</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">commandLine</span><span class="p">.</span><span class="nx">appendSwitch</span><span class="p">(</span><span class="s1">&#39;widevine-cdm-version&#39;</span><span class="p">,</span> <span class="s1">&#39;1.4.8.866&#39;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">mainWindow</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;ready&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">mainWindow</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">BrowserWindow</span><span class="p">({</span>
+    <span class="nx">webPreferences</span><span class="o">:</span> <span class="p">{</span>
+      <span class="c1">// The `plugins` have to be enabled.</span>
+      <span class="nx">plugins</span><span class="o">:</span> <span class="kc">true</span>
+    <span class="p">}</span>
+  <span class="p">})</span>
+<span class="p">});</span>
+</code></pre></div>
+<h2 id="verifying-the-plugin">Verifying the plugin</h2>
+
+<p>To verify whether the plugin works, you can use following ways:</p>
+
+<ul>
+<li>Open devtools and check whether <code>navigator.plugins</code> includes the Widevine
+CDM plugin.</li>
+<li>Open https://shaka-player-demo.appspot.com/ and load a manifest that uses
+<code>Widevine</code>.</li>
+<li>Open http://www.dash-player.com/demo/drm-test-area/, check whether the page
+says <code>bitdash uses Widevine in your browser</code>, then play the video.</li>
+</ul>
+
+
+      </div>
+    </div>
+    
+    <div class='row'>
+      <div class='ten columns release offset-by-one docs-footer'>
+        <span class="octicon octicon-pencil"></span>
+        See something that needs fixing? Propose a change on the <a href='https://github.com/atom/electron/blob/master/docs/tutorial/using-widevine-cdm-plugin.md'>source</a>.
+        <br>
+        <span class="octicon octicon-zap"></span>
+        Need a different version of the docs? See the <a href='/docs'>available versions</a>.
+      </div>
+    </div>
+    
+  </div>
+</section>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class='container'>
+    <div class='row'>
+      <div class='one-half column'>
+        <ul class='inline-list'>
+          <li><a href='https://github.com/atom/electron'>Repository</a></li>
+          <li><a href='/docs/v0.36.5'>Documentation</a></li>
+          <li><a href='/releases.html'>Releases</a></li>
+          <li><a href='http://blog.atom.io'>Blog</a></li>
+          <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+        </ul>
+      </div>
+
+      <div class='one-half column text-right'>
+        <a href='https://github.com' class="no-hover-dec"><span class='octicon octicon-code'></span> with <span class='octicon octicon-heart'></span> by <span class='octicon octicon-logo-github'></span></a>
+      </div>
+  </div>
+</footer>
+
+    <script>
+  var anchorForId = function (id) {
+    var anchor = document.createElement("a");
+    anchor.className = "header-link";
+    anchor.href      = "#" + id;
+    anchor.innerHTML = "<span class='octicon octicon-link'></span>";
+    anchor.title = "Permalink";
+    return anchor;
+  };
+
+  var linkifyAnchors = function (level, containingElement) {
+    var headers = containingElement.getElementsByTagName("h" + level);
+    for (var h = 0; h < headers.length; h++) {
+      var header = headers[h];
+
+      if (typeof header.id !== "undefined" && header.id !== "") {
+        header.appendChild(anchorForId(header.id));
+      }
+    }
+  };
+
+  document.onreadystatechange = function () {
+    if (this.readyState === "complete") {
+      var contentBlock = document.getElementsByClassName("docs")[0] || document.getElementsByClassName("news")[0];
+      if (!contentBlock) {
+        return;
+      }
+      for (var level = 1; level <= 6; level++) {
+        linkifyAnchors(level, contentBlock);
+      }
+    }
+  };
+</script>
+
+  </body>
+
+</html>

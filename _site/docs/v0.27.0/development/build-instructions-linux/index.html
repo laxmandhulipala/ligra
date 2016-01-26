@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+  <title>Build Instructions Linux</title>
+  <meta name='description' content='Build cross platform desktop apps with web technologies'>
+
+  <link rel='shortcut icon' href='/images/favicon.ico'/>
+  <link rel='stylesheet' href='/css/normalize.css'>
+  <link rel='stylesheet' href='/css/skeleton.css'>
+  <link rel='stylesheet' href='/css/main.css'>
+  <link rel='stylesheet' href='/css/octicons/octicons.css'>
+  <link rel='stylesheet' href='/css/pygments.css'>
+  <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+  <link rel='canonical' href='/docs/v0.27.0/development/build-instructions-linux/'>
+  <link rel='alternate' type='application/rss+xml' title='Ligra' href='/feed.xml' />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-3769691-57', 'auto');
+    ga('send', 'pageview');
+  </script>
+</head>
+
+
+  <body>
+
+    <header>
+  <div class='top-bar'>
+    <div class='container'>
+      <div class='row'>
+        <div class='four columns'>
+          <ul class='navigation inline-list'>
+            <li><a href='/#built-on-electron'>Built on Electron</a></li>
+            <li><a href='/#get-started'>Get Started</a></li>
+          </ul>
+        </div>
+        <div class='eight columns text-right'>
+          <ul class='navigation inline-list'>
+            <li><a href='https://github.com/atom/electron'>Repository</a></li>
+            <li><a href='/docs/v0.36.5'>Documentation</a></li>
+            <li><a href='http://blog.atom.io'>Blog</a></li>
+            <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+    <div class='page-content'>
+      <div class='wrapper'>
+        <div class='page-template build-instructions-linux'>
+  <section class='jump-to-release is-compact'>
+  <div class='container'>
+    <div class='row'>
+      <div class='twelve columns'>
+      <h1><img class="electron-icon" src='/images/electron-icon.svg'>Electron Documentation</h1>
+      
+      <a href='/docs/v0.27.0/'>v0.27.0  </a> |
+      <a href='https://github.com/atom/electron/blob/master/docs/development/build-instructions-linux.md'>Document Source</a>
+      
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class='docs'>
+  <div class='container'>
+    <div class='row'>
+      <div class='ten columns release offset-by-one'>
+        
+        <h6 class='docs-breadcrumb'>v0.27.0 / Development
+           / Build Instructions Linux </h6>
+        
+
+        <h1 id="build-instructions-(linux)">Build instructions (Linux)</h1>
+
+<h2 id="prerequisites">Prerequisites</h2>
+
+<ul>
+<li><a href="http://nodejs.org">Node.js</a></li>
+<li>Clang 3.4 or later</li>
+<li>Development headers of GTK+ and libnotify</li>
+</ul>
+
+<p>On Ubuntu you could install the libraries via:</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>sudo apt-get install build-essential clang libdbus-1-dev libgtk2.0-dev <span class="se">\</span>
+                       libnotify-dev libgnome-keyring-dev libgconf2-dev <span class="se">\</span>
+                       libasound2-dev libcap-dev libcups2-dev libxtst-dev <span class="se">\</span>
+                       gcc-multilib g++-multilib
+</code></pre></div>
+<p>Latest Node.js could be installed via ppa:</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>sudo apt-get install python-software-properties software-properties-common
+<span class="nv">$ </span>sudo add-apt-repository ppa:chris-lea/node.js
+<span class="nv">$ </span>sudo apt-get update
+<span class="nv">$ </span>sudo apt-get install nodejs
+
+<span class="c"># Update to latest npm</span>
+<span class="nv">$ </span>sudo npm install npm -g
+</code></pre></div>
+<h2 id="getting-the-code">Getting the code</h2>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>git clone https://github.com/atom/electron.git
+</code></pre></div>
+<h2 id="bootstrapping">Bootstrapping</h2>
+
+<p>The bootstrap script will download all necessary build dependencies and create
+build project files. Notice that we&#39;re using <code>ninja</code> to build Electron so
+there is no <code>Makefile</code> generated.</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span><span class="nb">cd </span>electron
+<span class="nv">$ </span>./script/bootstrap.py -v
+</code></pre></div>
+<h2 id="building">Building</h2>
+
+<p>Build both <code>Release</code> and <code>Debug</code> targets:</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>./script/build.py
+</code></pre></div>
+<p>You can also only build the <code>Debug</code> target:</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>./script/build.py -c D
+</code></pre></div>
+<p>After building is done, you can find <code>atom</code> under <code>out/D</code>.</p>
+
+<h2 id="troubleshooting">Troubleshooting</h2>
+
+<h3 id="fatal-error:-bits/predefs.h:-no-such-file-or-directory">fatal error: bits/predefs.h: No such file or directory</h3>
+
+<p>If you got an error like this:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">In file included from /usr/include/stdio.h:28:0,
+                 from ../../../svnsrc/libgcc/../gcc/tsystem.h:88,
+                 from ../../../svnsrc/libgcc/libgcc2.c:29:
+/usr/include/features.h:324:26: fatal error: bits/predefs.h: No such file or directory
+ #include &lt;bits/predefs.h&gt;
+</code></pre></div>
+<p>Then you need to install <code>gcc-multilib</code> and <code>g++-multilib</code>, on Ubuntu you can do
+this:</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>sudo apt-get install gcc-multilib g++-multilib
+</code></pre></div>
+<h3 id="error-adding-symbols:-dso-missing-from-command-line">error adding symbols: DSO missing from command line</h3>
+
+<p>If you got an error like this:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">/usr/bin/ld: vendor/download/libchromiumcontent/Release/libchromiumcontent.so: undefined reference to symbol &#39;gconf_client_get&#39;
+//usr/lib/x86_64-linux-gnu/libgconf-2.so.4: error adding symbols: DSO missing from command line
+</code></pre></div>
+<p>libchromiumcontent.so is build with clang 3.0 which is incompatible with newer
+versions of clang. Try using clang 3.0, default version in Ubuntu 12.04.</p>
+
+<h3 id="libudev.so.0-missing">libudev.so.0 missing</h3>
+
+<p>If you get an error like:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">/usr/bin/ld: warning: libudev.so.0, needed by .../vendor/brightray/vendor/download/libchromiumcontent/Release/libchromiumcontent.so, not found (try using -rpath or -rpath-link)
+</code></pre></div>
+<p>and you are on Ubuntu 13.04+, 64 bit system, try doing</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">sudo ln -s /lib/x86_64-linux-gnu/libudev.so.1.3.5 /usr/lib/libudev.so.0
+</code></pre></div>
+<p>for ubuntu 13.04+ 32 bit systems, try doing</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">sudo ln -s /lib/i386-linux-gnu/libudev.so.1.3.5  /usr/lib/libudev.so.0
+</code></pre></div>
+<p>also see</p>
+
+<p>https://github.com/nwjs/nw.js/wiki/The-solution-of-lacking-libudev.so.0</p>
+
+<h2 id="tests">Tests</h2>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>./script/test.py
+</code></pre></div>
+
+      </div>
+    </div>
+    
+    <div class='row'>
+      <div class='ten columns release offset-by-one docs-footer'>
+        <span class="octicon octicon-pencil"></span>
+        See something that needs fixing? Propose a change on the <a href='https://github.com/atom/electron/blob/master/docs/development/build-instructions-linux.md'>source</a>.
+        <br>
+        <span class="octicon octicon-zap"></span>
+        Need a different version of the docs? See the <a href='/docs'>available versions</a>.
+      </div>
+    </div>
+    
+  </div>
+</section>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class='container'>
+    <div class='row'>
+      <div class='one-half column'>
+        <ul class='inline-list'>
+          <li><a href='https://github.com/atom/electron'>Repository</a></li>
+          <li><a href='/docs/v0.36.5'>Documentation</a></li>
+          <li><a href='/releases.html'>Releases</a></li>
+          <li><a href='http://blog.atom.io'>Blog</a></li>
+          <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+        </ul>
+      </div>
+
+      <div class='one-half column text-right'>
+        <a href='https://github.com' class="no-hover-dec"><span class='octicon octicon-code'></span> with <span class='octicon octicon-heart'></span> by <span class='octicon octicon-logo-github'></span></a>
+      </div>
+  </div>
+</footer>
+
+    <script>
+  var anchorForId = function (id) {
+    var anchor = document.createElement("a");
+    anchor.className = "header-link";
+    anchor.href      = "#" + id;
+    anchor.innerHTML = "<span class='octicon octicon-link'></span>";
+    anchor.title = "Permalink";
+    return anchor;
+  };
+
+  var linkifyAnchors = function (level, containingElement) {
+    var headers = containingElement.getElementsByTagName("h" + level);
+    for (var h = 0; h < headers.length; h++) {
+      var header = headers[h];
+
+      if (typeof header.id !== "undefined" && header.id !== "") {
+        header.appendChild(anchorForId(header.id));
+      }
+    }
+  };
+
+  document.onreadystatechange = function () {
+    if (this.readyState === "complete") {
+      var contentBlock = document.getElementsByClassName("docs")[0] || document.getElementsByClassName("news")[0];
+      if (!contentBlock) {
+        return;
+      }
+      for (var level = 1; level <= 6; level++) {
+        linkifyAnchors(level, contentBlock);
+      }
+    }
+  };
+</script>
+
+  </body>
+
+</html>

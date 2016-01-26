@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+  <title>Tray Ko</title>
+  <meta name='description' content='Build cross platform desktop apps with web technologies'>
+
+  <link rel='shortcut icon' href='/images/favicon.ico'/>
+  <link rel='stylesheet' href='/css/normalize.css'>
+  <link rel='stylesheet' href='/css/skeleton.css'>
+  <link rel='stylesheet' href='/css/main.css'>
+  <link rel='stylesheet' href='/css/octicons/octicons.css'>
+  <link rel='stylesheet' href='/css/pygments.css'>
+  <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+  <link rel='canonical' href='/docs/v0.30.0/api/tray-ko/'>
+  <link rel='alternate' type='application/rss+xml' title='Ligra' href='/feed.xml' />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-3769691-57', 'auto');
+    ga('send', 'pageview');
+  </script>
+</head>
+
+
+  <body>
+
+    <header>
+  <div class='top-bar'>
+    <div class='container'>
+      <div class='row'>
+        <div class='four columns'>
+          <ul class='navigation inline-list'>
+            <li><a href='/#built-on-electron'>Built on Electron</a></li>
+            <li><a href='/#get-started'>Get Started</a></li>
+          </ul>
+        </div>
+        <div class='eight columns text-right'>
+          <ul class='navigation inline-list'>
+            <li><a href='https://github.com/atom/electron'>Repository</a></li>
+            <li><a href='/docs/v0.36.5'>Documentation</a></li>
+            <li><a href='http://blog.atom.io'>Blog</a></li>
+            <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+    <div class='page-content'>
+      <div class='wrapper'>
+        <div class='page-template tray-ko'>
+  <section class='jump-to-release is-compact'>
+  <div class='container'>
+    <div class='row'>
+      <div class='twelve columns'>
+      <h1><img class="electron-icon" src='/images/electron-icon.svg'>Electron Documentation</h1>
+      
+      <a href='/docs/v0.30.0/'>v0.30.0  </a> |
+      <a href='https://github.com/atom/electron/blob/master/docs/api/tray-ko.md'>Document Source</a>
+      
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class='docs'>
+  <div class='container'>
+    <div class='row'>
+      <div class='ten columns release offset-by-one'>
+        
+        <h6 class='docs-breadcrumb'>v0.30.0 / API
+           / Tray Ko </h6>
+        
+
+        <h1 id="tray">Tray</h1>
+
+<p><code>Tray</code>는 OS의 알림영역에 아이콘을 표시합니다. 보통 컨텍스트 메뉴(context menu)를 같이 사용합니다.</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;app&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">Menu</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;menu&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">Tray</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;tray&#39;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">appIcon</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;ready&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+  <span class="nx">appIcon</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Tray</span><span class="p">(</span><span class="s1">&#39;/path/to/my/icon&#39;</span><span class="p">);</span> <span class="c1">// 현재 어플리케이션 디렉터리를 기준으로 하려면 `__dirname + &#39;/images/tray.png&#39;` 형식으로 입력해야합니다.</span>
+  <span class="kd">var</span> <span class="nx">contextMenu</span> <span class="o">=</span> <span class="nx">Menu</span><span class="p">.</span><span class="nx">buildFromTemplate</span><span class="p">([</span>
+    <span class="p">{</span> <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;Item1&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;radio&#39;</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;Item2&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;radio&#39;</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;Item3&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;radio&#39;</span><span class="p">,</span> <span class="nx">checked</span><span class="o">:</span> <span class="kc">true</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;Item4&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;radio&#39;</span> <span class="p">}</span>
+  <span class="p">]);</span>
+  <span class="nx">appIcon</span><span class="p">.</span><span class="nx">setToolTip</span><span class="p">(</span><span class="s1">&#39;이것은 나의 어플리케이션 입니다!&#39;</span><span class="p">);</span>
+  <span class="nx">appIcon</span><span class="p">.</span><span class="nx">setContextMenu</span><span class="p">(</span><span class="nx">contextMenu</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div>
+<p><strong>플랫폼별 한계:</strong></p>
+
+<ul>
+<li>OS X에서는 트레이 아이콘이 컨텍스트 메뉴를 가지고 있을 경우 <code>clicked</code> 이벤트는 무시됩니다.</li>
+<li>Linux에서는 앱 알림 표시기(app indicator)가 지원되면 해당 기능을 사용합니다. 만약 지원하지 않으면 <code>GtkStatusIcon</code>을 대신 사용합니다.</li>
+<li>앱 알림 표시기는 컨텍스트 메뉴를 가지고 있을 때만 보입니다.</li>
+<li>Linux에서 앱 알림 표시기가 사용될 경우, <code>clicked</code> 이벤트는 무시됩니다.</li>
+</ul>
+
+<p>이러한 이유로 만약 Tray API가 모든 플랫폼에서 똑같이 작동하게 하고 싶다면, 설계시 <code>clicked</code> 이벤트에 의존하지 말아야합니다.
+그리고 언제나 컨텍스트 메뉴를 포함해서 사용해야 합니다.</p>
+
+<h2 id="class:-tray">Class: Tray</h2>
+
+<p><code>Tray</code>는 <a href="http://nodejs.org/api/events.html#events_class_events_eventemitter">EventEmitter</a>를 상속 받았습니다.</p>
+
+<h3 id="new-tray(image)">new Tray(image)</h3>
+
+<ul>
+<li><code>image</code> <a href="http://electron.atom.io/docs/v0.30.0/api/native-image-ko">NativeImage</a></li>
+</ul>
+
+<p>전달된 <code>image</code>를 이용하여 트레이 아이콘을 만듭니다.</p>
+
+<h3 id="event:-&#39;clicked&#39;">Event: &#39;clicked&#39;</h3>
+
+<ul>
+<li><code>event</code></li>
+<li><code>bounds</code> Object - 트레이 아이콘의 범위
+
+<ul>
+<li><code>x</code> Integer</li>
+<li><code>y</code> Integer</li>
+<li><code>width</code> Integer</li>
+<li><code>height</code> Integer</li>
+</ul></li>
+</ul>
+
+<p>트레이 아이콘이 클릭될 때 호출됩니다.</p>
+
+<p><strong>주의:</strong> <code>bounds</code>는 OS X와 Window 7 이후 버전에서만 작동합니다.</p>
+
+<h3 id="event:-&#39;double-clicked&#39;">Event: &#39;double-clicked&#39;</h3>
+
+<p>트레이 아이콘이 더블 클릭될 때 호출됩니다.</p>
+
+<p><strong>주의:</strong> 이 기능은 OS X에서만 작동합니다.</p>
+
+<h3 id="event:-&#39;balloon-show&#39;">Event: &#39;balloon-show&#39;</h3>
+
+<p>알림풍선이 보여질 때 호출됩니다.</p>
+
+<p><strong>주의:</strong> 이 기능은 Windows에서만 작동합니다.</p>
+
+<h3 id="event:-&#39;balloon-clicked&#39;">Event: &#39;balloon-clicked&#39;</h3>
+
+<p>알림풍선이 클릭될 때 호출됩니다.</p>
+
+<p><strong>주의:</strong> 이 기능은 Windows에서만 작동합니다.</p>
+
+<h3 id="event:-&#39;balloon-closed&#39;">Event: &#39;balloon-closed&#39;</h3>
+
+<p>알림풍선이 시간이 지나 사라지거나 유저가 클릭하여 닫을 때 호출됩니다.</p>
+
+<p><strong>주의:</strong> 이 기능은 Windows에서만 작동합니다.</p>
+
+<h3 id="tray.destroy()">Tray.destroy()</h3>
+
+<p>트레이 아이콘을 즉시 삭제시킵니다.</p>
+
+<h3 id="tray.setimage(image)">Tray.setImage(image)</h3>
+
+<ul>
+<li><code>image</code> <a href="http://electron.atom.io/docs/v0.30.0/api/native-image-ko">NativeImage</a></li>
+</ul>
+
+<p><code>image</code>를 사용하여 트레이 아이콘의 이미지를 설정합니다.</p>
+
+<h3 id="tray.setpressedimage(image)">Tray.setPressedImage(image)</h3>
+
+<ul>
+<li><code>image</code> <a href="http://electron.atom.io/docs/v0.30.0/api/native-image-ko">NativeImage</a></li>
+</ul>
+
+<p><code>image</code>를 사용하여 트레이 아이콘이 눌렸을 때의 이미지를 설정합니다.</p>
+
+<p><strong>주의:</strong> 이 기능은 OS X에서만 작동합니다.</p>
+
+<h3 id="tray.settooltip(tooltip)">Tray.setToolTip(toolTip)</h3>
+
+<ul>
+<li><code>toolTip</code> String</li>
+</ul>
+
+<p>트레이 아이콘의 툴팁 텍스트를 설정합니다.</p>
+
+<h3 id="tray.settitle(title)">Tray.setTitle(title)</h3>
+
+<ul>
+<li><code>title</code> String</li>
+</ul>
+
+<p>상태바에서 트레이 아이콘 옆에 표시되는 제목 텍스트를 설정합니다.</p>
+
+<p><strong>주의:</strong> 이 기능은 OS X에서만 작동합니다.</p>
+
+<h3 id="tray.sethighlightmode(highlight)">Tray.setHighlightMode(highlight)</h3>
+
+<ul>
+<li><code>highlight</code> Boolean</li>
+</ul>
+
+<p>트레이 아이콘을 클릭했을 때 하이라이트 될지 설정합니다.</p>
+
+<p><strong>주의:</strong> 이 기능은 OS X에서만 작동합니다.</p>
+
+<h3 id="tray.displayballoon(options)">Tray.displayBalloon(options)</h3>
+
+<ul>
+<li><code>options</code> Object
+
+<ul>
+<li><code>icon</code> <a href="http://electron.atom.io/docs/v0.30.0/api/native-image-ko">NativeImage</a></li>
+<li><code>title</code> String</li>
+<li><code>content</code> String</li>
+</ul></li>
+</ul>
+
+<p>트레이에 알림풍선을 생성합니다.</p>
+
+<p><strong>알림:</strong> 이 기능은 Windows에서만 작동합니다.</p>
+
+<h3 id="tray.setcontextmenu(menu)">Tray.setContextMenu(menu)</h3>
+
+<ul>
+<li><code>menu</code> Menu</li>
+</ul>
+
+<p>트레이에 컨텍스트 메뉴를 설정합니다.</p>
+
+
+      </div>
+    </div>
+    
+    <div class='row'>
+      <div class='ten columns release offset-by-one docs-footer'>
+        <span class="octicon octicon-pencil"></span>
+        See something that needs fixing? Propose a change on the <a href='https://github.com/atom/electron/blob/master/docs/api/tray-ko.md'>source</a>.
+        <br>
+        <span class="octicon octicon-zap"></span>
+        Need a different version of the docs? See the <a href='/docs'>available versions</a>.
+      </div>
+    </div>
+    
+  </div>
+</section>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class='container'>
+    <div class='row'>
+      <div class='one-half column'>
+        <ul class='inline-list'>
+          <li><a href='https://github.com/atom/electron'>Repository</a></li>
+          <li><a href='/docs/v0.36.5'>Documentation</a></li>
+          <li><a href='/releases.html'>Releases</a></li>
+          <li><a href='http://blog.atom.io'>Blog</a></li>
+          <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+        </ul>
+      </div>
+
+      <div class='one-half column text-right'>
+        <a href='https://github.com' class="no-hover-dec"><span class='octicon octicon-code'></span> with <span class='octicon octicon-heart'></span> by <span class='octicon octicon-logo-github'></span></a>
+      </div>
+  </div>
+</footer>
+
+    <script>
+  var anchorForId = function (id) {
+    var anchor = document.createElement("a");
+    anchor.className = "header-link";
+    anchor.href      = "#" + id;
+    anchor.innerHTML = "<span class='octicon octicon-link'></span>";
+    anchor.title = "Permalink";
+    return anchor;
+  };
+
+  var linkifyAnchors = function (level, containingElement) {
+    var headers = containingElement.getElementsByTagName("h" + level);
+    for (var h = 0; h < headers.length; h++) {
+      var header = headers[h];
+
+      if (typeof header.id !== "undefined" && header.id !== "") {
+        header.appendChild(anchorForId(header.id));
+      }
+    }
+  };
+
+  document.onreadystatechange = function () {
+    if (this.readyState === "complete") {
+      var contentBlock = document.getElementsByClassName("docs")[0] || document.getElementsByClassName("news")[0];
+      if (!contentBlock) {
+        return;
+      }
+      for (var level = 1; level <= 6; level++) {
+        linkifyAnchors(level, contentBlock);
+      }
+    }
+  };
+</script>
+
+  </body>
+
+</html>

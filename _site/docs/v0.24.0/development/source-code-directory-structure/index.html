@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+  <title>Source Code Directory Structure</title>
+  <meta name='description' content='Build cross platform desktop apps with web technologies'>
+
+  <link rel='shortcut icon' href='/images/favicon.ico'/>
+  <link rel='stylesheet' href='/css/normalize.css'>
+  <link rel='stylesheet' href='/css/skeleton.css'>
+  <link rel='stylesheet' href='/css/main.css'>
+  <link rel='stylesheet' href='/css/octicons/octicons.css'>
+  <link rel='stylesheet' href='/css/pygments.css'>
+  <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+  <link rel='canonical' href='/docs/v0.24.0/development/source-code-directory-structure/'>
+  <link rel='alternate' type='application/rss+xml' title='Ligra' href='/feed.xml' />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-3769691-57', 'auto');
+    ga('send', 'pageview');
+  </script>
+</head>
+
+
+  <body>
+
+    <header>
+  <div class='top-bar'>
+    <div class='container'>
+      <div class='row'>
+        <div class='four columns'>
+          <ul class='navigation inline-list'>
+            <li><a href='/#built-on-electron'>Built on Electron</a></li>
+            <li><a href='/#get-started'>Get Started</a></li>
+          </ul>
+        </div>
+        <div class='eight columns text-right'>
+          <ul class='navigation inline-list'>
+            <li><a href='https://github.com/atom/electron'>Repository</a></li>
+            <li><a href='/docs/v0.36.5'>Documentation</a></li>
+            <li><a href='http://blog.atom.io'>Blog</a></li>
+            <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+    <div class='page-content'>
+      <div class='wrapper'>
+        <div class='page-template source-code-directory-structure'>
+  <section class='jump-to-release is-compact'>
+  <div class='container'>
+    <div class='row'>
+      <div class='twelve columns'>
+      <h1><img class="electron-icon" src='/images/electron-icon.svg'>Electron Documentation</h1>
+      
+      <a href='/docs/v0.24.0/'>v0.24.0  </a> |
+      <a href='https://github.com/atom/electron/blob/master/docs/development/source-code-directory-structure.md'>Document Source</a>
+      
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class='docs'>
+  <div class='container'>
+    <div class='row'>
+      <div class='ten columns release offset-by-one'>
+        
+        <h6 class='docs-breadcrumb'>v0.24.0 / Development
+           / Source Code Directory Structure </h6>
+        
+
+        <h1 id="source-code-directory-structure">Source code directory structure</h1>
+
+<h2 id="overview">Overview</h2>
+
+<p>The source code of Electron is separated into a few parts, and we are mostly
+following Chromium on the separation conventions.</p>
+
+<p>You may need to become familiar with <a href="http://dev.chromium.org/developers/design-documents/multi-process-architecture">Chromium&#39;s multi-process
+architecture</a>
+to understand the source code better.</p>
+
+<h2 id="structure-of-source-code">Structure of source code</h2>
+
+<ul>
+<li><strong>atom</strong> - Source code of Electron.
+
+<ul>
+<li><strong>app</strong> - System entry code.</li>
+<li><strong>browser</strong> - The frontend including the main window, UI, and all of the
+main process things. This talks to the renderer to manage web pages.</li>
+<li><strong>lib</strong> - Javascript part of the main process initialization code.</li>
+<li><strong>ui</strong> - Implementation of UI stuff for different platforms.
+
+<ul>
+<li><strong>cocoa</strong> - Cocoa specific source code.</li>
+<li><strong>gtk</strong> - GTK+ specific source code.</li>
+<li><strong>win</strong> - Windows GUI specific source code.</li>
+</ul></li>
+<li><strong>default_app</strong> - The default page to show when Electron is started
+without providing an app.</li>
+<li><strong>api</strong> - The implementation of the main process APIs.
+
+<ul>
+<li><strong>lib</strong> - Javascript part of the API implementation.</li>
+</ul></li>
+<li><strong>net</strong> - Network related code.</li>
+<li><strong>mac</strong> - Mac specific Objective-C source code.</li>
+<li><strong>resources</strong> - Icons, platform-dependent files, etc.</li>
+<li><strong>renderer</strong> - Code that runs in renderer process.</li>
+<li><strong>lib</strong> - Javascript part of renderer initialization code.</li>
+<li><strong>api</strong> - The implementation of renderer process APIs.
+
+<ul>
+<li><strong>lib</strong> - Javascript part of the API implementation.</li>
+</ul></li>
+<li><strong>common</strong> - Code that used by both the main and renderer processes,
+including some utility functions and code to integrate node&#39;s message
+loop into Chromium&#39;s message loop.</li>
+<li><strong>lib</strong> - Common Javascript initialization code.</li>
+<li><strong>api</strong> - The implementation of common APIs, and foundations of
+Electron&#39;s built-in modules.
+
+<ul>
+<li><strong>lib</strong> - Javascript part of the API implementation.</li>
+</ul></li>
+</ul></li>
+<li><strong>chromium_src</strong> - Source code that copied from Chromium.</li>
+<li><strong>docs</strong> - Documentations.</li>
+<li><strong>spec</strong> - Automatic tests.</li>
+<li><strong>atom.gyp</strong> - Building rules of Electron.</li>
+<li><strong>common.gypi</strong> - Compiler specific settings and building rules for other
+components like <code>node</code> and <code>breakpad</code>.</li>
+</ul>
+
+<h2 id="structure-of-other-directories">Structure of other directories</h2>
+
+<ul>
+<li><strong>script</strong> - Scripts used for development purpose like building, packaging,
+testing, etc.</li>
+<li><strong>tools</strong> - Helper scripts used by gyp files, unlike <code>script</code>, scripts put
+here should never be invoked by users directly.</li>
+<li><strong>vendor</strong> - Source code of third party dependencies, we didn&#39;t use
+<code>third_party</code> as name because it would confuse with the same directory in
+Chromium&#39;s source code tree.</li>
+<li><strong>node_modules</strong> - Third party node modules used for building.</li>
+<li><strong>out</strong> - Temporary output directory of <code>ninja</code>.</li>
+<li><strong>dist</strong> - Temporary directory created by <code>script/create-dist.py</code> script
+when creating an distribution.</li>
+<li><strong>external_binaries</strong> - Downloaded binaries of third-party frameworks which
+do not support to be built via <code>gyp</code>.</li>
+</ul>
+
+
+      </div>
+    </div>
+    
+    <div class='row'>
+      <div class='ten columns release offset-by-one docs-footer'>
+        <span class="octicon octicon-pencil"></span>
+        See something that needs fixing? Propose a change on the <a href='https://github.com/atom/electron/blob/master/docs/development/source-code-directory-structure.md'>source</a>.
+        <br>
+        <span class="octicon octicon-zap"></span>
+        Need a different version of the docs? See the <a href='/docs'>available versions</a>.
+      </div>
+    </div>
+    
+  </div>
+</section>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class='container'>
+    <div class='row'>
+      <div class='one-half column'>
+        <ul class='inline-list'>
+          <li><a href='https://github.com/atom/electron'>Repository</a></li>
+          <li><a href='/docs/v0.36.5'>Documentation</a></li>
+          <li><a href='/releases.html'>Releases</a></li>
+          <li><a href='http://blog.atom.io'>Blog</a></li>
+          <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+        </ul>
+      </div>
+
+      <div class='one-half column text-right'>
+        <a href='https://github.com' class="no-hover-dec"><span class='octicon octicon-code'></span> with <span class='octicon octicon-heart'></span> by <span class='octicon octicon-logo-github'></span></a>
+      </div>
+  </div>
+</footer>
+
+    <script>
+  var anchorForId = function (id) {
+    var anchor = document.createElement("a");
+    anchor.className = "header-link";
+    anchor.href      = "#" + id;
+    anchor.innerHTML = "<span class='octicon octicon-link'></span>";
+    anchor.title = "Permalink";
+    return anchor;
+  };
+
+  var linkifyAnchors = function (level, containingElement) {
+    var headers = containingElement.getElementsByTagName("h" + level);
+    for (var h = 0; h < headers.length; h++) {
+      var header = headers[h];
+
+      if (typeof header.id !== "undefined" && header.id !== "") {
+        header.appendChild(anchorForId(header.id));
+      }
+    }
+  };
+
+  document.onreadystatechange = function () {
+    if (this.readyState === "complete") {
+      var contentBlock = document.getElementsByClassName("docs")[0] || document.getElementsByClassName("news")[0];
+      if (!contentBlock) {
+        return;
+      }
+      for (var level = 1; level <= 6; level++) {
+        linkifyAnchors(level, contentBlock);
+      }
+    }
+  };
+</script>
+
+  </body>
+
+</html>

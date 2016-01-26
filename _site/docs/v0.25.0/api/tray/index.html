@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+  <title>Tray</title>
+  <meta name='description' content='Build cross platform desktop apps with web technologies'>
+
+  <link rel='shortcut icon' href='/images/favicon.ico'/>
+  <link rel='stylesheet' href='/css/normalize.css'>
+  <link rel='stylesheet' href='/css/skeleton.css'>
+  <link rel='stylesheet' href='/css/main.css'>
+  <link rel='stylesheet' href='/css/octicons/octicons.css'>
+  <link rel='stylesheet' href='/css/pygments.css'>
+  <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+  <link rel='canonical' href='/docs/v0.25.0/api/tray/'>
+  <link rel='alternate' type='application/rss+xml' title='Ligra' href='/feed.xml' />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-3769691-57', 'auto');
+    ga('send', 'pageview');
+  </script>
+</head>
+
+
+  <body>
+
+    <header>
+  <div class='top-bar'>
+    <div class='container'>
+      <div class='row'>
+        <div class='four columns'>
+          <ul class='navigation inline-list'>
+            <li><a href='/#built-on-electron'>Built on Electron</a></li>
+            <li><a href='/#get-started'>Get Started</a></li>
+          </ul>
+        </div>
+        <div class='eight columns text-right'>
+          <ul class='navigation inline-list'>
+            <li><a href='https://github.com/atom/electron'>Repository</a></li>
+            <li><a href='/docs/v0.36.5'>Documentation</a></li>
+            <li><a href='http://blog.atom.io'>Blog</a></li>
+            <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+    <div class='page-content'>
+      <div class='wrapper'>
+        <div class='page-template tray'>
+  <section class='jump-to-release is-compact'>
+  <div class='container'>
+    <div class='row'>
+      <div class='twelve columns'>
+      <h1><img class="electron-icon" src='/images/electron-icon.svg'>Electron Documentation</h1>
+      
+      <a href='/docs/v0.25.0/'>v0.25.0  </a> |
+      <a href='https://github.com/atom/electron/blob/master/docs/api/tray.md'>Document Source</a>
+      
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class='docs'>
+  <div class='container'>
+    <div class='row'>
+      <div class='ten columns release offset-by-one'>
+        
+        <h6 class='docs-breadcrumb'>v0.25.0 / API
+           / Tray </h6>
+        
+
+        <h1 id="tray">tray</h1>
+
+<p>A <code>Tray</code> represents an icon in operating system&#39;s notification area, it is
+usually attached with a context menu.</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;app&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">Menu</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;menu&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">Tray</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;tray&#39;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">appIcon</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;ready&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+  <span class="nx">appIcon</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Tray</span><span class="p">(</span><span class="s1">&#39;/path/to/my/icon&#39;</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">contextMenu</span> <span class="o">=</span> <span class="nx">Menu</span><span class="p">.</span><span class="nx">buildFromTemplate</span><span class="p">([</span>
+    <span class="p">{</span> <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;Item1&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;radio&#39;</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;Item2&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;radio&#39;</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;Item3&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;radio&#39;</span><span class="p">,</span> <span class="nx">checked</span><span class="o">:</span> <span class="kc">true</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;Item4&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;radio&#39;</span> <span class="p">},</span>
+  <span class="p">]);</span>
+  <span class="nx">appIcon</span><span class="p">.</span><span class="nx">setToolTip</span><span class="p">(</span><span class="s1">&#39;This is my application.&#39;</span><span class="p">);</span>
+  <span class="nx">appIcon</span><span class="p">.</span><span class="nx">setContextMenu</span><span class="p">(</span><span class="nx">contextMenu</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div>
+<p><strong>Platform limitations:</strong></p>
+
+<ul>
+<li>On OS X <code>clicked</code> event will be ignored if the tray icon has context menu.</li>
+<li>On Linux app indicator will be used if it is supported, otherwise
+<code>GtkStatusIcon</code> will be used instead.</li>
+<li>App indicator will only be showed when it has context menu.</li>
+<li>When app indicator is used on Linux, <code>clicked</code> event is ignored.</li>
+</ul>
+
+<p>So if you want to keep exact same behaviors on all platforms, you should not
+rely on <code>clicked</code> event and always attach a context menu to the tray icon.</p>
+
+<h2 id="class:-tray">Class: Tray</h2>
+
+<p><code>Tray</code> is an <a href="http://nodejs.org/api/events.html#events_class_events_eventemitter">EventEmitter</a>.</p>
+
+<h3 id="new-tray(image)">new Tray(image)</h3>
+
+<ul>
+<li><code>image</code> <a href="http://electron.atom.io/docs/v0.25.0/api/native-image">NativeImage</a></li>
+</ul>
+
+<p>Creates a new tray icon associated with the <code>image</code>.</p>
+
+<h3 id="event:-&#39;clicked&#39;">Event: &#39;clicked&#39;</h3>
+
+<p>Emitted when the tray icon is clicked.</p>
+
+<h3 id="event:-&#39;double-clicked&#39;">Event: &#39;double-clicked&#39;</h3>
+
+<p>Emitted when the tray icon is double clicked.</p>
+
+<p><strong>Note:</strong> This is only implemented on OS X.</p>
+
+<h3 id="event:-&#39;balloon-show&#39;">Event: &#39;balloon-show&#39;</h3>
+
+<p>Emitted when the tray balloon shows.</p>
+
+<p><strong>Note:</strong> This is only implemented on Windows.</p>
+
+<h3 id="event:-&#39;balloon-clicked&#39;">Event: &#39;balloon-clicked&#39;</h3>
+
+<p>Emitted when the tray balloon is clicked.</p>
+
+<p><strong>Note:</strong> This is only implemented on Windows.</p>
+
+<h3 id="event:-&#39;balloon-closed&#39;">Event: &#39;balloon-closed&#39;</h3>
+
+<p>Emitted when the tray balloon is closed because of timeout or user manually
+closes it.</p>
+
+<p><strong>Note:</strong> This is only implemented on Windows.</p>
+
+<h3 id="tray.destroy()">Tray.destroy()</h3>
+
+<p>Destroys the tray icon immediately.</p>
+
+<h3 id="tray.setimage(image)">Tray.setImage(image)</h3>
+
+<ul>
+<li><code>image</code> <a href="http://electron.atom.io/docs/v0.25.0/api/native-image">NativeImage</a></li>
+</ul>
+
+<p>Sets the <code>image</code> associated with this tray icon.</p>
+
+<h3 id="tray.setpressedimage(image)">Tray.setPressedImage(image)</h3>
+
+<ul>
+<li><code>image</code> <a href="http://electron.atom.io/docs/v0.25.0/api/native-image">NativeImage</a></li>
+</ul>
+
+<p>Sets the <code>image</code> associated with this tray icon when pressed.</p>
+
+<h3 id="tray.settooltip(tooltip)">Tray.setToolTip(toolTip)</h3>
+
+<ul>
+<li><code>toolTip</code> String</li>
+</ul>
+
+<p>Sets the hover text for this tray icon.</p>
+
+<h3 id="tray.settitle(title)">Tray.setTitle(title)</h3>
+
+<ul>
+<li><code>title</code> String</li>
+</ul>
+
+<p>Sets the title displayed aside of the tray icon in the status bar.</p>
+
+<p>This is only implemented on OS X.</p>
+
+<h3 id="tray.sethighlightmode(highlight)">Tray.setHighlightMode(highlight)</h3>
+
+<ul>
+<li><code>highlight</code> Boolean</li>
+</ul>
+
+<p>Sets whether the tray icon is highlighted when it is clicked.</p>
+
+<p>This is only implmented on OS X.</p>
+
+<h3 id="tray.displayballoon(options)">Tray.displayBalloon(options)</h3>
+
+<ul>
+<li><code>options</code> Object
+
+<ul>
+<li><code>icon</code> <a href="http://electron.atom.io/docs/v0.25.0/api/native-image">NativeImage</a></li>
+<li><code>title</code> String</li>
+<li><code>content</code> String</li>
+</ul></li>
+</ul>
+
+<h3 id="tray.setcontextmenu(menu)">Tray.setContextMenu(menu)</h3>
+
+<ul>
+<li><code>menu</code> Menu</li>
+</ul>
+
+<p>Set the context menu for this icon.</p>
+
+
+      </div>
+    </div>
+    
+    <div class='row'>
+      <div class='ten columns release offset-by-one docs-footer'>
+        <span class="octicon octicon-pencil"></span>
+        See something that needs fixing? Propose a change on the <a href='https://github.com/atom/electron/blob/master/docs/api/tray.md'>source</a>.
+        <br>
+        <span class="octicon octicon-zap"></span>
+        Need a different version of the docs? See the <a href='/docs'>available versions</a>.
+      </div>
+    </div>
+    
+  </div>
+</section>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class='container'>
+    <div class='row'>
+      <div class='one-half column'>
+        <ul class='inline-list'>
+          <li><a href='https://github.com/atom/electron'>Repository</a></li>
+          <li><a href='/docs/v0.36.5'>Documentation</a></li>
+          <li><a href='/releases.html'>Releases</a></li>
+          <li><a href='http://blog.atom.io'>Blog</a></li>
+          <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+        </ul>
+      </div>
+
+      <div class='one-half column text-right'>
+        <a href='https://github.com' class="no-hover-dec"><span class='octicon octicon-code'></span> with <span class='octicon octicon-heart'></span> by <span class='octicon octicon-logo-github'></span></a>
+      </div>
+  </div>
+</footer>
+
+    <script>
+  var anchorForId = function (id) {
+    var anchor = document.createElement("a");
+    anchor.className = "header-link";
+    anchor.href      = "#" + id;
+    anchor.innerHTML = "<span class='octicon octicon-link'></span>";
+    anchor.title = "Permalink";
+    return anchor;
+  };
+
+  var linkifyAnchors = function (level, containingElement) {
+    var headers = containingElement.getElementsByTagName("h" + level);
+    for (var h = 0; h < headers.length; h++) {
+      var header = headers[h];
+
+      if (typeof header.id !== "undefined" && header.id !== "") {
+        header.appendChild(anchorForId(header.id));
+      }
+    }
+  };
+
+  document.onreadystatechange = function () {
+    if (this.readyState === "complete") {
+      var contentBlock = document.getElementsByClassName("docs")[0] || document.getElementsByClassName("news")[0];
+      if (!contentBlock) {
+        return;
+      }
+      for (var level = 1; level <= 6; level++) {
+        linkifyAnchors(level, contentBlock);
+      }
+    }
+  };
+</script>
+
+  </body>
+
+</html>

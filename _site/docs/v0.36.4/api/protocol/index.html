@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+  <title>Protocol</title>
+  <meta name='description' content='Build cross platform desktop apps with web technologies'>
+
+  <link rel='shortcut icon' href='/images/favicon.ico'/>
+  <link rel='stylesheet' href='/css/normalize.css'>
+  <link rel='stylesheet' href='/css/skeleton.css'>
+  <link rel='stylesheet' href='/css/main.css'>
+  <link rel='stylesheet' href='/css/octicons/octicons.css'>
+  <link rel='stylesheet' href='/css/pygments.css'>
+  <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+  <link rel='canonical' href='/docs/v0.36.4/api/protocol/'>
+  <link rel='alternate' type='application/rss+xml' title='Ligra' href='/feed.xml' />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-3769691-57', 'auto');
+    ga('send', 'pageview');
+  </script>
+</head>
+
+
+  <body>
+
+    <header>
+  <div class='top-bar'>
+    <div class='container'>
+      <div class='row'>
+        <div class='four columns'>
+          <ul class='navigation inline-list'>
+            <li><a href='/#built-on-electron'>Built on Electron</a></li>
+            <li><a href='/#get-started'>Get Started</a></li>
+          </ul>
+        </div>
+        <div class='eight columns text-right'>
+          <ul class='navigation inline-list'>
+            <li><a href='https://github.com/atom/electron'>Repository</a></li>
+            <li><a href='/docs/v0.36.5'>Documentation</a></li>
+            <li><a href='http://blog.atom.io'>Blog</a></li>
+            <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+    <div class='page-content'>
+      <div class='wrapper'>
+        <div class='page-template protocol'>
+  <section class='jump-to-release is-compact'>
+  <div class='container'>
+    <div class='row'>
+      <div class='twelve columns'>
+      <h1><img class="electron-icon" src='/images/electron-icon.svg'>Electron Documentation</h1>
+      
+      <a href='/docs/v0.36.4/'>v0.36.4  </a> |
+      <a href='https://github.com/atom/electron/blob/master/docs/api/protocol.md'>Document Source</a>
+      
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class='docs'>
+  <div class='container'>
+    <div class='row'>
+      <div class='ten columns release offset-by-one'>
+        
+        <h6 class='docs-breadcrumb'>v0.36.4 / API
+           / Protocol </h6>
+        
+
+        <h1 id="protocol">protocol</h1>
+
+<p>The <code>protocol</code> module can register a custom protocol or intercept an existing
+protocol.</p>
+
+<p>An example of implementing a protocol that has the same effect as the
+<code>file://</code> protocol:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kr">const</span> <span class="nx">electron</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;electron&#39;</span><span class="p">);</span>
+<span class="kr">const</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">electron</span><span class="p">.</span><span class="nx">app</span><span class="p">;</span>
+<span class="kr">const</span> <span class="nx">path</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;path&#39;</span><span class="p">);</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;ready&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">protocol</span> <span class="o">=</span> <span class="nx">electron</span><span class="p">.</span><span class="nx">protocol</span><span class="p">;</span>
+    <span class="nx">protocol</span><span class="p">.</span><span class="nx">registerFileProtocol</span><span class="p">(</span><span class="s1">&#39;atom&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">request</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="nx">request</span><span class="p">.</span><span class="nx">url</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="mi">7</span><span class="p">);</span>
+      <span class="nx">callback</span><span class="p">({</span><span class="nx">path</span><span class="o">:</span> <span class="nx">path</span><span class="p">.</span><span class="nx">normalize</span><span class="p">(</span><span class="nx">__dirname</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="nx">url</span><span class="p">)});</span>
+    <span class="p">},</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s1">&#39;Failed to register protocol&#39;</span><span class="p">)</span>
+    <span class="p">});</span>
+<span class="p">});</span>
+</code></pre></div>
+<p><strong>Note:</strong> This module can only be used after the <code>ready</code> event in the <code>app</code>
+module is emitted.</p>
+
+<h2 id="methods">Methods</h2>
+
+<p>The <code>protocol</code> module has the following methods:</p>
+
+<h3 id="protocol.registerstandardschemes(schemes)"><code>protocol.registerStandardSchemes(schemes)</code></h3>
+
+<ul>
+<li><code>schemes</code> Array - Custom schemes to be registered as standard schemes.</li>
+</ul>
+
+<p>A standard <code>scheme</code> adheres to what RFC 3986 calls
+<a href="https://tools.ietf.org/html/rfc3986#section-3">generic URI syntax</a>. This
+includes <code>file:</code> and <code>filesystem:</code>.</p>
+
+<h3 id="protocol.registerserviceworkerschemes(schemes)"><code>protocol.registerServiceWorkerSchemes(schemes)</code></h3>
+
+<ul>
+<li><code>schemes</code> Array - Custom schemes to be registered to handle service workers.</li>
+</ul>
+
+<h3 id="protocol.registerfileprotocol(scheme,-handler[,-completion])"><code>protocol.registerFileProtocol(scheme, handler[, completion])</code></h3>
+
+<ul>
+<li><code>scheme</code> String</li>
+<li><code>handler</code> Function</li>
+<li><code>completion</code> Function (optional)</li>
+</ul>
+
+<p>Registers a protocol of <code>scheme</code> that will send the file as a response. The
+<code>handler</code> will be called with <code>handler(request, callback)</code> when a <code>request</code> is
+going to be created with <code>scheme</code>. <code>completion</code> will be called with
+<code>completion(null)</code> when <code>scheme</code> is successfully registered or
+<code>completion(error)</code> when failed.</p>
+
+<p>To handle the <code>request</code>, the <code>callback</code> should be called with either the file&#39;s
+path or an object that has a <code>path</code> property, e.g. <code>callback(filePath)</code> or
+<code>callback({path: filePath})</code>.</p>
+
+<p>When <code>callback</code> is called with nothing, a number, or an object that has an
+<code>error</code> property, the <code>request</code> will fail with the <code>error</code> number you
+specified. For the available error numbers you can use, please see the
+<a href="https://code.google.com/p/chromium/codesearch#chromium/src/net/base/net_error_list.h">net error list</a>.</p>
+
+<p>By default the <code>scheme</code> is treated like <code>http:</code>, which is parsed differently
+than protocols that follow the &quot;generic URI syntax&quot; like <code>file:</code>, so you
+probably want to call <code>protocol.registerStandardSchemes</code> to have your scheme
+treated as a standard scheme.</p>
+
+<h3 id="protocol.registerbufferprotocol(scheme,-handler[,-completion])"><code>protocol.registerBufferProtocol(scheme, handler[, completion])</code></h3>
+
+<ul>
+<li><code>scheme</code> String</li>
+<li><code>handler</code> Function</li>
+<li><code>completion</code> Function (optional)</li>
+</ul>
+
+<p>Registers a protocol of <code>scheme</code> that will send a <code>Buffer</code> as a response. The
+<code>callback</code> should be called with either a <code>Buffer</code> object or an object that
+has the <code>data</code>, <code>mimeType</code>, and <code>chart</code> properties.</p>
+
+<p>Example:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">protocol</span><span class="p">.</span><span class="nx">registerBufferProtocol</span><span class="p">(</span><span class="s1">&#39;atom&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">request</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">callback</span><span class="p">({</span><span class="nx">mimeType</span><span class="o">:</span> <span class="s1">&#39;text/html&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="k">new</span> <span class="nx">Buffer</span><span class="p">(</span><span class="s1">&#39;&lt;h5&gt;Response&lt;/h5&gt;&#39;</span><span class="p">)});</span>
+<span class="p">},</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s1">&#39;Failed to register protocol&#39;</span><span class="p">)</span>
+<span class="p">});</span>
+</code></pre></div>
+<h3 id="protocol.registerstringprotocol(scheme,-handler[,-completion])"><code>protocol.registerStringProtocol(scheme, handler[, completion])</code></h3>
+
+<ul>
+<li><code>scheme</code> String</li>
+<li><code>handler</code> Function</li>
+<li><code>completion</code> Function (optional)</li>
+</ul>
+
+<p>Registers a protocol of <code>scheme</code> that will send a <code>String</code> as a response. The
+<code>callback</code> should be called with either a <code>String</code> or an object that has the
+<code>data</code>, <code>mimeType</code>, and <code>chart</code> properties.</p>
+
+<h3 id="protocol.registerhttpprotocol(scheme,-handler[,-completion])"><code>protocol.registerHttpProtocol(scheme, handler[, completion])</code></h3>
+
+<ul>
+<li><code>scheme</code> String</li>
+<li><code>handler</code> Function</li>
+<li><code>completion</code> Function (optional)</li>
+</ul>
+
+<p>Registers a protocol of <code>scheme</code> that will send an HTTP request as a response.
+The <code>callback</code> should be called with an object that has the <code>url</code>, <code>method</code>,
+<code>referrer</code>, <code>uploadData</code> and <code>session</code> properties.</p>
+
+<p>By default the HTTP request will reuse the current session. If you want the
+request to have a different session you should set <code>session</code> to <code>null</code>.</p>
+
+<p>POST request should provide an <code>uploadData</code> object.
+* <code>uploadData</code> object
+  * <code>contentType</code> String - MIME type of the content.
+  *  <code>data</code> String - Content to be sent.</p>
+
+<h3 id="protocol.unregisterprotocol(scheme[,-completion])"><code>protocol.unregisterProtocol(scheme[, completion])</code></h3>
+
+<ul>
+<li><code>scheme</code> String</li>
+<li><code>completion</code> Function (optional)</li>
+</ul>
+
+<p>Unregisters the custom protocol of <code>scheme</code>.</p>
+
+<h3 id="protocol.isprotocolhandled(scheme,-callback)"><code>protocol.isProtocolHandled(scheme, callback)</code></h3>
+
+<ul>
+<li><code>scheme</code> String</li>
+<li><code>callback</code> Function</li>
+</ul>
+
+<p>The <code>callback</code> will be called with a boolean that indicates whether there is
+already a handler for <code>scheme</code>.</p>
+
+<h3 id="protocol.interceptfileprotocol(scheme,-handler[,-completion])"><code>protocol.interceptFileProtocol(scheme, handler[, completion])</code></h3>
+
+<ul>
+<li><code>scheme</code> String</li>
+<li><code>handler</code> Function</li>
+<li><code>completion</code> Function (optional)</li>
+</ul>
+
+<p>Intercepts <code>scheme</code> protocol and uses <code>handler</code> as the protocol&#39;s new handler
+which sends a file as a response.</p>
+
+<h3 id="protocol.interceptstringprotocol(scheme,-handler[,-completion])"><code>protocol.interceptStringProtocol(scheme, handler[, completion])</code></h3>
+
+<ul>
+<li><code>scheme</code> String</li>
+<li><code>handler</code> Function</li>
+<li><code>completion</code> Function (optional)</li>
+</ul>
+
+<p>Intercepts <code>scheme</code> protocol and uses <code>handler</code> as the protocol&#39;s new handler
+which sends a <code>String</code> as a response.</p>
+
+<h3 id="protocol.interceptbufferprotocol(scheme,-handler[,-completion])"><code>protocol.interceptBufferProtocol(scheme, handler[, completion])</code></h3>
+
+<ul>
+<li><code>scheme</code> String</li>
+<li><code>handler</code> Function</li>
+<li><code>completion</code> Function (optional)</li>
+</ul>
+
+<p>Intercepts <code>scheme</code> protocol and uses <code>handler</code> as the protocol&#39;s new handler
+which sends a <code>Buffer</code> as a response.</p>
+
+<h3 id="protocol.intercepthttpprotocol(scheme,-handler[,-completion])"><code>protocol.interceptHttpProtocol(scheme, handler[, completion])</code></h3>
+
+<ul>
+<li><code>scheme</code> String</li>
+<li><code>handler</code> Function</li>
+<li><code>completion</code> Function (optional)</li>
+</ul>
+
+<p>Intercepts <code>scheme</code> protocol and uses <code>handler</code> as the protocol&#39;s new handler
+which sends a new HTTP request as a response.</p>
+
+<h3 id="protocol.uninterceptprotocol(scheme[,-completion])"><code>protocol.uninterceptProtocol(scheme[, completion])</code></h3>
+
+<ul>
+<li><code>scheme</code> String</li>
+<li><code>completion</code> Function</li>
+</ul>
+
+<p>Remove the interceptor installed for <code>scheme</code> and restore its original handler.</p>
+
+
+      </div>
+    </div>
+    
+    <div class='row'>
+      <div class='ten columns release offset-by-one docs-footer'>
+        <span class="octicon octicon-pencil"></span>
+        See something that needs fixing? Propose a change on the <a href='https://github.com/atom/electron/blob/master/docs/api/protocol.md'>source</a>.
+        <br>
+        <span class="octicon octicon-zap"></span>
+        Need a different version of the docs? See the <a href='/docs'>available versions</a>.
+      </div>
+    </div>
+    
+  </div>
+</section>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class='container'>
+    <div class='row'>
+      <div class='one-half column'>
+        <ul class='inline-list'>
+          <li><a href='https://github.com/atom/electron'>Repository</a></li>
+          <li><a href='/docs/v0.36.5'>Documentation</a></li>
+          <li><a href='/releases.html'>Releases</a></li>
+          <li><a href='http://blog.atom.io'>Blog</a></li>
+          <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+        </ul>
+      </div>
+
+      <div class='one-half column text-right'>
+        <a href='https://github.com' class="no-hover-dec"><span class='octicon octicon-code'></span> with <span class='octicon octicon-heart'></span> by <span class='octicon octicon-logo-github'></span></a>
+      </div>
+  </div>
+</footer>
+
+    <script>
+  var anchorForId = function (id) {
+    var anchor = document.createElement("a");
+    anchor.className = "header-link";
+    anchor.href      = "#" + id;
+    anchor.innerHTML = "<span class='octicon octicon-link'></span>";
+    anchor.title = "Permalink";
+    return anchor;
+  };
+
+  var linkifyAnchors = function (level, containingElement) {
+    var headers = containingElement.getElementsByTagName("h" + level);
+    for (var h = 0; h < headers.length; h++) {
+      var header = headers[h];
+
+      if (typeof header.id !== "undefined" && header.id !== "") {
+        header.appendChild(anchorForId(header.id));
+      }
+    }
+  };
+
+  document.onreadystatechange = function () {
+    if (this.readyState === "complete") {
+      var contentBlock = document.getElementsByClassName("docs")[0] || document.getElementsByClassName("news")[0];
+      if (!contentBlock) {
+        return;
+      }
+      for (var level = 1; level <= 6; level++) {
+        linkifyAnchors(level, contentBlock);
+      }
+    }
+  };
+</script>
+
+  </body>
+
+</html>

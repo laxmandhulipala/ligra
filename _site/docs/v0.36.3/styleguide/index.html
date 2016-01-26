@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+  <title>Styleguide</title>
+  <meta name='description' content='Build cross platform desktop apps with web technologies'>
+
+  <link rel='shortcut icon' href='/images/favicon.ico'/>
+  <link rel='stylesheet' href='/css/normalize.css'>
+  <link rel='stylesheet' href='/css/skeleton.css'>
+  <link rel='stylesheet' href='/css/main.css'>
+  <link rel='stylesheet' href='/css/octicons/octicons.css'>
+  <link rel='stylesheet' href='/css/pygments.css'>
+  <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+  <link rel='canonical' href='/docs/v0.36.3/styleguide/'>
+  <link rel='alternate' type='application/rss+xml' title='Ligra' href='/feed.xml' />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-3769691-57', 'auto');
+    ga('send', 'pageview');
+  </script>
+</head>
+
+
+  <body>
+
+    <header>
+  <div class='top-bar'>
+    <div class='container'>
+      <div class='row'>
+        <div class='four columns'>
+          <ul class='navigation inline-list'>
+            <li><a href='/#built-on-electron'>Built on Electron</a></li>
+            <li><a href='/#get-started'>Get Started</a></li>
+          </ul>
+        </div>
+        <div class='eight columns text-right'>
+          <ul class='navigation inline-list'>
+            <li><a href='https://github.com/atom/electron'>Repository</a></li>
+            <li><a href='/docs/v0.36.5'>Documentation</a></li>
+            <li><a href='http://blog.atom.io'>Blog</a></li>
+            <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+    <div class='page-content'>
+      <div class='wrapper'>
+        <div class='page-template styleguide'>
+  <section class='jump-to-release '>
+  <div class='container'>
+    <div class='row'>
+      <div class='twelve columns'>
+      <h1><img class="electron-icon" src='/images/electron-icon.svg'>Electron Documentation</h1>
+      
+      <a href='/docs/v0.36.3/'>v0.36.3  </a> |
+      <a href='https://github.com/atom/electron/blob/master/docs/styleguide.md'>Document Source</a>
+      
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class='docs'>
+  <div class='container'>
+    <div class='row'>
+      <div class='ten columns release offset-by-one'>
+        
+        <h6 class='docs-breadcrumb'>v0.36.3 / Table of Contents
+           / Styleguide </h6>
+        
+
+        <h1 id="electron-documentation-styleguide">Electron Documentation Styleguide</h1>
+
+<p>Find the appropriate section for your task: <a href="#reading-electron-documentation">reading Electron documentation</a>
+or <a href="#writing-electron-documentation">writing Electron documentation</a>.</p>
+
+<h2 id="writing-electron-documentation">Writing Electron Documentation</h2>
+
+<p>These are the ways that we construct the Electron documentation.</p>
+
+<ul>
+<li>Maximum one <code>h1</code> title per page.</li>
+<li>Use <code>bash</code> instead of <code>cmd</code> in code blocks (because of syntax highlighter).</li>
+<li>Doc <code>h1</code> titles should match object name (i.e. <code>browser-window</code> →
+<code>BrowserWindow</code>).
+
+<ul>
+<li>Hyphen separated filenames, however, are fine.</li>
+</ul></li>
+<li>No headers following headers, add at least a one-sentence description.</li>
+<li>Methods headers are wrapped in <code>code</code> ticks.</li>
+<li>Event headers are wrapped in single &#39;quotation&#39; marks.</li>
+<li>No nesting lists more than 2 levels (unfortunately because of markdown
+renderer).</li>
+<li>Add section titles: Events, Class Methods and Instance Methods.</li>
+<li>Use &#39;will&#39; over &#39;would&#39; when describing outcomes.</li>
+<li>Events and methods are <code>h3</code> headers.</li>
+<li>Optional arguments written as <code>function (required[, optional])</code>.</li>
+<li>Optional arguments are denoted when called out in list.</li>
+<li>Line length is 80-column wrapped.</li>
+<li>Platform specific methods are noted in italics following method header.
+
+<ul>
+<li><code>### `method(foo, bar)` _OS X_</code></li>
+</ul></li>
+<li>Prefer &#39;in the ___ process&#39; over &#39;on&#39;</li>
+</ul>
+
+<h3 id="documentation-translations">Documentation Translations</h3>
+
+<p>Translations of the Electron docs are located within the <code>docs-translations</code>
+directory.</p>
+
+<p>To add another set (or partial set):</p>
+
+<ul>
+<li>Create a subdirectory named by language abbreviation.</li>
+<li>Within that subdirectory, duplicate the <code>docs</code> directory, keeping the
+names of directories and files same.</li>
+<li>Translate the files.</li>
+<li>Update the <code>README.md</code> within your language directory to link to the files
+you have translated.</li>
+<li>Add a link to your translation directory on the main Electron <a href="https://github.com/atom/electron#documentation-translations">README</a>.</li>
+</ul>
+
+<h2 id="reading-electron-documentation">Reading Electron Documentation</h2>
+
+<p>Here are some tips for understanding Electron documentation syntax.</p>
+
+<h3 id="methods">Methods</h3>
+
+<p>An example of <a href="https://developer.mozilla.org/en-US/docs/Glossary/Method">method</a>
+documentation:</p>
+
+<hr>
+
+<p><code>methodName(required[, optional]))</code></p>
+
+<ul>
+<li><code>require</code> String (<strong>required</strong>)</li>
+<li><code>optional</code> Integer</li>
+</ul>
+
+<hr>
+
+<p>The method name is followed by the arguments it takes. Optional arguments are
+notated by brackets surrounding the optional argument as well as the comma
+required if this optional argument follows another argument.</p>
+
+<p>Below the method is more detailed information on each of the arguments. The type
+of argument is notated by either the common types:
+<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String"><code>String</code></a>,
+<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number"><code>Number</code></a>,
+<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object"><code>Object</code></a>,
+<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array"><code>Array</code></a>
+or a custom type like Electron&#39;s api/web-content.</p>
+
+<h3 id="events">Events</h3>
+
+<p>An example of <a href="https://developer.mozilla.org/en-US/docs/Web/API/Event">event</a>
+documentation:</p>
+
+<hr>
+
+<p>Event: &#39;wake-up&#39;</p>
+
+<p>Returns:</p>
+
+<ul>
+<li><code>time</code> String</li>
+</ul>
+
+<hr>
+
+<p>The event is a string that is used after a <code>.on</code> listener method. If it returns
+a value it and its type is noted below. If you were to listen and respond to
+this event it might look something like this:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">Alarm</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;wake-up&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">time</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">time</span><span class="p">)</span>
+<span class="p">})</span>
+</code></pre></div>
+
+      </div>
+    </div>
+    
+    <div class='row'>
+      <div class='ten columns release offset-by-one docs-footer'>
+        <span class="octicon octicon-pencil"></span>
+        See something that needs fixing? Propose a change on the <a href='https://github.com/atom/electron/blob/master/docs/styleguide.md'>source</a>.
+        <br>
+        <span class="octicon octicon-zap"></span>
+        Need a different version of the docs? See the <a href='/docs'>available versions</a>.
+      </div>
+    </div>
+    
+  </div>
+</section>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class='container'>
+    <div class='row'>
+      <div class='one-half column'>
+        <ul class='inline-list'>
+          <li><a href='https://github.com/atom/electron'>Repository</a></li>
+          <li><a href='/docs/v0.36.5'>Documentation</a></li>
+          <li><a href='/releases.html'>Releases</a></li>
+          <li><a href='http://blog.atom.io'>Blog</a></li>
+          <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+        </ul>
+      </div>
+
+      <div class='one-half column text-right'>
+        <a href='https://github.com' class="no-hover-dec"><span class='octicon octicon-code'></span> with <span class='octicon octicon-heart'></span> by <span class='octicon octicon-logo-github'></span></a>
+      </div>
+  </div>
+</footer>
+
+    <script>
+  var anchorForId = function (id) {
+    var anchor = document.createElement("a");
+    anchor.className = "header-link";
+    anchor.href      = "#" + id;
+    anchor.innerHTML = "<span class='octicon octicon-link'></span>";
+    anchor.title = "Permalink";
+    return anchor;
+  };
+
+  var linkifyAnchors = function (level, containingElement) {
+    var headers = containingElement.getElementsByTagName("h" + level);
+    for (var h = 0; h < headers.length; h++) {
+      var header = headers[h];
+
+      if (typeof header.id !== "undefined" && header.id !== "") {
+        header.appendChild(anchorForId(header.id));
+      }
+    }
+  };
+
+  document.onreadystatechange = function () {
+    if (this.readyState === "complete") {
+      var contentBlock = document.getElementsByClassName("docs")[0] || document.getElementsByClassName("news")[0];
+      if (!contentBlock) {
+        return;
+      }
+      for (var level = 1; level <= 6; level++) {
+        linkifyAnchors(level, contentBlock);
+      }
+    }
+  };
+</script>
+
+  </body>
+
+</html>

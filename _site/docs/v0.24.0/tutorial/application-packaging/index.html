@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+  <title>Application Packaging</title>
+  <meta name='description' content='Build cross platform desktop apps with web technologies'>
+
+  <link rel='shortcut icon' href='/images/favicon.ico'/>
+  <link rel='stylesheet' href='/css/normalize.css'>
+  <link rel='stylesheet' href='/css/skeleton.css'>
+  <link rel='stylesheet' href='/css/main.css'>
+  <link rel='stylesheet' href='/css/octicons/octicons.css'>
+  <link rel='stylesheet' href='/css/pygments.css'>
+  <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+  <link rel='canonical' href='/docs/v0.24.0/tutorial/application-packaging/'>
+  <link rel='alternate' type='application/rss+xml' title='Ligra' href='/feed.xml' />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-3769691-57', 'auto');
+    ga('send', 'pageview');
+  </script>
+</head>
+
+
+  <body>
+
+    <header>
+  <div class='top-bar'>
+    <div class='container'>
+      <div class='row'>
+        <div class='four columns'>
+          <ul class='navigation inline-list'>
+            <li><a href='/#built-on-electron'>Built on Electron</a></li>
+            <li><a href='/#get-started'>Get Started</a></li>
+          </ul>
+        </div>
+        <div class='eight columns text-right'>
+          <ul class='navigation inline-list'>
+            <li><a href='https://github.com/atom/electron'>Repository</a></li>
+            <li><a href='/docs/v0.36.5'>Documentation</a></li>
+            <li><a href='http://blog.atom.io'>Blog</a></li>
+            <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+    <div class='page-content'>
+      <div class='wrapper'>
+        <div class='page-template application-packaging'>
+  <section class='jump-to-release is-compact'>
+  <div class='container'>
+    <div class='row'>
+      <div class='twelve columns'>
+      <h1><img class="electron-icon" src='/images/electron-icon.svg'>Electron Documentation</h1>
+      
+      <a href='/docs/v0.24.0/'>v0.24.0  </a> |
+      <a href='https://github.com/atom/electron/blob/master/docs/tutorial/application-packaging.md'>Document Source</a>
+      
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class='docs'>
+  <div class='container'>
+    <div class='row'>
+      <div class='ten columns release offset-by-one'>
+        
+        <h6 class='docs-breadcrumb'>v0.24.0 / Tutorial
+           / Application Packaging </h6>
+        
+
+        <h1 id="application-packaging">Application packaging</h1>
+
+<p>To protect your app&#39;s resources and source code from the users, you can choose
+to package your app into an <a href="https://github.com/atom/asar">asar</a> archive with little changes to your
+source code.</p>
+
+<h2 id="generating-asar-archive">Generating <code>asar</code> archive</h2>
+
+<p>An <a href="https://github.com/atom/asar">asar</a> archive is a simple tar-like format that concatenates files
+into a single file, Electron can read arbitrary files from it without unpacking
+the whole file.</p>
+
+<p>Following is the steps to package your app into an <code>asar</code> archive:</p>
+
+<h3 id="1.-install-the-asar-utility">1. Install the asar utility</h3>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>npm install -g asar
+</code></pre></div>
+<h3 id="2.-package-with-asar-pack">2. Package with <code>asar pack</code></h3>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>asar pack your-app app.asar
+</code></pre></div>
+<h2 id="using-asar-archives">Using <code>asar</code> archives</h2>
+
+<p>In Electron there are two sets of APIs: Node APIs provided by Node.js, and Web
+APIs provided by Chromium. Both APIs support reading files from <code>asar</code> archives.</p>
+
+<h3 id="node-api">Node API</h3>
+
+<p>With special patches in Electron, Node APIs like <code>fs.readFile</code> and <code>require</code>
+treat <code>asar</code> archives as virtual directories, and the files in it as normal
+files in the filesystem.</p>
+
+<p>For example, suppose we have an <code>example.asar</code> archive under <code>/path/to</code>:</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>asar list /path/to/example.asar
+/app.js
+/file.txt
+/dir/module.js
+/static/index.html
+/static/main.css
+/static/jquery.min.js
+</code></pre></div>
+<p>Read a file in the <code>asar</code> archive:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">);</span>
+<span class="nx">fs</span><span class="p">.</span><span class="nx">readFileSync</span><span class="p">(</span><span class="s1">&#39;/path/to/example.asar/file.txt&#39;</span><span class="p">);</span>
+</code></pre></div>
+<p>List all files under the root of the archive:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">);</span>
+<span class="nx">fs</span><span class="p">.</span><span class="nx">readdirSync</span><span class="p">(</span><span class="s1">&#39;/path/to/example.asar&#39;</span><span class="p">);</span>
+</code></pre></div>
+<p>Use a module from the archive:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;/path/to/example.asar/dir/module.js&#39;</span><span class="p">);</span>
+</code></pre></div>
+<p>You can also display a web page in an <code>asar</code> archive with <code>BrowserWindow</code>:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">BrowserWindow</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;browser-window&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">win</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">BrowserWindow</span><span class="p">({</span><span class="nx">width</span><span class="o">:</span> <span class="mi">800</span><span class="p">,</span> <span class="nx">height</span><span class="o">:</span> <span class="mi">600</span><span class="p">});</span>
+<span class="nx">win</span><span class="p">.</span><span class="nx">loadUrl</span><span class="p">(</span><span class="s1">&#39;file:///path/to/example.asar/static/index.html&#39;</span><span class="p">);</span>
+</code></pre></div>
+<h3 id="web-api">Web API</h3>
+
+<p>In a web page, files in archive can be requested with the <code>file:</code> protocol. Like
+the Node API, <code>asar</code> archives are treated as directories.</p>
+
+<p>For example, to get a file with <code>$.get</code>:</p>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;script&gt;</span>
+<span class="kd">var</span> <span class="nx">$</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./jquery.min.js&#39;</span><span class="p">);</span>
+<span class="nx">$</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;file:///path/to/example.asar/file.txt&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+<span class="p">});</span>
+<span class="nt">&lt;/script&gt;</span>
+</code></pre></div>
+<h3 id="treating-asar-archive-as-normal-file">Treating <code>asar</code> archive as normal file</h3>
+
+<p>For some cases like verifying the <code>asar</code> archive&#39;s checksum, we need to read the
+content of <code>asar</code> archive as file. For this purpose you can use the built-in
+<code>original-fs</code> module which provides original <code>fs</code> APIs without <code>asar</code> support:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">originalFs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;original-fs&#39;</span><span class="p">);</span>
+<span class="nx">originalFs</span><span class="p">.</span><span class="nx">readFileSync</span><span class="p">(</span><span class="s1">&#39;/path/to/example.asar&#39;</span><span class="p">);</span>
+</code></pre></div>
+<h2 id="limitations-on-node-api">Limitations on Node API</h2>
+
+<p>Even though we tried hard to make <code>asar</code> archives in the Node API work like
+directories as much as possible, there are still limitations due to the
+low-level nature of the Node API.</p>
+
+<h3 id="archives-are-read-only">Archives are read only</h3>
+
+<p>The archives can not be modified so all Node APIs that can modify files will not
+work with <code>asar</code> archives.</p>
+
+<h3 id="working-directory-can-not-be-set-to-directories-in-archive">Working directory can not be set to directories in archive</h3>
+
+<p>Though <code>asar</code> archives are treated as directories, there are no actual
+directories in the filesystem, so you can never set the working directory to
+directories in <code>asar</code> archives, passing them to <code>cwd</code> option of some APIs will
+also cause errors.</p>
+
+<h3 id="extra-unpacking-on-some-apis">Extra unpacking on some APIs</h3>
+
+<p>Most <code>fs</code> APIs can read file or get file&#39;s information from <code>asar</code> archives
+without unpacking, but for some APIs that rely on passing the real file path to
+underlying system calls, Electron will extract the needed file into a
+temporary file and pass the path of the temporary file to the APIs to make them
+work. This adds a little overhead for those APIs.</p>
+
+<p>APIs that requires extra unpacking are:</p>
+
+<ul>
+<li><code>child_process.execFile</code></li>
+<li><code>fs.open</code></li>
+<li><code>fs.openSync</code></li>
+<li><code>process.dlopen</code> - Used by <code>require</code> on native modules</li>
+</ul>
+
+<h3 id="fake-stat-information-of-fs.stat">Fake stat information of <code>fs.stat</code></h3>
+
+<p>The <code>Stats</code> object returned by <code>fs.stat</code> and its friends on files in <code>asar</code>
+archives is generated by guessing, because those files do not exist on the
+filesystem. So you should not trust the <code>Stats</code> object except for getting file
+size and checking file type.</p>
+
+<h2 id="adding-unpacked-files-in-asar-archive">Adding unpacked files in <code>asar</code> archive</h2>
+
+<p>As stated above, some Node APIs will unpack the file to filesystem when
+calling, apart from the performance issues, it could also lead to false alerts
+of virus scanners.</p>
+
+<p>To work around this, you can unpack some files creating archives by using the
+<code>--unpack</code> option, an example of excluding shared libraries of native modules
+is:</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>asar pack app app.asar --unpack *.node
+</code></pre></div>
+<p>After running the command, apart from the <code>app.asar</code>, there is also an
+<code>app.asar.unpacked</code> folder generated which contains the unpacked files, you
+should copy it together with <code>app.asar</code> when shipping it to users.</p>
+
+
+      </div>
+    </div>
+    
+    <div class='row'>
+      <div class='ten columns release offset-by-one docs-footer'>
+        <span class="octicon octicon-pencil"></span>
+        See something that needs fixing? Propose a change on the <a href='https://github.com/atom/electron/blob/master/docs/tutorial/application-packaging.md'>source</a>.
+        <br>
+        <span class="octicon octicon-zap"></span>
+        Need a different version of the docs? See the <a href='/docs'>available versions</a>.
+      </div>
+    </div>
+    
+  </div>
+</section>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class='container'>
+    <div class='row'>
+      <div class='one-half column'>
+        <ul class='inline-list'>
+          <li><a href='https://github.com/atom/electron'>Repository</a></li>
+          <li><a href='/docs/v0.36.5'>Documentation</a></li>
+          <li><a href='/releases.html'>Releases</a></li>
+          <li><a href='http://blog.atom.io'>Blog</a></li>
+          <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+        </ul>
+      </div>
+
+      <div class='one-half column text-right'>
+        <a href='https://github.com' class="no-hover-dec"><span class='octicon octicon-code'></span> with <span class='octicon octicon-heart'></span> by <span class='octicon octicon-logo-github'></span></a>
+      </div>
+  </div>
+</footer>
+
+    <script>
+  var anchorForId = function (id) {
+    var anchor = document.createElement("a");
+    anchor.className = "header-link";
+    anchor.href      = "#" + id;
+    anchor.innerHTML = "<span class='octicon octicon-link'></span>";
+    anchor.title = "Permalink";
+    return anchor;
+  };
+
+  var linkifyAnchors = function (level, containingElement) {
+    var headers = containingElement.getElementsByTagName("h" + level);
+    for (var h = 0; h < headers.length; h++) {
+      var header = headers[h];
+
+      if (typeof header.id !== "undefined" && header.id !== "") {
+        header.appendChild(anchorForId(header.id));
+      }
+    }
+  };
+
+  document.onreadystatechange = function () {
+    if (this.readyState === "complete") {
+      var contentBlock = document.getElementsByClassName("docs")[0] || document.getElementsByClassName("news")[0];
+      if (!contentBlock) {
+        return;
+      }
+      for (var level = 1; level <= 6; level++) {
+        linkifyAnchors(level, contentBlock);
+      }
+    }
+  };
+</script>
+
+  </body>
+
+</html>

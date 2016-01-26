@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+  <title>Download Item</title>
+  <meta name='description' content='Build cross platform desktop apps with web technologies'>
+
+  <link rel='shortcut icon' href='/images/favicon.ico'/>
+  <link rel='stylesheet' href='/css/normalize.css'>
+  <link rel='stylesheet' href='/css/skeleton.css'>
+  <link rel='stylesheet' href='/css/main.css'>
+  <link rel='stylesheet' href='/css/octicons/octicons.css'>
+  <link rel='stylesheet' href='/css/pygments.css'>
+  <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+  <link rel='canonical' href='/docs/v0.36.5/api/download-item/'>
+  <link rel='alternate' type='application/rss+xml' title='Ligra' href='/feed.xml' />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-3769691-57', 'auto');
+    ga('send', 'pageview');
+  </script>
+</head>
+
+
+  <body>
+
+    <header>
+  <div class='top-bar'>
+    <div class='container'>
+      <div class='row'>
+        <div class='four columns'>
+          <ul class='navigation inline-list'>
+            <li><a href='/#built-on-electron'>Built on Electron</a></li>
+            <li><a href='/#get-started'>Get Started</a></li>
+          </ul>
+        </div>
+        <div class='eight columns text-right'>
+          <ul class='navigation inline-list'>
+            <li><a href='https://github.com/atom/electron'>Repository</a></li>
+            <li><a href='/docs/v0.36.5'>Documentation</a></li>
+            <li><a href='http://blog.atom.io'>Blog</a></li>
+            <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+    <div class='page-content'>
+      <div class='wrapper'>
+        <div class='page-template download-item'>
+  <section class='jump-to-release is-compact'>
+  <div class='container'>
+    <div class='row'>
+      <div class='twelve columns'>
+      <h1><img class="electron-icon" src='/images/electron-icon.svg'>Electron Documentation</h1>
+      
+      <a href='/docs/v0.36.5/'>v0.36.5  (Latest)  </a> |
+      <a href='https://github.com/atom/electron/blob/master/docs/api/download-item.md'>Document Source</a>
+      
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class='docs'>
+  <div class='container'>
+    <div class='row'>
+      <div class='ten columns release offset-by-one'>
+        
+        <h6 class='docs-breadcrumb'>v0.36.5 / API
+           / Download Item </h6>
+        
+
+        <h1 id="downloaditem">DownloadItem</h1>
+
+<p><code>DownloadItem</code> is an EventEmitter represents a download item in Electron. It
+is used in <code>will-download</code> event of <code>Session</code> module, and allows users to
+control the download item.</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// In the main process.</span>
+<span class="nx">win</span><span class="p">.</span><span class="nx">webContents</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;will-download&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">item</span><span class="p">,</span> <span class="nx">webContents</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// Set the save path, making Electron not to prompt a save dialog.</span>
+  <span class="nx">item</span><span class="p">.</span><span class="nx">setSavePath</span><span class="p">(</span><span class="s1">&#39;/tmp/save.pdf&#39;</span><span class="p">);</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">item</span><span class="p">.</span><span class="nx">getMimeType</span><span class="p">());</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">item</span><span class="p">.</span><span class="nx">getFilename</span><span class="p">());</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">item</span><span class="p">.</span><span class="nx">getTotalBytes</span><span class="p">());</span>
+  <span class="nx">item</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;updated&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Received bytes: &#39;</span> <span class="o">+</span> <span class="nx">item</span><span class="p">.</span><span class="nx">getReceivedBytes</span><span class="p">());</span>
+  <span class="p">});</span>
+  <span class="nx">item</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;done&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">,</span> <span class="nx">state</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">state</span> <span class="o">==</span> <span class="s2">&quot;completed&quot;</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Download successfully&quot;</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Download is cancelled or interrupted that can&#39;t be resumed&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+</code></pre></div>
+<h2 id="events">Events</h2>
+
+<h3 id="event:-&#39;updated&#39;">Event: &#39;updated&#39;</h3>
+
+<p>Emits when the <code>downloadItem</code> gets updated.</p>
+
+<h3 id="event:-&#39;done&#39;">Event: &#39;done&#39;</h3>
+
+<ul>
+<li><code>event</code> Event</li>
+<li><code>state</code> String
+
+<ul>
+<li><code>completed</code> - The download completed successfully.</li>
+<li><code>cancelled</code> - The download has been cancelled.</li>
+<li><code>interrupted</code> - An error broke the connection with the file server.</li>
+</ul></li>
+</ul>
+
+<p>Emits when the download is in a terminal state. This includes a completed
+download, a cancelled download(via <code>downloadItem.cancel()</code>), and interrupted
+download that can&#39;t be resumed.</p>
+
+<h2 id="methods">Methods</h2>
+
+<p>The <code>downloadItem</code> object has the following methods:</p>
+
+<h3 id="downloaditem.setsavepath(path)"><code>downloadItem.setSavePath(path)</code></h3>
+
+<ul>
+<li><code>path</code> String - Set the save file path of the download item.</li>
+</ul>
+
+<p>The API is only available in session&#39;s <code>will-download</code> callback function.
+If user doesn&#39;t set the save path via the API, Electron will use the original
+routine to determine the save path(Usually prompts a save dialog).</p>
+
+<h3 id="downloaditem.pause()"><code>downloadItem.pause()</code></h3>
+
+<p>Pauses the download.</p>
+
+<h3 id="downloaditem.resume()"><code>downloadItem.resume()</code></h3>
+
+<p>Resumes the download that has been paused.</p>
+
+<h3 id="downloaditem.cancel()"><code>downloadItem.cancel()</code></h3>
+
+<p>Cancels the download operation.</p>
+
+<h3 id="downloaditem.geturl()"><code>downloadItem.getURL()</code></h3>
+
+<p>Returns a <code>String</code> represents the origin url where the item is downloaded from.</p>
+
+<h3 id="downloaditem.getmimetype()"><code>downloadItem.getMimeType()</code></h3>
+
+<p>Returns a <code>String</code> represents the mime type.</p>
+
+<h3 id="downloaditem.hasusergesture()"><code>downloadItem.hasUserGesture()</code></h3>
+
+<p>Returns a <code>Boolean</code> indicates whether the download has user gesture.</p>
+
+<h3 id="downloaditem.getfilename()"><code>downloadItem.getFilename()</code></h3>
+
+<p>Returns a <code>String</code> represents the file name of the download item.</p>
+
+<p><strong>Note:</strong> The file name is not always the same as the actual one saved in local
+disk. If user changes the file name in a prompted download saving dialog, the
+actual name of saved file will be different.</p>
+
+<h3 id="downloaditem.gettotalbytes()"><code>downloadItem.getTotalBytes()</code></h3>
+
+<p>Returns a <code>Integer</code> represents the total size in bytes of the download item.
+If the size is unknown, it returns 0.</p>
+
+<h3 id="downloaditem.getreceivedbytes()"><code>downloadItem.getReceivedBytes()</code></h3>
+
+<p>Returns a <code>Integer</code> represents the received bytes of the download item.</p>
+
+<h3 id="downloaditem.getcontentdisposition()"><code>downloadItem.getContentDisposition()</code></h3>
+
+<p>Returns a <code>String</code> represents the Content-Disposition field from the response
+header.</p>
+
+
+      </div>
+    </div>
+    
+    <div class='row'>
+      <div class='ten columns release offset-by-one docs-footer'>
+        <span class="octicon octicon-pencil"></span>
+        See something that needs fixing? Propose a change on the <a href='https://github.com/atom/electron/blob/master/docs/api/download-item.md'>source</a>.
+        <br>
+        <span class="octicon octicon-zap"></span>
+        Need a different version of the docs? See the <a href='/docs'>available versions</a>.
+      </div>
+    </div>
+    
+  </div>
+</section>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class='container'>
+    <div class='row'>
+      <div class='one-half column'>
+        <ul class='inline-list'>
+          <li><a href='https://github.com/atom/electron'>Repository</a></li>
+          <li><a href='/docs/v0.36.5'>Documentation</a></li>
+          <li><a href='/releases.html'>Releases</a></li>
+          <li><a href='http://blog.atom.io'>Blog</a></li>
+          <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+        </ul>
+      </div>
+
+      <div class='one-half column text-right'>
+        <a href='https://github.com' class="no-hover-dec"><span class='octicon octicon-code'></span> with <span class='octicon octicon-heart'></span> by <span class='octicon octicon-logo-github'></span></a>
+      </div>
+  </div>
+</footer>
+
+    <script>
+  var anchorForId = function (id) {
+    var anchor = document.createElement("a");
+    anchor.className = "header-link";
+    anchor.href      = "#" + id;
+    anchor.innerHTML = "<span class='octicon octicon-link'></span>";
+    anchor.title = "Permalink";
+    return anchor;
+  };
+
+  var linkifyAnchors = function (level, containingElement) {
+    var headers = containingElement.getElementsByTagName("h" + level);
+    for (var h = 0; h < headers.length; h++) {
+      var header = headers[h];
+
+      if (typeof header.id !== "undefined" && header.id !== "") {
+        header.appendChild(anchorForId(header.id));
+      }
+    }
+  };
+
+  document.onreadystatechange = function () {
+    if (this.readyState === "complete") {
+      var contentBlock = document.getElementsByClassName("docs")[0] || document.getElementsByClassName("news")[0];
+      if (!contentBlock) {
+        return;
+      }
+      for (var level = 1; level <= 6; level++) {
+        linkifyAnchors(level, contentBlock);
+      }
+    }
+  };
+</script>
+
+  </body>
+
+</html>

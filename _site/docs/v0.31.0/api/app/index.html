@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+  <title>App</title>
+  <meta name='description' content='Build cross platform desktop apps with web technologies'>
+
+  <link rel='shortcut icon' href='/images/favicon.ico'/>
+  <link rel='stylesheet' href='/css/normalize.css'>
+  <link rel='stylesheet' href='/css/skeleton.css'>
+  <link rel='stylesheet' href='/css/main.css'>
+  <link rel='stylesheet' href='/css/octicons/octicons.css'>
+  <link rel='stylesheet' href='/css/pygments.css'>
+  <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+  <link rel='canonical' href='/docs/v0.31.0/api/app/'>
+  <link rel='alternate' type='application/rss+xml' title='Ligra' href='/feed.xml' />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-3769691-57', 'auto');
+    ga('send', 'pageview');
+  </script>
+</head>
+
+
+  <body>
+
+    <header>
+  <div class='top-bar'>
+    <div class='container'>
+      <div class='row'>
+        <div class='four columns'>
+          <ul class='navigation inline-list'>
+            <li><a href='/#built-on-electron'>Built on Electron</a></li>
+            <li><a href='/#get-started'>Get Started</a></li>
+          </ul>
+        </div>
+        <div class='eight columns text-right'>
+          <ul class='navigation inline-list'>
+            <li><a href='https://github.com/atom/electron'>Repository</a></li>
+            <li><a href='/docs/v0.36.5'>Documentation</a></li>
+            <li><a href='http://blog.atom.io'>Blog</a></li>
+            <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+    <div class='page-content'>
+      <div class='wrapper'>
+        <div class='page-template app'>
+  <section class='jump-to-release is-compact'>
+  <div class='container'>
+    <div class='row'>
+      <div class='twelve columns'>
+      <h1><img class="electron-icon" src='/images/electron-icon.svg'>Electron Documentation</h1>
+      
+      <a href='/docs/v0.31.0/'>v0.31.0  </a> |
+      <a href='https://github.com/atom/electron/blob/master/docs/api/app.md'>Document Source</a>
+      
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class='docs'>
+  <div class='container'>
+    <div class='row'>
+      <div class='ten columns release offset-by-one'>
+        
+        <h6 class='docs-breadcrumb'>v0.31.0 / API
+           / App </h6>
+        
+
+        <h1 id="app">app</h1>
+
+<p>The <code>app</code> module is responsible for controlling the application&#39;s lifecycle.</p>
+
+<p>The following example shows how to quit the application when the last window is closed:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;app&#39;</span><span class="p">);</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;window-all-closed&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">app</span><span class="p">.</span><span class="nx">quit</span><span class="p">();</span>
+<span class="p">});</span>
+</code></pre></div>
+<h2 id="event:-will-finish-launching">Event: will-finish-launching</h2>
+
+<p>Emitted when the application has finished basic startup. On Windows and Linux,
+the <code>will-finish-launching</code> event is the same as the <code>ready</code> event; on OS X,
+this event represents the <code>applicationWillFinishLaunching</code> notification of <code>NSApplication</code>.
+You would usually set up listeners for the <code>open-file</code> and <code>open-url</code> events here,
+and start the crash reporter and auto updater.</p>
+
+<p>In most cases, you should just do everything in the <code>ready</code> event handler.</p>
+
+<h2 id="event:-ready">Event: ready</h2>
+
+<p>Emitted when Electron has finished initialization.</p>
+
+<h2 id="event:-window-all-closed">Event: window-all-closed</h2>
+
+<p>Emitted when all windows have been closed.</p>
+
+<p>This event is only emitted when the application is not going to quit. If the
+user pressed <code>Cmd + Q</code>, or the developer called <code>app.quit()</code>, Electron would
+first try to close all the windows and then emit the <code>will-quit</code> event, and in
+this case the <code>window-all-closed</code> event would not be emitted.</p>
+
+<h2 id="event:-before-quit">Event: before-quit</h2>
+
+<ul>
+<li><code>event</code> Event</li>
+</ul>
+
+<p>Emitted before the application starts closing its windows.
+Calling <code>event.preventDefault()</code> will prevent the default behaviour, which is
+terminating the application.</p>
+
+<h2 id="event:-will-quit">Event: will-quit</h2>
+
+<ul>
+<li><code>event</code> Event</li>
+</ul>
+
+<p>Emitted when all windows have been closed and the application will quit.
+Calling <code>event.preventDefault()</code> will prevent the default behaviour, which is
+terminating the application.</p>
+
+<p>See the description of the <code>window-all-closed</code> event for the differences between the <code>will-quit</code>
+and <code>window-all-closed</code> events.</p>
+
+<h2 id="event:-quit">Event: quit</h2>
+
+<p>Emitted when the application is quitting.</p>
+
+<h2 id="event:-open-file">Event: open-file</h2>
+
+<ul>
+<li><code>event</code> Event</li>
+<li><code>path</code> String</li>
+</ul>
+
+<p>Emitted when the user wants to open a file with the application. The <code>open-file</code> event
+is usually emitted when the application is already open and the OS wants to reuse the
+application to open the file. <code>open-file</code> is also emitted when a file is dropped onto the
+dock and the application is not yet running. Make sure to listen for the <code>open-file</code>
+event very early in your application startup to handle this case (even before the
+<code>ready</code> event is emitted).</p>
+
+<p>You should call <code>event.preventDefault()</code> if you want to handle this event.</p>
+
+<h2 id="event:-open-url">Event: open-url</h2>
+
+<ul>
+<li><code>event</code> Event</li>
+<li><code>url</code> String</li>
+</ul>
+
+<p>Emitted when the user wants to open a URL with the application. The URL scheme
+must be registered to be opened by your application.</p>
+
+<p>You should call <code>event.preventDefault()</code> if you want to handle this event.</p>
+
+<h2 id="event:-activate-with-no-open-windows">Event: activate-with-no-open-windows</h2>
+
+<p>Emitted when the application is activated while there are no open windows, which
+usually happens when the user has closed all of the application&#39;s windows and then
+clicks on the application&#39;s dock icon.</p>
+
+<h2 id="event:-browser-window-blur">Event: browser-window-blur</h2>
+
+<ul>
+<li><code>event</code> Event</li>
+<li><code>window</code> BrowserWindow</li>
+</ul>
+
+<p>Emitted when a <a href="http://electron.atom.io/docs/v0.31.0/api/browser-window">browserWindow</a> gets blurred.</p>
+
+<h2 id="event:-browser-window-focus">Event: browser-window-focus</h2>
+
+<ul>
+<li><code>event</code> Event</li>
+<li><code>window</code> BrowserWindow</li>
+</ul>
+
+<p>Emitted when a <a href="http://electron.atom.io/docs/v0.31.0/api/browser-window">browserWindow</a> gets focused.</p>
+
+<h3 id="event:-&#39;select-certificate&#39;">Event: &#39;select-certificate&#39;</h3>
+
+<p>Emitted when a client certificate is requested.</p>
+
+<ul>
+<li><code>event</code> Event</li>
+<li><code>webContents</code> <a href="http://electron.atom.io/docs/v0.31.0/api/browser-window#class-webcontents">WebContents</a></li>
+<li><code>url</code> String</li>
+<li><code>certificateList</code> [Objects]
+
+<ul>
+<li><code>data</code> PEM encoded data</li>
+<li><code>issuerName</code> Issuer&#39;s Common Name</li>
+</ul></li>
+<li><code>callback</code> Function</li>
+</ul>
+<div class="highlight"><pre><code class="language-text" data-lang="text">app.on(&#39;select-certificate&#39;, function(event, host, url, list, callback) {
+  event.preventDefault();
+  callback(list[0]);
+})
+</code></pre></div>
+<p><code>url</code> corresponds to the navigation entry requesting the client certificate.
+<code>callback</code> needs to be called with an entry filtered from the list.
+<code>event.preventDefault()</code> prevents the application from using the first certificate
+from the store.</p>
+
+<h3 id="event:-&#39;gpu-process-crashed&#39;">Event: &#39;gpu-process-crashed&#39;</h3>
+
+<p>Emitted when the gpu process crashes.</p>
+
+<h2 id="app.quit()">app.quit()</h2>
+
+<p>Try to close all windows. The <code>before-quit</code> event will first be emitted. If all
+windows are successfully closed, the <code>will-quit</code> event will be emitted and by
+default the application will terminate.</p>
+
+<p>This method guarantees that all <code>beforeunload</code> and <code>unload</code> event handlers are correctly
+executed. It is possible that a window cancels the quitting by returning
+<code>false</code> in the <code>beforeunload</code> event handler.</p>
+
+<h2 id="app.getapppath()">app.getAppPath()</h2>
+
+<p>Returns the current application directory.</p>
+
+<h2 id="app.getpath(name)">app.getPath(name)</h2>
+
+<ul>
+<li><code>name</code> String</li>
+</ul>
+
+<p>Retrieves a path to a special directory or file associated with <code>name</code>. On
+failure an <code>Error</code> is thrown.</p>
+
+<p>You can request the following paths by the name:</p>
+
+<ul>
+<li><code>home</code>: User&#39;s home directory</li>
+<li><code>appData</code>: Per-user application data directory, which by default points to:
+
+<ul>
+<li><code>%APPDATA%</code> on Windows</li>
+<li><code>$XDG_CONFIG_HOME</code> or <code>~/.config</code> on Linux</li>
+<li><code>~/Library/Application Support</code> on OS X</li>
+</ul></li>
+<li><code>userData</code>: The directory for storing your app&#39;s configuration files, which by
+default it is the <code>appData</code> directory appended with your app&#39;s name</li>
+<li><code>cache</code>: Per-user application cache directory, which by default points to:
+
+<ul>
+<li><code>%APPDATA%</code> on Windows (which doesn&#39;t have a universal cache location)</li>
+<li><code>$XDG_CACHE_HOME</code> or <code>~/.cache</code> on Linux</li>
+<li><code>~/Library/Caches</code> on OS X</li>
+</ul></li>
+<li><code>userCache</code>: The directory for placing your app&#39;s caches, by default it is the
+<code>cache</code> directory appended with your app&#39;s name</li>
+<li><code>temp</code>: Temporary directory</li>
+<li><code>userDesktop</code>: The current user&#39;s Desktop directory</li>
+<li><code>exe</code>: The current executable file</li>
+<li><code>module</code>: The <code>libchromiumcontent</code> library</li>
+</ul>
+
+<h2 id="app.setpath(name,-path)">app.setPath(name, path)</h2>
+
+<ul>
+<li><code>name</code> String</li>
+<li><code>path</code> String</li>
+</ul>
+
+<p>Overrides the <code>path</code> to a special directory or file associated with <code>name</code>. If
+the path specifies a directory that does not exist, the directory will be
+created by this method. On failure an <code>Error</code> is thrown.</p>
+
+<p>You can only override paths of <code>name</code>s  defined in <code>app.getPath</code>.</p>
+
+<p>By default, web pages&#39; cookies and caches will be stored under the <code>userData</code>
+directory. If you want to change this location, you have to override the
+<code>userData</code> path before the <code>ready</code> event of the <code>app</code> module is emitted.</p>
+
+<h2 id="app.getversion()">app.getVersion()</h2>
+
+<p>Returns the version of the loaded application. If no version is found in the
+application&#39;s <code>package.json</code> file, the version of the current bundle or executable is
+returned.</p>
+
+<h2 id="app.getname()">app.getName()</h2>
+
+<p>Returns the current application&#39;s name, which is the name in the application&#39;s
+<code>package.json</code> file.</p>
+
+<p>Usually the <code>name</code> field of <code>package.json</code> is a short lowercased name, according
+to the npm modules spec. You should usually also specify a <code>productName</code>
+field, which is your application&#39;s full capitalized name, and which will be
+preferred over <code>name</code> by Electron.</p>
+
+<h2 id="app.resolveproxy(url,-callback)">app.resolveProxy(url, callback)</h2>
+
+<ul>
+<li><code>url</code> URL</li>
+<li><code>callback</code> Function</li>
+</ul>
+
+<p>Resolves the proxy information for <code>url</code>. The <code>callback</code> will be called with
+<code>callback(proxy)</code> when the request is performed.</p>
+
+<h2 id="app.addrecentdocument(path)">app.addRecentDocument(path)</h2>
+
+<ul>
+<li><code>path</code> String</li>
+</ul>
+
+<p>Adds <code>path</code> to the recent documents list.</p>
+
+<p>This list is managed by the OS. On Windows you can visit the list from the task
+bar, and on OS X you can visit it from dock menu.</p>
+
+<h2 id="app.clearrecentdocuments()">app.clearRecentDocuments()</h2>
+
+<p>Clears the recent documents list.</p>
+
+<h2 id="app.setusertasks(tasks)">app.setUserTasks(tasks)</h2>
+
+<ul>
+<li><code>tasks</code> Array - Array of <code>Task</code> objects</li>
+</ul>
+
+<p>Adds <code>tasks</code> to the <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/dd378460(v=vs.85).aspx#tasks">Tasks</a> category of the JumpList on Windows.</p>
+
+<p><code>tasks</code> is an array of <code>Task</code> objects in following format:</p>
+
+<ul>
+<li><code>Task</code> Object
+
+<ul>
+<li><code>program</code> String - Path of the program to execute, usually you should
+specify <code>process.execPath</code> which opens the current program</li>
+<li><code>arguments</code> String - The command line arguments when <code>program</code> is
+executed</li>
+<li><code>title</code> String - The string to be displayed in a JumpList</li>
+<li><code>description</code> String - Description of this task</li>
+<li><code>iconPath</code> String - The absolute path to an icon to be displayed in a
+JumpList, which can be an arbitrary resource file that contains an icon. You can 
+usually specify <code>process.execPath</code> to show the icon of the program</li>
+<li><code>iconIndex</code> Integer - The icon index in the icon file. If an icon file
+consists of two or more icons, set this value to identify the icon. If an
+icon file consists of one icon, this value is 0</li>
+</ul></li>
+</ul>
+
+<p><strong>Note:</strong> This API is only available on Windows.</p>
+
+<h2 id="app.commandline.appendswitch(switch,-[value])">app.commandLine.appendSwitch(switch, [value])</h2>
+
+<p>Append a switch [with optional value] to Chromium&#39;s command line.</p>
+
+<p><strong>Note:</strong> This will not affect <code>process.argv</code>, and is mainly used by developers
+to control some low-level Chromium behaviors.</p>
+
+<h2 id="app.commandline.appendargument(value)">app.commandLine.appendArgument(value)</h2>
+
+<p>Append an argument to Chromium&#39;s command line. The argument will be quoted correctly.</p>
+
+<p><strong>Note:</strong> This will not affect <code>process.argv</code>.</p>
+
+<h2 id="app.dock.bounce([type])">app.dock.bounce([type])</h2>
+
+<ul>
+<li><code>type</code> String - Can be <code>critical</code> or <code>informational</code>. The default is
+<code>informational</code></li>
+</ul>
+
+<p>When <code>critical</code> is passed, the dock icon will bounce until either the
+application becomes active or the request is canceled.</p>
+
+<p>When <code>informational</code> is passed, the dock icon will bounce for one second. However,
+the request remains active until either the application becomes active or
+the request is canceled.</p>
+
+<p>An ID representing the request is returned.</p>
+
+<p><strong>Note:</strong> This API is only available on OS X.</p>
+
+<h2 id="app.dock.cancelbounce(id)">app.dock.cancelBounce(id)</h2>
+
+<ul>
+<li><code>id</code> Integer</li>
+</ul>
+
+<p>Cancel the bounce of <code>id</code>.</p>
+
+<p><strong>Note:</strong> This API is only available on OS X.</p>
+
+<h2 id="app.dock.setbadge(text)">app.dock.setBadge(text)</h2>
+
+<ul>
+<li><code>text</code> String</li>
+</ul>
+
+<p>Sets the string to be displayed in the dock’s badging area.</p>
+
+<p><strong>Note:</strong> This API is only available on OS X.</p>
+
+<h2 id="app.dock.getbadge()">app.dock.getBadge()</h2>
+
+<p>Returns the badge string of the dock.</p>
+
+<p><strong>Note:</strong> This API is only available on OS X.</p>
+
+<h2 id="app.dock.hide()">app.dock.hide()</h2>
+
+<p>Hides the dock icon.</p>
+
+<p><strong>Note:</strong> This API is only available on OS X.</p>
+
+<h2 id="app.dock.show()">app.dock.show()</h2>
+
+<p>Shows the dock icon.</p>
+
+<p><strong>Note:</strong> This API is only available on OS X.</p>
+
+<h2 id="app.dock.setmenu(menu)">app.dock.setMenu(menu)</h2>
+
+<ul>
+<li><code>menu</code> Menu</li>
+</ul>
+
+<p>Sets the application&#39;s <a href="https://developer.apple.com/library/mac/documentation/Carbon/Conceptual/customizing_docktile/concepts/dockconcepts.html#//apple_ref/doc/uid/TP30000986-CH2-TPXREF103">dock menu</a>.</p>
+
+<p><strong>Note:</strong> This API is only available on OS X.</p>
+
+
+      </div>
+    </div>
+    
+    <div class='row'>
+      <div class='ten columns release offset-by-one docs-footer'>
+        <span class="octicon octicon-pencil"></span>
+        See something that needs fixing? Propose a change on the <a href='https://github.com/atom/electron/blob/master/docs/api/app.md'>source</a>.
+        <br>
+        <span class="octicon octicon-zap"></span>
+        Need a different version of the docs? See the <a href='/docs'>available versions</a>.
+      </div>
+    </div>
+    
+  </div>
+</section>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class='container'>
+    <div class='row'>
+      <div class='one-half column'>
+        <ul class='inline-list'>
+          <li><a href='https://github.com/atom/electron'>Repository</a></li>
+          <li><a href='/docs/v0.36.5'>Documentation</a></li>
+          <li><a href='/releases.html'>Releases</a></li>
+          <li><a href='http://blog.atom.io'>Blog</a></li>
+          <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+        </ul>
+      </div>
+
+      <div class='one-half column text-right'>
+        <a href='https://github.com' class="no-hover-dec"><span class='octicon octicon-code'></span> with <span class='octicon octicon-heart'></span> by <span class='octicon octicon-logo-github'></span></a>
+      </div>
+  </div>
+</footer>
+
+    <script>
+  var anchorForId = function (id) {
+    var anchor = document.createElement("a");
+    anchor.className = "header-link";
+    anchor.href      = "#" + id;
+    anchor.innerHTML = "<span class='octicon octicon-link'></span>";
+    anchor.title = "Permalink";
+    return anchor;
+  };
+
+  var linkifyAnchors = function (level, containingElement) {
+    var headers = containingElement.getElementsByTagName("h" + level);
+    for (var h = 0; h < headers.length; h++) {
+      var header = headers[h];
+
+      if (typeof header.id !== "undefined" && header.id !== "") {
+        header.appendChild(anchorForId(header.id));
+      }
+    }
+  };
+
+  document.onreadystatechange = function () {
+    if (this.readyState === "complete") {
+      var contentBlock = document.getElementsByClassName("docs")[0] || document.getElementsByClassName("news")[0];
+      if (!contentBlock) {
+        return;
+      }
+      for (var level = 1; level <= 6; level++) {
+        linkifyAnchors(level, contentBlock);
+      }
+    }
+  };
+</script>
+
+  </body>
+
+</html>

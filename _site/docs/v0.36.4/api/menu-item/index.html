@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+  <title>Menu Item</title>
+  <meta name='description' content='Build cross platform desktop apps with web technologies'>
+
+  <link rel='shortcut icon' href='/images/favicon.ico'/>
+  <link rel='stylesheet' href='/css/normalize.css'>
+  <link rel='stylesheet' href='/css/skeleton.css'>
+  <link rel='stylesheet' href='/css/main.css'>
+  <link rel='stylesheet' href='/css/octicons/octicons.css'>
+  <link rel='stylesheet' href='/css/pygments.css'>
+  <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+  <link rel='canonical' href='/docs/v0.36.4/api/menu-item/'>
+  <link rel='alternate' type='application/rss+xml' title='Ligra' href='/feed.xml' />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-3769691-57', 'auto');
+    ga('send', 'pageview');
+  </script>
+</head>
+
+
+  <body>
+
+    <header>
+  <div class='top-bar'>
+    <div class='container'>
+      <div class='row'>
+        <div class='four columns'>
+          <ul class='navigation inline-list'>
+            <li><a href='/#built-on-electron'>Built on Electron</a></li>
+            <li><a href='/#get-started'>Get Started</a></li>
+          </ul>
+        </div>
+        <div class='eight columns text-right'>
+          <ul class='navigation inline-list'>
+            <li><a href='https://github.com/atom/electron'>Repository</a></li>
+            <li><a href='/docs/v0.36.5'>Documentation</a></li>
+            <li><a href='http://blog.atom.io'>Blog</a></li>
+            <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+    <div class='page-content'>
+      <div class='wrapper'>
+        <div class='page-template menu-item'>
+  <section class='jump-to-release is-compact'>
+  <div class='container'>
+    <div class='row'>
+      <div class='twelve columns'>
+      <h1><img class="electron-icon" src='/images/electron-icon.svg'>Electron Documentation</h1>
+      
+      <a href='/docs/v0.36.4/'>v0.36.4  </a> |
+      <a href='https://github.com/atom/electron/blob/master/docs/api/menu-item.md'>Document Source</a>
+      
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class='docs'>
+  <div class='container'>
+    <div class='row'>
+      <div class='ten columns release offset-by-one'>
+        
+        <h6 class='docs-breadcrumb'>v0.36.4 / API
+           / Menu Item </h6>
+        
+
+        <h1 id="menuitem">MenuItem</h1>
+
+<p>The <code>menu-item</code> module allows you to add items to an application or context
+<a href="http://electron.atom.io/docs/v0.36.4/api/menu"><code>menu</code></a>.</p>
+
+<p>See <a href="http://electron.atom.io/docs/v0.36.4/api/menu"><code>menu</code></a> for examples.</p>
+
+<h2 id="class:-menuitem">Class: MenuItem</h2>
+
+<p>Create a new <code>MenuItem</code> with the following method:</p>
+
+<h3 id="new-menuitem(options)">new MenuItem(options)</h3>
+
+<ul>
+<li><code>options</code> Object
+
+<ul>
+<li><code>click</code> Function - Will be called with <code>click(menuItem, browserWindow)</code> when
+the menu item is clicked</li>
+<li><code>role</code> String - Define the action of the menu item, when specified the
+<code>click</code> property will be ignored</li>
+<li><code>type</code> String - Can be <code>normal</code>, <code>separator</code>, <code>submenu</code>, <code>checkbox</code> or
+<code>radio</code></li>
+<li><code>label</code> String</li>
+<li><code>sublabel</code> String</li>
+<li><code>accelerator</code> <a href="http://electron.atom.io/docs/v0.36.4/api/accelerator">Accelerator</a></li>
+<li><code>icon</code> <a href="http://electron.atom.io/docs/v0.36.4/api/native-image">NativeImage</a></li>
+<li><code>enabled</code> Boolean</li>
+<li><code>visible</code> Boolean</li>
+<li><code>checked</code> Boolean</li>
+<li><code>submenu</code> Menu - Should be specified for <code>submenu</code> type menu item, when
+it&#39;s specified the <code>type: &#39;submenu&#39;</code> can be omitted for the menu item.
+If the value is not a <code>Menu</code> then it will be automatically converted to one
+using <code>Menu.buildFromTemplate</code>.</li>
+<li><code>id</code> String - Unique within a single menu. If defined then it can be used
+as a reference to this item by the position attribute.</li>
+<li><code>position</code> String - This field allows fine-grained definition of the
+specific location within a given menu.</li>
+</ul></li>
+</ul>
+
+<p>When creating menu items, it is recommended to specify <code>role</code> instead of
+manually implementing the behavior if there is matching action, so menu can have
+best native experience.</p>
+
+<p>The <code>role</code> property can have following values:</p>
+
+<ul>
+<li><code>undo</code></li>
+<li><code>redo</code></li>
+<li><code>cut</code></li>
+<li><code>copy</code></li>
+<li><code>paste</code></li>
+<li><code>selectall</code></li>
+<li><code>minimize</code> - Minimize current window</li>
+<li><code>close</code> - Close current window</li>
+</ul>
+
+<p>On OS X <code>role</code> can also have following additional values:</p>
+
+<ul>
+<li><code>about</code> - Map to the <code>orderFrontStandardAboutPanel</code> action</li>
+<li><code>hide</code> - Map to the <code>hide</code> action</li>
+<li><code>hideothers</code> - Map to the <code>hideOtherApplications</code> action</li>
+<li><code>unhide</code> - Map to the <code>unhideAllApplications</code> action</li>
+<li><code>front</code> - Map to the <code>arrangeInFront</code> action</li>
+<li><code>window</code> - The submenu is a &quot;Window&quot; menu</li>
+<li><code>help</code> - The submenu is a &quot;Help&quot; menu</li>
+<li><code>services</code> - The submenu is a &quot;Services&quot; menu</li>
+</ul>
+
+
+      </div>
+    </div>
+    
+    <div class='row'>
+      <div class='ten columns release offset-by-one docs-footer'>
+        <span class="octicon octicon-pencil"></span>
+        See something that needs fixing? Propose a change on the <a href='https://github.com/atom/electron/blob/master/docs/api/menu-item.md'>source</a>.
+        <br>
+        <span class="octicon octicon-zap"></span>
+        Need a different version of the docs? See the <a href='/docs'>available versions</a>.
+      </div>
+    </div>
+    
+  </div>
+</section>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class='container'>
+    <div class='row'>
+      <div class='one-half column'>
+        <ul class='inline-list'>
+          <li><a href='https://github.com/atom/electron'>Repository</a></li>
+          <li><a href='/docs/v0.36.5'>Documentation</a></li>
+          <li><a href='/releases.html'>Releases</a></li>
+          <li><a href='http://blog.atom.io'>Blog</a></li>
+          <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+        </ul>
+      </div>
+
+      <div class='one-half column text-right'>
+        <a href='https://github.com' class="no-hover-dec"><span class='octicon octicon-code'></span> with <span class='octicon octicon-heart'></span> by <span class='octicon octicon-logo-github'></span></a>
+      </div>
+  </div>
+</footer>
+
+    <script>
+  var anchorForId = function (id) {
+    var anchor = document.createElement("a");
+    anchor.className = "header-link";
+    anchor.href      = "#" + id;
+    anchor.innerHTML = "<span class='octicon octicon-link'></span>";
+    anchor.title = "Permalink";
+    return anchor;
+  };
+
+  var linkifyAnchors = function (level, containingElement) {
+    var headers = containingElement.getElementsByTagName("h" + level);
+    for (var h = 0; h < headers.length; h++) {
+      var header = headers[h];
+
+      if (typeof header.id !== "undefined" && header.id !== "") {
+        header.appendChild(anchorForId(header.id));
+      }
+    }
+  };
+
+  document.onreadystatechange = function () {
+    if (this.readyState === "complete") {
+      var contentBlock = document.getElementsByClassName("docs")[0] || document.getElementsByClassName("news")[0];
+      if (!contentBlock) {
+        return;
+      }
+      for (var level = 1; level <= 6; level++) {
+        linkifyAnchors(level, contentBlock);
+      }
+    }
+  };
+</script>
+
+  </body>
+
+</html>
