@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+  <title>Application Packaging Es</title>
+  <meta name='description' content='Build cross platform desktop apps with web technologies'>
+
+  <link rel='shortcut icon' href='/images/favicon.ico'/>
+  <link rel='stylesheet' href='/css/normalize.css'>
+  <link rel='stylesheet' href='/css/skeleton.css'>
+  <link rel='stylesheet' href='/css/main.css'>
+  <link rel='stylesheet' href='/css/octicons/octicons.css'>
+  <link rel='stylesheet' href='/css/pygments.css'>
+  <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+  <link rel='canonical' href='/docs/v0.31.0/tutorial/application-packaging-es/'>
+  <link rel='alternate' type='application/rss+xml' title='Electron' href='/feed.xml' />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-3769691-57', 'auto');
+    ga('send', 'pageview');
+  </script>
+</head>
+
+
+  <body>
+
+    <header>
+  <div class='top-bar'>
+    <div class='container'>
+      <div class='row'>
+        <div class='four columns'>
+          <ul class='navigation inline-list'>
+            <li><a href='/#built-on-electron'>Built on Electron</a></li>
+            <li><a href='/#get-started'>Get Started</a></li>
+          </ul>
+        </div>
+        <div class='eight columns text-right'>
+          <ul class='navigation inline-list'>
+            <li><a href='https://github.com/atom/electron'>Repository</a></li>
+            <li><a href='/docs/v0.36.5'>Documentation</a></li>
+            <li><a href='http://blog.atom.io'>Blog</a></li>
+            <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+    <div class='page-content'>
+      <div class='wrapper'>
+        <div class='page-template application-packaging-es'>
+  <section class='jump-to-release is-compact'>
+  <div class='container'>
+    <div class='row'>
+      <div class='twelve columns'>
+      <h1><img class="electron-icon" src='/images/electron-icon.svg'>Electron Documentation</h1>
+      
+      <a href='/docs/v0.31.0/'>v0.31.0  </a> |
+      <a href='https://github.com/atom/electron/blob/master/docs/tutorial/application-packaging-es.md'>Document Source</a>
+      
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class='docs'>
+  <div class='container'>
+    <div class='row'>
+      <div class='ten columns release offset-by-one'>
+        
+        <h6 class='docs-breadcrumb'>v0.31.0 / Tutorial
+           / Application Packaging Es </h6>
+        
+
+        <h1 id="empaquetamiento-de-aplicaciones">Empaquetamiento de aplicaciones</h1>
+
+<p>Para proteger los recursos y el código fuente de tu aplicación, puedes optar por empaquetar
+tu aplicación en un paquete <a href="https://github.com/atom/asar">asar</a>.</p>
+
+<h2 id="generando-un-archivo-asar">Generando un archivo <code>asar</code></h2>
+
+<p>Un paquete <a href="https://github.com/atom/asar">asar</a> es un formato sencillo similar a tar, este formato concatena todos los archivos en uno,
+Electron puede leer el contenido sin desempaquetar todos los archivos.</p>
+
+<p>A continuación, los pasos para empaquetar tu aplicación con <code>asar</code>:</p>
+
+<h3 id="1.-instalar-asar">1. Instalar asar</h3>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>npm install -g asar
+</code></pre></div>
+<h3 id="2.-empaquetar-utilizando-asar-pack">2. Empaquetar utilizando <code>asar pack</code></h3>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>asar pack your-app app.asar
+</code></pre></div>
+<h2 id="utilizando-los-paquetes-asar">Utilizando los paquetes <code>asar</code></h2>
+
+<p>En Electron existen dos tipos de APIs: las APIs de Node, proveídas por Node.js,
+y las APIs Web, proveídas por Chromium. Ambas APIs soportan la lecutra de paquetes <code>asar</code>.</p>
+
+<h3 id="api-node">API Node</h3>
+
+<p>Con parches especiales en Electron, las APIs de Node como <code>fs.readFile</code> and <code>require</code>
+tratan los paquetes <code>asar</code> como directorios virtuales, y el contenido es accesible como si se tratara
+de archivos normales en el sistema de archivos.</p>
+
+<p>Por ejemplo, supongamos que tenemos un paquete <code>example.asar</code> bajo <code>/path/to</code>:</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>asar list /path/to/example.asar
+/app.js
+/file.txt
+/dir/module.js
+/static/index.html
+/static/main.css
+/static/jquery.min.js
+</code></pre></div>
+<p>Leer un archivo de nuestro paquete <code>asar</code>:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">);</span>
+<span class="nx">fs</span><span class="p">.</span><span class="nx">readFileSync</span><span class="p">(</span><span class="s1">&#39;/path/to/example.asar/file.txt&#39;</span><span class="p">);</span>
+</code></pre></div>
+<p>Listar todos los archivos de la raíz:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">);</span>
+<span class="nx">fs</span><span class="p">.</span><span class="nx">readdirSync</span><span class="p">(</span><span class="s1">&#39;/path/to/example.asar&#39;</span><span class="p">);</span>
+</code></pre></div>
+<p>Utilizar un módulo que se encuentra dentro del archivo:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;/path/to/example.asar/dir/module.js&#39;</span><span class="p">);</span>
+</code></pre></div>
+<p>También puedes mostrar una página web contenida en un <code>asar</code> utilizando <code>BrowserWindow</code>.</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">BrowserWindow</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;browser-window&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">win</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">BrowserWindow</span><span class="p">({</span><span class="nx">width</span><span class="o">:</span> <span class="mi">800</span><span class="p">,</span> <span class="nx">height</span><span class="o">:</span> <span class="mi">600</span><span class="p">});</span>
+<span class="nx">win</span><span class="p">.</span><span class="nx">loadUrl</span><span class="p">(</span><span class="s1">&#39;file:///path/to/example.asar/static/index.html&#39;</span><span class="p">);</span>
+</code></pre></div>
+<h3 id="api-web">API Web</h3>
+
+<p>En una págin web, los archivos que se encuentran en el paquete son accesibles a través del protocolo <code>file:</code>.
+Al igual que la API Node, los paquetes <code>asar</code> son tratados como directorios.</p>
+
+<p>Por ejemplo, para obtener un archivo con <code>$.get</code>:</p>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;script&gt;</span>
+<span class="kd">var</span> <span class="nx">$</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./jquery.min.js&#39;</span><span class="p">);</span>
+<span class="nx">$</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;file:///path/to/example.asar/file.txt&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+<span class="p">});</span>
+<span class="nt">&lt;/script&gt;</span>
+</code></pre></div>
+<h3 id="utilizando-un-paquete-asar-como-un-archivo-normal">Utilizando un paquete <code>asar</code> como un archivo normal</h3>
+
+<p>En algunas situaciones necesitaremos acceder al paquete <code>asar</code> como archivo, por ejemplo,
+si necesitaramos verificar la integridad del archivo con un checksum.
+Para casos así es posible utilizar el módulo  <code>original-fs</code>, que provee la API <code>fs</code> original:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">originalFs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;original-fs&#39;</span><span class="p">);</span>
+<span class="nx">originalFs</span><span class="p">.</span><span class="nx">readFileSync</span><span class="p">(</span><span class="s1">&#39;/path/to/example.asar&#39;</span><span class="p">);</span>
+</code></pre></div>
+<h2 id="limitaciones-de-la-api-node:">Limitaciones de la API Node:</h2>
+
+<p>A pesar de que hemos intentado que los paquetes  <code>asar</code> funcionen como directorios de la mejor forma posible,
+aún existen limitaciones debido a la naturaleza de bajo nivel de la API Node.</p>
+
+<h3 id="los-paquetes-son-de-sólo-lecutra">Los paquetes son de sólo lecutra</h3>
+
+<p>Los paquetes <code>asar</code> no pueden ser modificados, por lo cual todas las funciones que modifiquen archivos
+no funcionarán.</p>
+
+<h2 id="los-directorios-del-paquete-no-pueden-establecerse-como-working-directories">Los directorios del paquete no pueden establecerse como working directories</h2>
+
+<p>A pesar de que los paquetes <code>asar</code> son manejados virtualmente como directorios,
+estos directorios no existen en el sistema de archivos, por lo cual no es posible establecerlos
+como working directory, el uso de la opción <code>cwd</code> en algunas APIs podría causar errores.</p>
+
+<h3 id="desempaquetamiento-adicional-en-algunas-apis">Desempaquetamiento adicional en algunas APIs</h3>
+
+<p>La mayoría de las APIs <code>fs</code> pueden leer u obtener información sobre un archivo en un paquete <code>asar</code> sin
+la necesidad de desempaquetarlo, pero algunas APIs requieren la ruta real. En estos casos Electron extraerá
+el archivo a una ruta temporal. Esto agrega un overhead a algunas APIs.</p>
+
+<p>Las APIs que requieren el desempaquetamiento adicional son:</p>
+
+<ul>
+<li><code>child_process.execFile</code></li>
+<li><code>fs.open</code></li>
+<li><code>fs.openSync</code></li>
+<li><code>process.dlopen</code> - Utilizado po <code>require</code> en los módulos nativos</li>
+</ul>
+
+<h3 id="información-falsa-en-fs.stat">Información falsa en <code>fs.stat</code></h3>
+
+<p>El objeto <code>Stats</code> retornado por <code>fs.stat</code> y otras funciones relacionadas,
+no es preciso, ya que los archivos del paquete <code>asar</code> no existen el sistema de archivos.
+La utilización del objeto <code>Stats</code> sólo es recomendable para obtener el tamaño del archivo y/o
+comprobar el tipo de archivo.</p>
+
+<h2 id="agregando-archivos-al-paquete-asar">Agregando archivos al paquete <code>asar</code></h2>
+
+<p>Como se menciona arriba, algunas APIs de Node desempaquetarán archivos cuando exista una llamada
+que los referencie, además de los problemas de rendimiento que esto podría ocasionar, también
+podría accionar alertas falsas en software antivirus.</p>
+
+<p>Para lidiar con esto, puedes desempaquetar algunos archivos utilizando la opción <code>--unpack</code>,
+a continuación un ejemplo que excluye las librerías compartidas de los módulos nativos:</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>asar pack app app.asar --unpack *.node
+</code></pre></div>
+<p>Después de ejecutar este comando, además del archivo <code>app.asar</code>, también se creará
+un directorio <code>app.asar.unpacked</code>, que contendrá los archivos desempaquetados.
+Este directorio deberá copiarse junto con el archivo <code>app.asar</code> a la hora de distribuir la aplicación.</p>
+
+
+      </div>
+    </div>
+    
+    <div class='row'>
+      <div class='ten columns release offset-by-one docs-footer'>
+        <span class="octicon octicon-pencil"></span>
+        See something that needs fixing? Propose a change on the <a href='https://github.com/atom/electron/blob/master/docs/tutorial/application-packaging-es.md'>source</a>.
+        <br>
+        <span class="octicon octicon-zap"></span>
+        Need a different version of the docs? See the <a href='/docs'>available versions</a>.
+      </div>
+    </div>
+    
+  </div>
+</section>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class='container'>
+    <div class='row'>
+      <div class='one-half column'>
+        <ul class='inline-list'>
+          <li><a href='https://github.com/atom/electron'>Repository</a></li>
+          <li><a href='/docs/v0.36.5'>Documentation</a></li>
+          <li><a href='/releases.html'>Releases</a></li>
+          <li><a href='http://blog.atom.io'>Blog</a></li>
+          <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+        </ul>
+      </div>
+
+      <div class='one-half column text-right'>
+        <a href='https://github.com' class="no-hover-dec"><span class='octicon octicon-code'></span> with <span class='octicon octicon-heart'></span> by <span class='octicon octicon-logo-github'></span></a>
+      </div>
+  </div>
+</footer>
+
+    <script>
+  var anchorForId = function (id) {
+    var anchor = document.createElement("a");
+    anchor.className = "header-link";
+    anchor.href      = "#" + id;
+    anchor.innerHTML = "<span class='octicon octicon-link'></span>";
+    anchor.title = "Permalink";
+    return anchor;
+  };
+
+  var linkifyAnchors = function (level, containingElement) {
+    var headers = containingElement.getElementsByTagName("h" + level);
+    for (var h = 0; h < headers.length; h++) {
+      var header = headers[h];
+
+      if (typeof header.id !== "undefined" && header.id !== "") {
+        header.appendChild(anchorForId(header.id));
+      }
+    }
+  };
+
+  document.onreadystatechange = function () {
+    if (this.readyState === "complete") {
+      var contentBlock = document.getElementsByClassName("docs")[0] || document.getElementsByClassName("news")[0];
+      if (!contentBlock) {
+        return;
+      }
+      for (var level = 1; level <= 6; level++) {
+        linkifyAnchors(level, contentBlock);
+      }
+    }
+  };
+</script>
+
+  </body>
+
+</html>

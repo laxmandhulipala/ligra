@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+  <title>Quick Start Jp</title>
+  <meta name='description' content='Build cross platform desktop apps with web technologies'>
+
+  <link rel='shortcut icon' href='/images/favicon.ico'/>
+  <link rel='stylesheet' href='/css/normalize.css'>
+  <link rel='stylesheet' href='/css/skeleton.css'>
+  <link rel='stylesheet' href='/css/main.css'>
+  <link rel='stylesheet' href='/css/octicons/octicons.css'>
+  <link rel='stylesheet' href='/css/pygments.css'>
+  <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+  <link rel='canonical' href='/docs/v0.30.0/tutorial/quick-start-jp/'>
+  <link rel='alternate' type='application/rss+xml' title='Electron' href='/feed.xml' />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-3769691-57', 'auto');
+    ga('send', 'pageview');
+  </script>
+</head>
+
+
+  <body>
+
+    <header>
+  <div class='top-bar'>
+    <div class='container'>
+      <div class='row'>
+        <div class='four columns'>
+          <ul class='navigation inline-list'>
+            <li><a href='/#built-on-electron'>Built on Electron</a></li>
+            <li><a href='/#get-started'>Get Started</a></li>
+          </ul>
+        </div>
+        <div class='eight columns text-right'>
+          <ul class='navigation inline-list'>
+            <li><a href='https://github.com/atom/electron'>Repository</a></li>
+            <li><a href='/docs/v0.36.5'>Documentation</a></li>
+            <li><a href='http://blog.atom.io'>Blog</a></li>
+            <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+    <div class='page-content'>
+      <div class='wrapper'>
+        <div class='page-template quick-start-jp'>
+  <section class='jump-to-release is-compact'>
+  <div class='container'>
+    <div class='row'>
+      <div class='twelve columns'>
+      <h1><img class="electron-icon" src='/images/electron-icon.svg'>Electron Documentation</h1>
+      
+      <a href='/docs/v0.30.0/'>v0.30.0  </a> |
+      <a href='https://github.com/atom/electron/blob/master/docs/tutorial/quick-start-jp.md'>Document Source</a>
+      
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class='docs'>
+  <div class='container'>
+    <div class='row'>
+      <div class='ten columns release offset-by-one'>
+        
+        <h6 class='docs-breadcrumb'>v0.30.0 / Tutorial
+           / Quick Start Jp </h6>
+        
+
+        <h1 id="クイックスタート">クイックスタート</h1>
+
+<h2 id="導入">導入</h2>
+
+<p>ElectronではリッチなネイティブAPIを持ったランタイムを提供することによってピュアなJavaScriptでデスクトップアプリケーションをつくることができます。ウェブサーバーの代わりにデスクトップアプリケーションに焦点をあてたio.jsランタイムであるといえばわかりやすいかもしれません。</p>
+
+<p>ElectronはJavaScriptをGUIライブラリにバインディングしません。その代わりに、ElectronはウェブページをGUIとして使用します。なのでElectronはJavaScriptによってコントロールされる最小のChromiumブラウザでもあるともいえます。</p>
+
+<h3 id="メインプロセス">メインプロセス</h3>
+
+<p>Electronでは、<code>package.json</code> の <code>main</code>で実行されるプロセスを <strong>メインプロセス</strong> と呼びます。メインスクリプトではGUIにウェブページを表示することができるプロセスを実行します。</p>
+
+<h3 id="レンダラープロセス">レンダラープロセス</h3>
+
+<p>Electronはウェブページを表示させるためにChromiumを使用しているので、Chromiumのマルチプロセスアーキテクチャが使用されることになります。Electronで実行されるウェブページはそれぞれ自身のプロセスで実行されます。それを <strong>レンダラープロセス</strong> と呼びます。</p>
+
+<p>通常、ブラウザのウェブページはサウンドボックス環境で実行されネイティブなリソースへのアクセスができません。Electronではウェブページからio.jsのAPIを使って、ネイティブリソースへの権限が与えられます。そのおかげでウェブページの中からJavaScriptを使って低レベルなオペレーティングシステムとのインタラクションが可能になります。</p>
+
+<h3 id="メインプロセスとリレンダラープロセスの違い">メインプロセスとリレンダラープロセスの違い</h3>
+
+<p>メインプロセスは <code>BrowserWindow</code> インスタンスを作ることによってウェブページをつくります。それぞれの <code>BrowserWindow</code> インスタンスはそれ自身の リレンダラープロセス上でウェブページを実行します。<code>BrowserWindow</code> インスタンスが破棄されると、対応するリレンダラープロセスも終了されます。</p>
+
+<p>メインプロセスはすべてのウェブページとそれに対応するリレンダラープロセスを管理しています。それぞれのリレンダラープロセスは分離しているのでウェブページで実行されていることだけを気に留めておいてください。</p>
+
+<p>ウェブページでは、GUI関連のAPIを呼ぶことはできません。なぜならば、ウェブページで管理しているネイティブのGUIリソースは非常に危険で簡単にリークしてしまうからです。もしウェブページ内でGUIを操作したい場合には、メインプロセスと通信をする必要があります。</p>
+
+<p>Electronでは、メインプロセスとリレンダラープロセスとのコミュニケーションをするために<a href="http://electron.atom.io/docs/v0.30.0/api/ipc-renderer">ipc</a>モジュールを提供しています。またそれと、RPC形式の通信を行う[remot)モジュールもあります。</p>
+
+<h2 id="electronアプリを作成する">Electronアプリを作成する</h2>
+
+<p>一般的に  Electronアプリの構成は次のようになります：</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">your-app/
+├── package.json
+├── main.js
+└── index.html
+</code></pre></div>
+<p><code>package.json</code>の形式はNodeモジュールとまったく同じです。 <code>main</code>　フィールドでアプリを起動するためのスクリプトを特定し、メインプロセスで実行します。 <code>package.json</code>の例は次のようになります：</p>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span>
+  <span class="nt">&quot;name&quot;</span>    <span class="p">:</span> <span class="s2">&quot;your-app&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;version&quot;</span> <span class="p">:</span> <span class="s2">&quot;0.1.0&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;main&quot;</span>    <span class="p">:</span> <span class="s2">&quot;main.js&quot;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><code>main.js</code> ではウィンドウを作成してシステムイベントを管理します。典型的な例は次のようになります：</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;app&#39;</span><span class="p">);</span>  <span class="c1">// Module to control application life.</span>
+<span class="kd">var</span> <span class="nx">BrowserWindow</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;browser-window&#39;</span><span class="p">);</span>  <span class="c1">// Module to create native browser window.</span>
+
+<span class="c1">// Report crashes to our server.</span>
+<span class="nx">require</span><span class="p">(</span><span class="s1">&#39;crash-reporter&#39;</span><span class="p">).</span><span class="nx">start</span><span class="p">();</span>
+
+<span class="c1">// Keep a global reference of the window object, if you don&#39;t, the window will</span>
+<span class="c1">// be closed automatically when the javascript object is GCed.</span>
+<span class="kd">var</span> <span class="nx">mainWindow</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+<span class="c1">// Quit when all windows are closed.</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;window-all-closed&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">platform</span> <span class="o">!=</span> <span class="s1">&#39;darwin&#39;</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">app</span><span class="p">.</span><span class="nx">quit</span><span class="p">();</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+
+<span class="c1">// This method will be called when Electron has done everything</span>
+<span class="c1">// initialization and ready for creating browser windows.</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;ready&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// Create the browser window.</span>
+  <span class="nx">mainWindow</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">BrowserWindow</span><span class="p">({</span><span class="nx">width</span><span class="o">:</span> <span class="mi">800</span><span class="p">,</span> <span class="nx">height</span><span class="o">:</span> <span class="mi">600</span><span class="p">});</span>
+
+  <span class="c1">// and load the index.html of the app.</span>
+  <span class="nx">mainWindow</span><span class="p">.</span><span class="nx">loadUrl</span><span class="p">(</span><span class="s1">&#39;file://&#39;</span> <span class="o">+</span> <span class="nx">__dirname</span> <span class="o">+</span> <span class="s1">&#39;/index.html&#39;</span><span class="p">);</span>
+
+  <span class="c1">// Open the devtools.</span>
+  <span class="nx">mainWindow</span><span class="p">.</span><span class="nx">openDevTools</span><span class="p">();</span>
+
+  <span class="c1">// Emitted when the window is closed.</span>
+  <span class="nx">mainWindow</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;closed&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// Dereference the window object, usually you would store windows</span>
+    <span class="c1">// in an array if your app supports multi windows, this is the time</span>
+    <span class="c1">// when you should delete the corresponding element.</span>
+    <span class="nx">mainWindow</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</code></pre></div>
+<p>最後に表示するウェブページ<code>index.html</code>は次のようになります：</p>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+  <span class="nt">&lt;head&gt;</span>
+    <span class="nt">&lt;title&gt;</span>Hello World!<span class="nt">&lt;/title&gt;</span>
+  <span class="nt">&lt;/head&gt;</span>
+  <span class="nt">&lt;body&gt;</span>
+    <span class="nt">&lt;h1&gt;</span>Hello World!<span class="nt">&lt;/h1&gt;</span>
+    We are using io.js <span class="nt">&lt;script&gt;</span><span class="nb">document</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">version</span><span class="p">)</span><span class="nt">&lt;/script&gt;</span>
+    and Electron <span class="nt">&lt;script&gt;</span><span class="nb">document</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">versions</span><span class="p">[</span><span class="s1">&#39;electron&#39;</span><span class="p">])</span><span class="nt">&lt;/script&gt;</span>.
+  <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div>
+<h2 id="アプリを実行する">アプリを実行する</h2>
+
+<p>アプリケーションを作り終えたら、<a href="http://electron.atom.io/docs/v0.30.0/tutorial/application-distribution">Application distribution</a>ガイドにしたがってディストリビューションを作成します、そしてパッケージされたアプリケーションとして配布することが可能です。またダウンロードしたElectronのバイナリをアプリケーション・ディレクトリを実行するために利用することもできます。</p>
+
+<p>Windowsの場合：</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>.<span class="se">\e</span>lectron<span class="se">\e</span>lectron.exe your-app<span class="se">\</span>
+</code></pre></div>
+<p>Linuxの場合：</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>./electron/electron your-app/
+</code></pre></div>
+<p>OS Xの場合：</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>./Electron.app/Contents/MacOS/Electron your-app/
+</code></pre></div>
+<p><code>Electron.app</code> はElectronのリリースパッケージに含まれており、<a href="https://github.com/atom/electron/releases">ここ</a> からダウンロードできます。</p>
+
+
+      </div>
+    </div>
+    
+    <div class='row'>
+      <div class='ten columns release offset-by-one docs-footer'>
+        <span class="octicon octicon-pencil"></span>
+        See something that needs fixing? Propose a change on the <a href='https://github.com/atom/electron/blob/master/docs/tutorial/quick-start-jp.md'>source</a>.
+        <br>
+        <span class="octicon octicon-zap"></span>
+        Need a different version of the docs? See the <a href='/docs'>available versions</a>.
+      </div>
+    </div>
+    
+  </div>
+</section>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class='container'>
+    <div class='row'>
+      <div class='one-half column'>
+        <ul class='inline-list'>
+          <li><a href='https://github.com/atom/electron'>Repository</a></li>
+          <li><a href='/docs/v0.36.5'>Documentation</a></li>
+          <li><a href='/releases.html'>Releases</a></li>
+          <li><a href='http://blog.atom.io'>Blog</a></li>
+          <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+        </ul>
+      </div>
+
+      <div class='one-half column text-right'>
+        <a href='https://github.com' class="no-hover-dec"><span class='octicon octicon-code'></span> with <span class='octicon octicon-heart'></span> by <span class='octicon octicon-logo-github'></span></a>
+      </div>
+  </div>
+</footer>
+
+    <script>
+  var anchorForId = function (id) {
+    var anchor = document.createElement("a");
+    anchor.className = "header-link";
+    anchor.href      = "#" + id;
+    anchor.innerHTML = "<span class='octicon octicon-link'></span>";
+    anchor.title = "Permalink";
+    return anchor;
+  };
+
+  var linkifyAnchors = function (level, containingElement) {
+    var headers = containingElement.getElementsByTagName("h" + level);
+    for (var h = 0; h < headers.length; h++) {
+      var header = headers[h];
+
+      if (typeof header.id !== "undefined" && header.id !== "") {
+        header.appendChild(anchorForId(header.id));
+      }
+    }
+  };
+
+  document.onreadystatechange = function () {
+    if (this.readyState === "complete") {
+      var contentBlock = document.getElementsByClassName("docs")[0] || document.getElementsByClassName("news")[0];
+      if (!contentBlock) {
+        return;
+      }
+      for (var level = 1; level <= 6; level++) {
+        linkifyAnchors(level, contentBlock);
+      }
+    }
+  };
+</script>
+
+  </body>
+
+</html>

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+  <title>Application Distribution Ko</title>
+  <meta name='description' content='Build cross platform desktop apps with web technologies'>
+
+  <link rel='shortcut icon' href='/images/favicon.ico'/>
+  <link rel='stylesheet' href='/css/normalize.css'>
+  <link rel='stylesheet' href='/css/skeleton.css'>
+  <link rel='stylesheet' href='/css/main.css'>
+  <link rel='stylesheet' href='/css/octicons/octicons.css'>
+  <link rel='stylesheet' href='/css/pygments.css'>
+  <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+  <link rel='canonical' href='/docs/v0.29.0/tutorial/application-distribution-ko/'>
+  <link rel='alternate' type='application/rss+xml' title='Electron' href='/feed.xml' />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-3769691-57', 'auto');
+    ga('send', 'pageview');
+  </script>
+</head>
+
+
+  <body>
+
+    <header>
+  <div class='top-bar'>
+    <div class='container'>
+      <div class='row'>
+        <div class='four columns'>
+          <ul class='navigation inline-list'>
+            <li><a href='/#built-on-electron'>Built on Electron</a></li>
+            <li><a href='/#get-started'>Get Started</a></li>
+          </ul>
+        </div>
+        <div class='eight columns text-right'>
+          <ul class='navigation inline-list'>
+            <li><a href='https://github.com/atom/electron'>Repository</a></li>
+            <li><a href='/docs/v0.36.5'>Documentation</a></li>
+            <li><a href='http://blog.atom.io'>Blog</a></li>
+            <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+    <div class='page-content'>
+      <div class='wrapper'>
+        <div class='page-template application-distribution-ko'>
+  <section class='jump-to-release is-compact'>
+  <div class='container'>
+    <div class='row'>
+      <div class='twelve columns'>
+      <h1><img class="electron-icon" src='/images/electron-icon.svg'>Electron Documentation</h1>
+      
+      <a href='/docs/v0.29.0/'>v0.29.0  </a> |
+      <a href='https://github.com/atom/electron/blob/master/docs/tutorial/application-distribution-ko.md'>Document Source</a>
+      
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class='docs'>
+  <div class='container'>
+    <div class='row'>
+      <div class='ten columns release offset-by-one'>
+        
+        <h6 class='docs-breadcrumb'>v0.29.0 / Tutorial
+           / Application Distribution Ko </h6>
+        
+
+        <h1 id="어플리케이션-배포">어플리케이션 배포</h1>
+
+<p>Electron 어플리케이션을 배포할 때는 어플리케이션 폴더의 이름을 <code>app</code>으로 지정한 후 Electron 실행파일의 리소스 디렉터리에 집어넣어야합니다.
+리소스 디렉터리는 OS X에선 <code>Electron.app/Contents/Resources/</code> Windows와 Linux에선 <code>resources/</code> 입니다.</p>
+
+<p>예제:</p>
+
+<p>OS X의 경우:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">electron/Electron.app/Contents/Resources/app/
+├── package.json
+├── main.js
+└── index.html
+</code></pre></div>
+<p>Windows 와 Linux의 경우:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">electron/resources/app
+├── package.json
+├── main.js
+└── index.html
+</code></pre></div>
+<p>그리고 <code>Electron.app</code>을 실행하면 (Linux에선 <code>electron</code> Windows에선 <code>electron.exe</code>입니다), Electron은 해당 앱을 실행시킵니다.
+최종 사용자에게는 이 <code>electron</code> 폴더(Electron.app)를 배포하면 됩니다.</p>
+
+<h2 id="asar로-앱-패키징-하기">asar로 앱 패키징 하기</h2>
+
+<p>소스파일 전체를 복사해서 배포하는 것과는 별개로, <a href="https://github.com/atom/asar">asar</a> 아카이브를 통해
+어플리케이션의 소스코드가 사용자에게 노출되는 것을 방지할 수 있습니다.</p>
+
+<p><code>asar</code> 아카이브를 사용할 땐 단순히 <code>app</code> 폴더 대신에 어플리케이션을 패키징한 <code>app.asar</code> 파일로 대체하면됩니다.
+이렇게 하면 Electron은 아카이브를 <code>app</code>폴더 대신 asar 아카이브를 기반으로 어플리케이션을 실행합니다.</p>
+
+<p>OS X의 경우:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">electron/Electron.app/Contents/Resources/
+└── app.asar
+</code></pre></div>
+<p>Windows 와 Linux의 경우:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">electron/resources/
+└── app.asar
+</code></pre></div>
+<p>자세한 내용은 <a href="http://electron.atom.io/docs/v0.29.0/tutorial/application-packaging">어플리케이션 패키징</a>에서 찾아볼 수 있습니다.</p>
+
+<h2 id="다운로드한-바이너리의-리소스를-앱에-맞게-수정하기">다운로드한 바이너리의 리소스를 앱에 맞게 수정하기</h2>
+
+<p>어플리케이션을 Electron에 번들링한 후, 해당 어플리케이션에 맞게 리브랜딩 할 수 있습니다.</p>
+
+<h3 id="windows">Windows</h3>
+
+<p><code>electron.exe</code>을 원하는 이름으로 변경할 수 있습니다.
+그리고 <a href="https://github.com/atom/rcedit">rcedit</a> 또는 <a href="http://www.resedit.net">ResEdit</a>를 사용하여 아이콘을 변경할 수 있습니다.</p>
+
+<h3 id="os-x">OS X</h3>
+
+<p><code>Electron.app</code>을 원하는 이름으로 변경할 수 있습니다. 그리고 다음 표시된 어플리케이션 내부 파일에서 
+<code>CFBundleDisplayName</code>, <code>CFBundleIdentifier</code> and <code>CFBundleName</code> 필드를 원하는 이름으로 변경해야합니다:</p>
+
+<ul>
+<li><code>Electron.app/Contents/Info.plist</code></li>
+<li><code>Electron.app/Contents/Frameworks/Electron Helper.app/Contents/Info.plist</code></li>
+</ul>
+
+<p>또한 helper 앱이 프로세스 모니터에 <code>Electron Helper</code>로 나오지 않도록 이름을 변경할 수 있습니다.
+하지만 반드시 내부 및 모든 helper 앱의 이름을 변경해야 합니다.</p>
+
+<p>어플리케이션 아이콘은 <code>Electron.app/Contents/Resources/atom.icns</code>을 원하는 아이콘으로 변경하면 됩니다.</p>
+
+<p>원하는 이름으로 바꾼 어플리케이션 예제:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">MyApp.app/Contents
+├── Info.plist
+├── MacOS/
+│   └── MyApp
+└── Frameworks/
+    ├── MyApp Helper EH.app
+    |   ├── Info.plist
+    |   └── MacOS/
+    |       └── MyApp Helper EH
+    ├── MyApp Helper NP.app
+    |   ├── Info.plist
+    |   └── MacOS/
+    |       └── MyApp Helper NP
+    └── MyApp Helper.app
+        ├── Info.plist
+        └── MacOS/
+            └── MyApp Helper
+</code></pre></div>
+<h3 id="linux">Linux</h3>
+
+<p>실행파일 <code>electron</code>의 이름을 원하는 대로 바꿀 수 있습니다.
+리눅스 어플리케이션의 아이콘은 <a href="https://developer.gnome.org/integration-guide/stable/desktop-files.html.en">.desktop file</a>을 사용하여 지정할 수 있습니다.</p>
+
+<h3 id="역자주-자동화">역자주-자동화</h3>
+
+<p>일일이 Electron의 리소스를 수정하는 것은 상당히 귀찮고 복잡합니다.
+하지만 이 작업을 자동화 시킬 수 있는 몇가지 방법이 있습니다: </p>
+
+<ul>
+<li><a href="https://github.com/loopline-systems/electron-builder">electron-builder</a></li>
+<li><a href="https://github.com/maxogden/electron-packager">electron-packager</a></li>
+</ul>
+
+<h2 id="electron-소스코드를-다시-빌드하여-리소스-수정하기">Electron 소스코드를 다시 빌드하여 리소스 수정하기</h2>
+
+<p>또한 Electron 소스코드를 다시 빌드할 때 어플리케이션 이름을 변경할 수 있습니다.
+<code>GYP_DEFINES</code> 환경변수를 사용하여 다음과 같이 다시 빌드할 수 있습니다:</p>
+
+<p><strong>Windows</strong></p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; <span class="nb">set</span> <span class="s2">&quot;GYP_DEFINES=project_name=myapp product_name=MyApp&quot;</span>
+&gt; python script<span class="se">\c</span>lean.py
+&gt; python script<span class="se">\b</span>ootstrap.py
+&gt; python script<span class="se">\b</span>uild.py -c R -t myapp
+</code></pre></div>
+<p><strong>Bash</strong></p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span><span class="nb">export </span><span class="nv">GYP_DEFINES</span><span class="o">=</span><span class="s2">&quot;project_name=myapp product_name=MyApp&quot;</span>
+<span class="nv">$ </span>script/clean.py
+<span class="nv">$ </span>script/bootstrap.py
+<span class="nv">$ </span>script/build.py -c Release -t myapp
+</code></pre></div>
+<h3 id="grunt-build-atom-shell">grunt-build-atom-shell</h3>
+
+<p>Electron의 소스코드를 수정하고 다시 빌드하는 작업은 상당히 복잡합니다.
+이를 해결하기 위해 <a href="https://github.com/paulcbetts/grunt-build-atom-shell">grunt-build-atom-shell</a>를 사용하여 빌드를 자동화 시킬 수 있습니다.</p>
+
+<p>이 툴을 사용하면 자동적으로 <code>.gyp</code>파일을 수정하고 다시 빌드합니다. 그리고 어플리케이션의 네이티브 Node 모듈 또한 새로운 실행파일 이름으로 매치 시킵니다.</p>
+
+
+      </div>
+    </div>
+    
+    <div class='row'>
+      <div class='ten columns release offset-by-one docs-footer'>
+        <span class="octicon octicon-pencil"></span>
+        See something that needs fixing? Propose a change on the <a href='https://github.com/atom/electron/blob/master/docs/tutorial/application-distribution-ko.md'>source</a>.
+        <br>
+        <span class="octicon octicon-zap"></span>
+        Need a different version of the docs? See the <a href='/docs'>available versions</a>.
+      </div>
+    </div>
+    
+  </div>
+</section>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class='container'>
+    <div class='row'>
+      <div class='one-half column'>
+        <ul class='inline-list'>
+          <li><a href='https://github.com/atom/electron'>Repository</a></li>
+          <li><a href='/docs/v0.36.5'>Documentation</a></li>
+          <li><a href='/releases.html'>Releases</a></li>
+          <li><a href='http://blog.atom.io'>Blog</a></li>
+          <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+        </ul>
+      </div>
+
+      <div class='one-half column text-right'>
+        <a href='https://github.com' class="no-hover-dec"><span class='octicon octicon-code'></span> with <span class='octicon octicon-heart'></span> by <span class='octicon octicon-logo-github'></span></a>
+      </div>
+  </div>
+</footer>
+
+    <script>
+  var anchorForId = function (id) {
+    var anchor = document.createElement("a");
+    anchor.className = "header-link";
+    anchor.href      = "#" + id;
+    anchor.innerHTML = "<span class='octicon octicon-link'></span>";
+    anchor.title = "Permalink";
+    return anchor;
+  };
+
+  var linkifyAnchors = function (level, containingElement) {
+    var headers = containingElement.getElementsByTagName("h" + level);
+    for (var h = 0; h < headers.length; h++) {
+      var header = headers[h];
+
+      if (typeof header.id !== "undefined" && header.id !== "") {
+        header.appendChild(anchorForId(header.id));
+      }
+    }
+  };
+
+  document.onreadystatechange = function () {
+    if (this.readyState === "complete") {
+      var contentBlock = document.getElementsByClassName("docs")[0] || document.getElementsByClassName("news")[0];
+      if (!contentBlock) {
+        return;
+      }
+      for (var level = 1; level <= 6; level++) {
+        linkifyAnchors(level, contentBlock);
+      }
+    }
+  };
+</script>
+
+  </body>
+
+</html>

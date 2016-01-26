@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+  <title>Devtools Extension Ko</title>
+  <meta name='description' content='Build cross platform desktop apps with web technologies'>
+
+  <link rel='shortcut icon' href='/images/favicon.ico'/>
+  <link rel='stylesheet' href='/css/normalize.css'>
+  <link rel='stylesheet' href='/css/skeleton.css'>
+  <link rel='stylesheet' href='/css/main.css'>
+  <link rel='stylesheet' href='/css/octicons/octicons.css'>
+  <link rel='stylesheet' href='/css/pygments.css'>
+  <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+  <link rel='canonical' href='/docs/v0.30.0/tutorial/devtools-extension-ko/'>
+  <link rel='alternate' type='application/rss+xml' title='Electron' href='/feed.xml' />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-3769691-57', 'auto');
+    ga('send', 'pageview');
+  </script>
+</head>
+
+
+  <body>
+
+    <header>
+  <div class='top-bar'>
+    <div class='container'>
+      <div class='row'>
+        <div class='four columns'>
+          <ul class='navigation inline-list'>
+            <li><a href='/#built-on-electron'>Built on Electron</a></li>
+            <li><a href='/#get-started'>Get Started</a></li>
+          </ul>
+        </div>
+        <div class='eight columns text-right'>
+          <ul class='navigation inline-list'>
+            <li><a href='https://github.com/atom/electron'>Repository</a></li>
+            <li><a href='/docs/v0.36.5'>Documentation</a></li>
+            <li><a href='http://blog.atom.io'>Blog</a></li>
+            <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+    <div class='page-content'>
+      <div class='wrapper'>
+        <div class='page-template devtools-extension-ko'>
+  <section class='jump-to-release is-compact'>
+  <div class='container'>
+    <div class='row'>
+      <div class='twelve columns'>
+      <h1><img class="electron-icon" src='/images/electron-icon.svg'>Electron Documentation</h1>
+      
+      <a href='/docs/v0.30.0/'>v0.30.0  </a> |
+      <a href='https://github.com/atom/electron/blob/master/docs/tutorial/devtools-extension-ko.md'>Document Source</a>
+      
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class='docs'>
+  <div class='container'>
+    <div class='row'>
+      <div class='ten columns release offset-by-one'>
+        
+        <h6 class='docs-breadcrumb'>v0.30.0 / Tutorial
+           / Devtools Extension Ko </h6>
+        
+
+        <h1 id="개발자-콘솔-확장">개발자 콘솔 확장</h1>
+
+<p>어플리케이션의 디버깅을 쉽게 하기 위해 Electron은 기본적으로 <a href="https://developer.chrome.com/extensions/devtools">Chrome DevTools Extension</a>을 지원합니다.</p>
+
+<p>개발자 콘솔 확장기능은 간단하게 사용할 확장기능 플러그인의 소스코드를 다운로드한 후 <code>BrowserWindow.addDevToolsExtension</code> API를 이용하여
+어플리케이션 내에 로드할 수 있습니다. 한가지 주의할 점은 확장기능 사용시 창이 생성될 때 마다 일일이 해당 API를 호출할 필요는 없습니다.</p>
+
+<p>예시로 <a href="https://github.com/facebook/react-devtools">React DevTools Extension</a>을 사용 한다면 먼저 소스코드를 다운로드 받고:</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span><span class="nb">cd</span> /some-directory
+<span class="nv">$ </span>git clone --recursive https://github.com/facebook/react-devtools.git
+</code></pre></div>
+<p>그리고 개발자 콘솔이 열린 창에서 다음의 코드를 콘솔에 입력하면 확장기능을 로드할 수 있습니다:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;remote&#39;</span><span class="p">).</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;browser-window&#39;</span><span class="p">).</span><span class="nx">addDevToolsExtension</span><span class="p">(</span><span class="s1">&#39;/some-directory/react-devtools&#39;</span><span class="p">);</span>
+</code></pre></div>
+<p>확장기능을 unload 하려면 <code>BrowserWindow.removeDevToolsExtension</code> API를 사용하여 다음에 콘솔을 다시 열 때 해당 확장기능이 로드되지 않도록 할 수 있습니다:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;remote&#39;</span><span class="p">).</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;browser-window&#39;</span><span class="p">).</span><span class="nx">removeDevToolsExtension</span><span class="p">(</span><span class="s1">&#39;React Developer Tools&#39;</span><span class="p">);</span>
+</code></pre></div>
+<h2 id="개발자-콘솔-확장기능의-구성-형식">개발자 콘솔 확장기능의 구성 형식</h2>
+
+<p>완벽하게 모든 개발자 콘솔 확장은 Chrome 브라우저를 위해 작성되었기 때문에 Electron에서도 로드할 수 있습니다.
+하지만 반드시 확장기능은 소스코드 그대로의 디렉터리(폴더) 형태여야 합니다. 그래서 <code>crx</code> 등의 포맷으로 패키징된 확장기능의 경우
+사용자가 직접 해당 패키지의 압축을 풀어서 로드하지 않는 이상은 Electron에서 해당 확장기능의 압축을 풀 방법이 없습니다.</p>
+
+<h2 id="백그라운드-페이지">백그라운드 페이지</h2>
+
+<p>현재 Electron은 Chrome에서 지원하는 백그라운드 페이지(background pages)를 지원하지 않습니다.
+몇몇 확장기능은 이 기능에 의존하는 경우가 있는데 이 경우 해당 확장기능은 Electron에서 작동하지 않을 수 있습니다.</p>
+
+<h2 id="chrome.*-api"><code>chrome.*</code> API</h2>
+
+<p>몇몇 Chrome 확장기능은 특정 기능을 사용하기 위해 <code>chrome.*</code> API를 사용하는데, Electron에선 이 API들을 구현하기 위해 노력했지만 안타깝게도 아직 모든 API가 구현되지는 않았습니다.</p>
+
+<p>아직 모든 API가 구현되지 않았기 때문에 확장기능에서 <code>chrome.devtools.*</code> 대신 <code>chrome.*</code> API를 사용할 경우 확장기능이 제대로 작동하지 않을 수 있음을 감안해야 합니다.
+만약 문제가 발생할 경우 Electron의 GitHub repo에 이슈를 올리면 해당 API를 추가하는데 많은 도움이 됩니다.</p>
+
+
+      </div>
+    </div>
+    
+    <div class='row'>
+      <div class='ten columns release offset-by-one docs-footer'>
+        <span class="octicon octicon-pencil"></span>
+        See something that needs fixing? Propose a change on the <a href='https://github.com/atom/electron/blob/master/docs/tutorial/devtools-extension-ko.md'>source</a>.
+        <br>
+        <span class="octicon octicon-zap"></span>
+        Need a different version of the docs? See the <a href='/docs'>available versions</a>.
+      </div>
+    </div>
+    
+  </div>
+</section>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class='container'>
+    <div class='row'>
+      <div class='one-half column'>
+        <ul class='inline-list'>
+          <li><a href='https://github.com/atom/electron'>Repository</a></li>
+          <li><a href='/docs/v0.36.5'>Documentation</a></li>
+          <li><a href='/releases.html'>Releases</a></li>
+          <li><a href='http://blog.atom.io'>Blog</a></li>
+          <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+        </ul>
+      </div>
+
+      <div class='one-half column text-right'>
+        <a href='https://github.com' class="no-hover-dec"><span class='octicon octicon-code'></span> with <span class='octicon octicon-heart'></span> by <span class='octicon octicon-logo-github'></span></a>
+      </div>
+  </div>
+</footer>
+
+    <script>
+  var anchorForId = function (id) {
+    var anchor = document.createElement("a");
+    anchor.className = "header-link";
+    anchor.href      = "#" + id;
+    anchor.innerHTML = "<span class='octicon octicon-link'></span>";
+    anchor.title = "Permalink";
+    return anchor;
+  };
+
+  var linkifyAnchors = function (level, containingElement) {
+    var headers = containingElement.getElementsByTagName("h" + level);
+    for (var h = 0; h < headers.length; h++) {
+      var header = headers[h];
+
+      if (typeof header.id !== "undefined" && header.id !== "") {
+        header.appendChild(anchorForId(header.id));
+      }
+    }
+  };
+
+  document.onreadystatechange = function () {
+    if (this.readyState === "complete") {
+      var contentBlock = document.getElementsByClassName("docs")[0] || document.getElementsByClassName("news")[0];
+      if (!contentBlock) {
+        return;
+      }
+      for (var level = 1; level <= 6; level++) {
+        linkifyAnchors(level, contentBlock);
+      }
+    }
+  };
+</script>
+
+  </body>
+
+</html>

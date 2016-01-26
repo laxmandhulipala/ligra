@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+  <title>Web View Tag Ko</title>
+  <meta name='description' content='Build cross platform desktop apps with web technologies'>
+
+  <link rel='shortcut icon' href='/images/favicon.ico'/>
+  <link rel='stylesheet' href='/css/normalize.css'>
+  <link rel='stylesheet' href='/css/skeleton.css'>
+  <link rel='stylesheet' href='/css/main.css'>
+  <link rel='stylesheet' href='/css/octicons/octicons.css'>
+  <link rel='stylesheet' href='/css/pygments.css'>
+  <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+  <link rel='canonical' href='/docs/v0.29.0/api/web-view-tag-ko/'>
+  <link rel='alternate' type='application/rss+xml' title='Electron' href='/feed.xml' />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-3769691-57', 'auto');
+    ga('send', 'pageview');
+  </script>
+</head>
+
+
+  <body>
+
+    <header>
+  <div class='top-bar'>
+    <div class='container'>
+      <div class='row'>
+        <div class='four columns'>
+          <ul class='navigation inline-list'>
+            <li><a href='/#built-on-electron'>Built on Electron</a></li>
+            <li><a href='/#get-started'>Get Started</a></li>
+          </ul>
+        </div>
+        <div class='eight columns text-right'>
+          <ul class='navigation inline-list'>
+            <li><a href='https://github.com/atom/electron'>Repository</a></li>
+            <li><a href='/docs/v0.36.5'>Documentation</a></li>
+            <li><a href='http://blog.atom.io'>Blog</a></li>
+            <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+    <div class='page-content'>
+      <div class='wrapper'>
+        <div class='page-template web-view-tag-ko'>
+  <section class='jump-to-release is-compact'>
+  <div class='container'>
+    <div class='row'>
+      <div class='twelve columns'>
+      <h1><img class="electron-icon" src='/images/electron-icon.svg'>Electron Documentation</h1>
+      
+      <a href='/docs/v0.29.0/'>v0.29.0  </a> |
+      <a href='https://github.com/atom/electron/blob/master/docs/api/web-view-tag-ko.md'>Document Source</a>
+      
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class='docs'>
+  <div class='container'>
+    <div class='row'>
+      <div class='ten columns release offset-by-one'>
+        
+        <h6 class='docs-breadcrumb'>v0.29.0 / API
+           / Web View Tag Ko </h6>
+        
+
+        <h1 id="&lt;webview&gt;-�±�"><code>&lt;webview&gt;</code> �±�</h1>
+
+<p>Use the <code>webview</code> tag to embed &#39;guest&#39; content (such as web pages) in your
+Electron app. The guest content is contained within the <code>webview</code> container;
+an embedder page within your app controls how the guest content is laid out and
+rendered.</p>
+
+<p>Different from the <code>iframe</code>, the <code>webview</code> runs in a separate process than your
+app; it doesn&#39;t have the same permissions as your web page and all interactions
+between your app and embedded content will be asynchronous. This keeps your app
+safe from the embedded content.</p>
+
+<h2 id="����">����</h2>
+
+<p>To embed a web page in your app, add the <code>webview</code> tag to your app&#39;s embedder
+page (this is the app page that will display the guest content). In its simplest
+form, the <code>webview</code> tag includes the <code>src</code> of the web page and css styles that
+control the appearance of the <code>webview</code> container:</p>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;webview</span> <span class="na">id=</span><span class="s">&quot;foo&quot;</span> <span class="na">src=</span><span class="s">&quot;https://www.github.com/&quot;</span> <span class="na">style=</span><span class="s">&quot;display:inline-block; width:640px; height:480px&quot;</span><span class="nt">&gt;&lt;/webview&gt;</span>
+</code></pre></div>
+<p>If you want to control the guest content in any way, you can write JavaScript
+that listens for <code>webview</code> events and responds to those events using the
+<code>webview</code> methods. Here&#39;s sample code with two event listeners: one that listens
+for the web page to start loading, the other for the web page to stop loading,
+and displays a &quot;loading...&quot; message during the load time:</p>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;script&gt;</span>
+  <span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">webview</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">indicator</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s2">&quot;.indicator&quot;</span><span class="p">);</span>
+
+    <span class="kd">var</span> <span class="nx">loadstart</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="nx">indicator</span><span class="p">.</span><span class="nx">innerText</span> <span class="o">=</span> <span class="s2">&quot;loading...&quot;</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kd">var</span> <span class="nx">loadstop</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="nx">indicator</span><span class="p">.</span><span class="nx">innerText</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="nx">webview</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">&quot;did-start-loading&quot;</span><span class="p">,</span> <span class="nx">loadstart</span><span class="p">);</span>
+    <span class="nx">webview</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">&quot;did-stop-loading&quot;</span><span class="p">,</span> <span class="nx">loadstop</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="nt">&lt;/script&gt;</span>
+</code></pre></div>
+<h2 id="�±�-�Ӽ�">�±� �Ӽ�</h2>
+
+<h3 id="src">src</h3>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;webview</span> <span class="na">src=</span><span class="s">&quot;https://www.github.com/&quot;</span><span class="nt">&gt;&lt;/webview&gt;</span>
+</code></pre></div>
+<p>Returns the visible URL. Writing to this attribute initiates top-level
+navigation.</p>
+
+<p>Assigning <code>src</code> its own value will reload the current page.</p>
+
+<p>The <code>src</code> attribute can also accept data URLs, such as
+<code>data:text/plain,Hello, world!</code>.</p>
+
+<h3 id="autosize">autosize</h3>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;webview</span> <span class="na">src=</span><span class="s">&quot;https://www.github.com/&quot;</span> <span class="na">autosize=</span><span class="s">&quot;on&quot;</span> <span class="na">minwidth=</span><span class="s">&quot;576&quot;</span> <span class="na">minheight=</span><span class="s">&quot;432&quot;</span><span class="nt">&gt;&lt;/webview&gt;</span>
+</code></pre></div>
+<p>If &quot;on&quot;, the <code>webview</code> container will automatically resize within the
+bounds specified by the attributes <code>minwidth</code>, <code>minheight</code>, <code>maxwidth</code>, and
+<code>maxheight</code>. These contraints do not impact the <code>webview</code> UNLESS <code>autosize</code> is
+enabled. When <code>autosize</code> is enabled, the <code>webview</code> container size cannot be less
+than the minimum values or greater than the maximum.</p>
+
+<h3 id="nodeintegration">nodeintegration</h3>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;webview</span> <span class="na">src=</span><span class="s">&quot;http://www.google.com/&quot;</span> <span class="na">nodeintegration</span><span class="nt">&gt;&lt;/webview&gt;</span>
+</code></pre></div>
+<p>If &quot;on&quot;, the guest page in <code>webview</code> will have node integration and can use node
+APIs like <code>require</code> and <code>process</code> to access low level system resources.</p>
+
+<h3 id="plugins">plugins</h3>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;webview</span> <span class="na">src=</span><span class="s">&quot;https://www.github.com/&quot;</span> <span class="na">plugins</span><span class="nt">&gt;&lt;/webview&gt;</span>
+</code></pre></div>
+<p>If &quot;on&quot;, the guest page in <code>webview</code> will be able to use browser plugins.</p>
+
+<h3 id="preload">preload</h3>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;webview</span> <span class="na">src=</span><span class="s">&quot;https://www.github.com/&quot;</span> <span class="na">preload=</span><span class="s">&quot;./test.js&quot;</span><span class="nt">&gt;&lt;/webview&gt;</span>
+</code></pre></div>
+<p>Specifies a script that will be loaded before other scripts run in the guest
+page. The protocol of script&#39;s URL must be either <code>file:</code> or <code>asar:</code>, because it
+will be loaded by <code>require</code> in guest page under the hood.</p>
+
+<p>When the guest page doesn&#39;t have node integration this script will still have
+access to all Node APIs, but global objects injected by Node will be deleted
+after this script has done execution.</p>
+
+<h3 id="httpreferrer">httpreferrer</h3>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;webview</span> <span class="na">src=</span><span class="s">&quot;https://www.github.com/&quot;</span> <span class="na">httpreferrer=</span><span class="s">&quot;http://cheng.guru&quot;</span><span class="nt">&gt;&lt;/webview&gt;</span>
+</code></pre></div>
+<p>Sets the referrer URL for the guest page.</p>
+
+<h3 id="useragent">useragent</h3>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;webview</span> <span class="na">src=</span><span class="s">&quot;https://www.github.com/&quot;</span> <span class="na">useragent=</span><span class="s">&quot;Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; AS; rv:11.0) like Gecko&quot;</span><span class="nt">&gt;&lt;/webview&gt;</span>
+</code></pre></div>
+<p>Sets the user agent for the guest page before the page is navigated to. Once the page is loaded, use the <code>setUserAgent</code> method to change the user agent.</p>
+
+<h3 id="disablewebsecurity">disablewebsecurity</h3>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;webview</span> <span class="na">src=</span><span class="s">&quot;https://www.github.com/&quot;</span> <span class="na">disablewebsecurity</span><span class="nt">&gt;&lt;/webview&gt;</span>
+</code></pre></div>
+<p>If &quot;on&quot;, the guest page will have web security disabled.</p>
+
+<h2 id="api">API</h2>
+
+<p>The webview element must be loaded before using the methods.<br>
+<strong>Example</strong>
+<code>javascript
+webview.addEventListener(&quot;dom-ready&quot;, function(){
+  webview.openDevTools();
+});
+</code></p>
+
+<h3 id="&lt;webview&gt;.geturl()"><code>&lt;webview&gt;</code>.getUrl()</h3>
+
+<p>Returns URL of guest page.</p>
+
+<h3 id="&lt;webview&gt;.gettitle()"><code>&lt;webview&gt;</code>.getTitle()</h3>
+
+<p>Returns the title of guest page.</p>
+
+<h3 id="&lt;webview&gt;.isloading()"><code>&lt;webview&gt;</code>.isLoading()</h3>
+
+<p>Returns whether guest page is still loading resources.</p>
+
+<h3 id="&lt;webview&gt;.iswaitingforresponse()"><code>&lt;webview&gt;</code>.isWaitingForResponse()</h3>
+
+<p>Returns whether guest page is waiting for a first-response for the main resource
+of the page.</p>
+
+<h3 id="&lt;webview&gt;.stop()"><code>&lt;webview&gt;</code>.stop()</h3>
+
+<p>Stops any pending navigation.</p>
+
+<h3 id="&lt;webview&gt;.reload()"><code>&lt;webview&gt;</code>.reload()</h3>
+
+<p>Reloads guest page.</p>
+
+<h3 id="&lt;webview&gt;.reloadignoringcache()"><code>&lt;webview&gt;</code>.reloadIgnoringCache()</h3>
+
+<p>Reloads guest page and ignores cache.</p>
+
+<h3 id="&lt;webview&gt;.cangoback()"><code>&lt;webview&gt;</code>.canGoBack()</h3>
+
+<p>Returns whether guest page can go back.</p>
+
+<h3 id="&lt;webview&gt;.cangoforward()"><code>&lt;webview&gt;</code>.canGoForward()</h3>
+
+<p>Returns whether guest page can go forward.</p>
+
+<h3 id="&lt;webview&gt;.cangotooffset(offset)"><code>&lt;webview&gt;</code>.canGoToOffset(offset)</h3>
+
+<ul>
+<li><code>offset</code> Integer</li>
+</ul>
+
+<p>Returns whether guest page can go to <code>offset</code>.</p>
+
+<h3 id="&lt;webview&gt;.clearhistory()"><code>&lt;webview&gt;</code>.clearHistory()</h3>
+
+<p>Clears the navigation history.</p>
+
+<h3 id="&lt;webview&gt;.goback()"><code>&lt;webview&gt;</code>.goBack()</h3>
+
+<p>Makes guest page go back.</p>
+
+<h3 id="&lt;webview&gt;.goforward()"><code>&lt;webview&gt;</code>.goForward()</h3>
+
+<p>Makes guest page go forward.</p>
+
+<h3 id="&lt;webview&gt;.gotoindex(index)"><code>&lt;webview&gt;</code>.goToIndex(index)</h3>
+
+<ul>
+<li><code>index</code> Integer</li>
+</ul>
+
+<p>Navigates to the specified absolute index.</p>
+
+<h3 id="&lt;webview&gt;.gotooffset(offset)"><code>&lt;webview&gt;</code>.goToOffset(offset)</h3>
+
+<ul>
+<li><code>offset</code> Integer</li>
+</ul>
+
+<p>Navigates to the specified offset from the &quot;current entry&quot;.</p>
+
+<h3 id="&lt;webview&gt;.iscrashed()"><code>&lt;webview&gt;</code>.isCrashed()</h3>
+
+<p>Whether the renderer process has crashed.</p>
+
+<h3 id="&lt;webview&gt;.setuseragent(useragent)"><code>&lt;webview&gt;</code>.setUserAgent(userAgent)</h3>
+
+<ul>
+<li><code>userAgent</code> String</li>
+</ul>
+
+<p>Overrides the user agent for guest page.</p>
+
+<h3 id="&lt;webview&gt;.insertcss(css)"><code>&lt;webview&gt;</code>.insertCSS(css)</h3>
+
+<ul>
+<li><code>css</code> String</li>
+</ul>
+
+<p>Injects CSS into guest page.</p>
+
+<h3 id="&lt;webview&gt;.executejavascript(code)"><code>&lt;webview&gt;</code>.executeJavaScript(code)</h3>
+
+<ul>
+<li><code>code</code> String</li>
+</ul>
+
+<p>Evaluates <code>code</code> in guest page.</p>
+
+<h3 id="&lt;webview&gt;.opendevtools()"><code>&lt;webview&gt;</code>.openDevTools()</h3>
+
+<p>Opens a devtools window for guest page.</p>
+
+<h3 id="&lt;webview&gt;.closedevtools()"><code>&lt;webview&gt;</code>.closeDevTools()</h3>
+
+<p>Closes the devtools window of guest page.</p>
+
+<h3 id="&lt;webview&gt;.isdevtoolsopened()"><code>&lt;webview&gt;</code>.isDevToolsOpened()</h3>
+
+<p>Returns whether guest page has a devtools window attached.</p>
+
+<h3 id="&lt;webview&gt;.inspectelement(x,-y)"><code>&lt;webview&gt;</code>.inspectElement(x, y)</h3>
+
+<ul>
+<li><code>x</code> Integer</li>
+<li><code>y</code> Integer</li>
+</ul>
+
+<p>Starts inspecting element at position (<code>x</code>, <code>y</code>) of guest page.</p>
+
+<h3 id="&lt;webview&gt;.inspectserviceworker()"><code>&lt;webview&gt;</code>.inspectServiceWorker()</h3>
+
+<p>Opens the devtools for the service worker context present in the guest page.</p>
+
+<h3 id="&lt;webview&gt;.undo()"><code>&lt;webview&gt;</code>.undo()</h3>
+
+<p>Executes editing command <code>undo</code> in page.</p>
+
+<h3 id="&lt;webview&gt;.redo()"><code>&lt;webview&gt;</code>.redo()</h3>
+
+<p>Executes editing command <code>redo</code> in page.</p>
+
+<h3 id="&lt;webview&gt;.cut()"><code>&lt;webview&gt;</code>.cut()</h3>
+
+<p>Executes editing command <code>cut</code> in page.</p>
+
+<h3 id="&lt;webview&gt;.copy()"><code>&lt;webview&gt;</code>.copy()</h3>
+
+<p>Executes editing command <code>copy</code> in page.</p>
+
+<h3 id="&lt;webview&gt;.paste()"><code>&lt;webview&gt;</code>.paste()</h3>
+
+<p>Executes editing command <code>paste</code> in page.</p>
+
+<h3 id="&lt;webview&gt;.pasteandmatchstyle()"><code>&lt;webview&gt;</code>.pasteAndMatchStyle()</h3>
+
+<p>Executes editing command <code>pasteAndMatchStyle</code> in page.</p>
+
+<h3 id="&lt;webview&gt;.delete()"><code>&lt;webview&gt;</code>.delete()</h3>
+
+<p>Executes editing command <code>delete</code> in page.</p>
+
+<h3 id="&lt;webview&gt;.selectall()"><code>&lt;webview&gt;</code>.selectAll()</h3>
+
+<p>Executes editing command <code>selectAll</code> in page.</p>
+
+<h3 id="&lt;webview&gt;.unselect()"><code>&lt;webview&gt;</code>.unselect()</h3>
+
+<p>Executes editing command <code>unselect</code> in page.</p>
+
+<h3 id="&lt;webview&gt;.replace(text)"><code>&lt;webview&gt;</code>.replace(text)</h3>
+
+<ul>
+<li><code>text</code> String</li>
+</ul>
+
+<p>Executes editing command <code>replace</code> in page.</p>
+
+<h3 id="&lt;webview&gt;.replacemisspelling(text)"><code>&lt;webview&gt;</code>.replaceMisspelling(text)</h3>
+
+<ul>
+<li><code>text</code> String</li>
+</ul>
+
+<p>Executes editing command <code>replaceMisspelling</code> in page.</p>
+
+<h3 id="&lt;webview&gt;.send(channel[,-args...])"><code>&lt;webview&gt;</code>.send(channel[, args...])</h3>
+
+<ul>
+<li><code>channel</code> String</li>
+</ul>
+
+<p>Send <code>args..</code> to guest page via <code>channel</code> in asynchronous message, the guest
+page can handle it by listening to the <code>channel</code> event of <code>ipc</code> module.</p>
+
+<p>See <a href="http://electron.atom.io/docs/v0.29.0/api/browser-window-ko#webcontentssendchannel-args">WebContents.send</a> for
+examples.</p>
+
+<h2 id="dom-�̺�Ʈ">DOM �̺�Ʈ</h2>
+
+<h3 id="did-finish-load">did-finish-load</h3>
+
+<p>Fired when the navigation is done, i.e. the spinner of the tab will stop
+spinning, and the <code>onload</code> event was dispatched.</p>
+
+<h3 id="did-fail-load">did-fail-load</h3>
+
+<ul>
+<li><code>errorCode</code> Integer</li>
+<li><code>errorDescription</code> String</li>
+</ul>
+
+<p>This event is like <code>did-finish-load</code>, but fired when the load failed or was
+cancelled, e.g. <code>window.stop()</code> is invoked.</p>
+
+<h3 id="did-frame-finish-load">did-frame-finish-load</h3>
+
+<ul>
+<li><code>isMainFrame</code> Boolean</li>
+</ul>
+
+<p>Fired when a frame has done navigation.</p>
+
+<h3 id="did-start-loading">did-start-loading</h3>
+
+<p>Corresponds to the points in time when the spinner of the tab starts spinning.</p>
+
+<h3 id="did-stop-loading">did-stop-loading</h3>
+
+<p>Corresponds to the points in time when the spinner of the tab stops spinning.</p>
+
+<h3 id="did-get-response-details">did-get-response-details</h3>
+
+<ul>
+<li><code>status</code> Boolean</li>
+<li><code>newUrl</code> String</li>
+<li><code>originalUrl</code> String</li>
+<li><code>httpResponseCode</code> Integer</li>
+<li><code>requestMethod</code> String</li>
+<li><code>referrer</code> String</li>
+<li><code>headers</code> Object</li>
+</ul>
+
+<p>Fired when details regarding a requested resource is available.
+<code>status</code> indicates socket connection to download the resource.</p>
+
+<h3 id="did-get-redirect-request">did-get-redirect-request</h3>
+
+<ul>
+<li><code>oldUrl</code> String</li>
+<li><code>newUrl</code> String</li>
+<li><code>isMainFrame</code> Boolean</li>
+</ul>
+
+<p>Fired when a redirect was received while requesting a resource.</p>
+
+<h3 id="dom-ready">dom-ready</h3>
+
+<p>Fired when document in the given frame is loaded.</p>
+
+<h3 id="page-title-set">page-title-set</h3>
+
+<ul>
+<li><code>title</code> String</li>
+<li><code>explicitSet</code> Boolean</li>
+</ul>
+
+<p>Fired when page title is set during navigation. <code>explicitSet</code> is false when title is synthesised from file
+url.</p>
+
+<h3 id="page-favicon-updated">page-favicon-updated</h3>
+
+<ul>
+<li><code>favicons</code> Array - Array of Urls</li>
+</ul>
+
+<p>Fired when page receives favicon urls.</p>
+
+<h3 id="enter-html-full-screen">enter-html-full-screen</h3>
+
+<p>Fired when page enters fullscreen triggered by html api.</p>
+
+<h3 id="leave-html-full-screen">leave-html-full-screen</h3>
+
+<p>Fired when page leaves fullscreen triggered by html api.</p>
+
+<h3 id="console-message">console-message</h3>
+
+<ul>
+<li><code>level</code> Integer</li>
+<li><code>message</code> String</li>
+<li><code>line</code> Integer</li>
+<li><code>sourceId</code> String</li>
+</ul>
+
+<p>Fired when the guest window logs a console message.</p>
+
+<p>The following example code forwards all log messages to the embedder&#39;s console
+without regard for log level or other properties.</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">webview</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;console-message&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Guest page logged a message:&#39;</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div>
+<h3 id="new-window">new-window</h3>
+
+<ul>
+<li><code>url</code> String</li>
+<li><code>frameName</code> String</li>
+<li><code>disposition</code> String - Can be <code>default</code>, <code>foreground-tab</code>, <code>background-tab</code>,
+<code>new-window</code> and <code>other</code></li>
+</ul>
+
+<p>Fired when the guest page attempts to open a new browser window.</p>
+
+<p>The following example code opens the new url in system&#39;s default browser.</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">webview</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;new-window&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;shell&#39;</span><span class="p">).</span><span class="nx">openExternal</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">url</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div>
+<h3 id="close">close</h3>
+
+<p>Fired when the guest page attempts to close itself.</p>
+
+<p>The following example code navigates the <code>webview</code> to <code>about:blank</code> when the
+guest attempts to close itself.</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">webview</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;close&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">webview</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="s1">&#39;about:blank&#39;</span><span class="p">;</span>
+<span class="p">});</span>
+</code></pre></div>
+<h3 id="ipc-message">ipc-message</h3>
+
+<ul>
+<li><code>channel</code> String</li>
+<li><code>args</code> Array</li>
+</ul>
+
+<p>Fired when the guest page has sent an asynchronous message to embedder page.</p>
+
+<p>With <code>sendToHost</code> method and <code>ipc-message</code> event you can easily communicate
+between guest page and embedder page:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// In embedder page.</span>
+<span class="nx">webview</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;ipc-message&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">channel</span><span class="p">);</span>
+  <span class="c1">// Prints &quot;pong&quot;</span>
+<span class="p">});</span>
+<span class="nx">webview</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="s1">&#39;ping&#39;</span><span class="p">);</span>
+</code></pre></div><div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// In guest page.</span>
+<span class="kd">var</span> <span class="nx">ipc</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;ipc&#39;</span><span class="p">);</span>
+<span class="nx">ipc</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;ping&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">ipc</span><span class="p">.</span><span class="nx">sendToHost</span><span class="p">(</span><span class="s1">&#39;pong&#39;</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div>
+<h3 id="crashed">crashed</h3>
+
+<p>Fired when the renderer process is crashed.</p>
+
+<h3 id="gpu-crashed">gpu-crashed</h3>
+
+<p>Fired when the gpu process is crashed.</p>
+
+<h3 id="plugin-crashed">plugin-crashed</h3>
+
+<ul>
+<li><code>name</code> String</li>
+<li><code>version</code> String</li>
+</ul>
+
+<p>Fired when a plugin process is crashed.</p>
+
+<h3 id="destroyed">destroyed</h3>
+
+<p>Fired when the WebContents is destroyed.</p>
+
+
+      </div>
+    </div>
+    
+    <div class='row'>
+      <div class='ten columns release offset-by-one docs-footer'>
+        <span class="octicon octicon-pencil"></span>
+        See something that needs fixing? Propose a change on the <a href='https://github.com/atom/electron/blob/master/docs/api/web-view-tag-ko.md'>source</a>.
+        <br>
+        <span class="octicon octicon-zap"></span>
+        Need a different version of the docs? See the <a href='/docs'>available versions</a>.
+      </div>
+    </div>
+    
+  </div>
+</section>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class='container'>
+    <div class='row'>
+      <div class='one-half column'>
+        <ul class='inline-list'>
+          <li><a href='https://github.com/atom/electron'>Repository</a></li>
+          <li><a href='/docs/v0.36.5'>Documentation</a></li>
+          <li><a href='/releases.html'>Releases</a></li>
+          <li><a href='http://blog.atom.io'>Blog</a></li>
+          <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+        </ul>
+      </div>
+
+      <div class='one-half column text-right'>
+        <a href='https://github.com' class="no-hover-dec"><span class='octicon octicon-code'></span> with <span class='octicon octicon-heart'></span> by <span class='octicon octicon-logo-github'></span></a>
+      </div>
+  </div>
+</footer>
+
+    <script>
+  var anchorForId = function (id) {
+    var anchor = document.createElement("a");
+    anchor.className = "header-link";
+    anchor.href      = "#" + id;
+    anchor.innerHTML = "<span class='octicon octicon-link'></span>";
+    anchor.title = "Permalink";
+    return anchor;
+  };
+
+  var linkifyAnchors = function (level, containingElement) {
+    var headers = containingElement.getElementsByTagName("h" + level);
+    for (var h = 0; h < headers.length; h++) {
+      var header = headers[h];
+
+      if (typeof header.id !== "undefined" && header.id !== "") {
+        header.appendChild(anchorForId(header.id));
+      }
+    }
+  };
+
+  document.onreadystatechange = function () {
+    if (this.readyState === "complete") {
+      var contentBlock = document.getElementsByClassName("docs")[0] || document.getElementsByClassName("news")[0];
+      if (!contentBlock) {
+        return;
+      }
+      for (var level = 1; level <= 6; level++) {
+        linkifyAnchors(level, contentBlock);
+      }
+    }
+  };
+</script>
+
+  </body>
+
+</html>

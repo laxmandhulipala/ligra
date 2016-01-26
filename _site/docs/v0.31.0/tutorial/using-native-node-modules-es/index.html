@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+  <title>Using Native Node Modules Es</title>
+  <meta name='description' content='Build cross platform desktop apps with web technologies'>
+
+  <link rel='shortcut icon' href='/images/favicon.ico'/>
+  <link rel='stylesheet' href='/css/normalize.css'>
+  <link rel='stylesheet' href='/css/skeleton.css'>
+  <link rel='stylesheet' href='/css/main.css'>
+  <link rel='stylesheet' href='/css/octicons/octicons.css'>
+  <link rel='stylesheet' href='/css/pygments.css'>
+  <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+  <link rel='canonical' href='/docs/v0.31.0/tutorial/using-native-node-modules-es/'>
+  <link rel='alternate' type='application/rss+xml' title='Electron' href='/feed.xml' />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-3769691-57', 'auto');
+    ga('send', 'pageview');
+  </script>
+</head>
+
+
+  <body>
+
+    <header>
+  <div class='top-bar'>
+    <div class='container'>
+      <div class='row'>
+        <div class='four columns'>
+          <ul class='navigation inline-list'>
+            <li><a href='/#built-on-electron'>Built on Electron</a></li>
+            <li><a href='/#get-started'>Get Started</a></li>
+          </ul>
+        </div>
+        <div class='eight columns text-right'>
+          <ul class='navigation inline-list'>
+            <li><a href='https://github.com/atom/electron'>Repository</a></li>
+            <li><a href='/docs/v0.36.5'>Documentation</a></li>
+            <li><a href='http://blog.atom.io'>Blog</a></li>
+            <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+    <div class='page-content'>
+      <div class='wrapper'>
+        <div class='page-template using-native-node-modules-es'>
+  <section class='jump-to-release is-compact'>
+  <div class='container'>
+    <div class='row'>
+      <div class='twelve columns'>
+      <h1><img class="electron-icon" src='/images/electron-icon.svg'>Electron Documentation</h1>
+      
+      <a href='/docs/v0.31.0/'>v0.31.0  </a> |
+      <a href='https://github.com/atom/electron/blob/master/docs/tutorial/using-native-node-modules-es.md'>Document Source</a>
+      
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class='docs'>
+  <div class='container'>
+    <div class='row'>
+      <div class='ten columns release offset-by-one'>
+        
+        <h6 class='docs-breadcrumb'>v0.31.0 / Tutorial
+           / Using Native Node Modules Es </h6>
+        
+
+        <h1 id="utilizando-módulos-node-nativos">Utilizando módulos Node nativos</h1>
+
+<p>Los módulos Node nativos son soportados por Electron, pero dado que Electron
+está utilizando una versión distinta de V8, debes especificar manualmente la 
+ubicación de las cabeceras de Electron a la hora de compilar módulos nativos.</p>
+
+<h2 id="compatibilidad-de-módulos-nativos">Compatibilidad de módulos nativos</h2>
+
+<p>A partir de Node v0.11.x han habido cambios vitales en la API de V8.
+Es de esperar que los módulos escritos para Node v0.10.x no funcionen con Node v0.11.x.
+Electron utiliza Node v.0.11.13 internamente, y por este motivo tiene el mismo problema.</p>
+
+<p>Para resolver esto, debes usar módulos que soporten Node v0.11.x,
+<a href="https://www.npmjs.org/browse/depended/nan">muchos módulos</a> soportan ambas versiones.
+En el caso de los módulos antiguos que sólo soportan Node v0.10.x, debes usar el módulo
+<a href="https://github.com/rvagg/nan">nan</a> para portarlos a v0.11.x.</p>
+
+<h2 id="¿cómo-instalar-módulos-nativos?">¿Cómo instalar módulos nativos?</h2>
+
+<h3 id="la-forma-fácil">La forma fácil</h3>
+
+<p>La forma más sencilla de recompilar módulos nativos es a través del paquete 
+<a href="https://github.com/paulcbetts/electron-rebuild"><code>electron-rebuild</code></a>, 
+el cual abstrae y maneja los pasos de descargar las cabeceras y compilar los módulos nativos:</p>
+<div class="highlight"><pre><code class="language-sh" data-lang="sh">npm install --save-dev electron-rebuild
+
+<span class="c"># Ejecuta esto cada vez que ejecutes npm install</span>
+./node_modules/.bin/electron-rebuild
+</code></pre></div>
+<h3 id="la-forma-node-gyp">La forma node-gyp</h3>
+
+<p>Para compilar módulos Node con las cabeceras de Electron, debes indicar a <code>node-gyp</code>
+desde dónde descargar las cabeceras y cuál versión usar:</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span><span class="nb">cd</span> /path-to-module/
+<span class="nv">$ HOME</span><span class="o">=</span>~/.electron-gyp node-gyp rebuild --target<span class="o">=</span>0.29.1 --arch<span class="o">=</span>x64 --dist-url<span class="o">=</span>https://atom.io/download/atom-shell
+</code></pre></div>
+<p>Los cambios en <code>HOME=~/.electron-gyp</code> fueron para especificar la ruta de las cabeceras.
+La opción <code>--target=0.29.1</code> es la versión de Electron. La opción <code>--dist-url=...</code> especifica
+dónde descargar las cabeceras. <code>--arch=x64</code> indica que el módulo será compilado para un sistema de 64bit.</p>
+
+<h3 id="la-forma-npm">La forma npm</h3>
+
+<p>También puedes usar <code>npm</code> para instalar módulos, los pasos son exactamente igual a otros módulos Node,
+con la excepción de que necesitas establecer algunas variables de entorno primero:</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">export </span><span class="nv">npm_config_disturl</span><span class="o">=</span>https://atom.io/download/atom-shell
+<span class="nb">export </span><span class="nv">npm_config_target</span><span class="o">=</span>0.29.1
+<span class="nb">export </span><span class="nv">npm_config_arch</span><span class="o">=</span>x64
+<span class="nv">HOME</span><span class="o">=</span>~/.electron-gyp npm install module-name
+</code></pre></div>
+
+      </div>
+    </div>
+    
+    <div class='row'>
+      <div class='ten columns release offset-by-one docs-footer'>
+        <span class="octicon octicon-pencil"></span>
+        See something that needs fixing? Propose a change on the <a href='https://github.com/atom/electron/blob/master/docs/tutorial/using-native-node-modules-es.md'>source</a>.
+        <br>
+        <span class="octicon octicon-zap"></span>
+        Need a different version of the docs? See the <a href='/docs'>available versions</a>.
+      </div>
+    </div>
+    
+  </div>
+</section>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class='container'>
+    <div class='row'>
+      <div class='one-half column'>
+        <ul class='inline-list'>
+          <li><a href='https://github.com/atom/electron'>Repository</a></li>
+          <li><a href='/docs/v0.36.5'>Documentation</a></li>
+          <li><a href='/releases.html'>Releases</a></li>
+          <li><a href='http://blog.atom.io'>Blog</a></li>
+          <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+        </ul>
+      </div>
+
+      <div class='one-half column text-right'>
+        <a href='https://github.com' class="no-hover-dec"><span class='octicon octicon-code'></span> with <span class='octicon octicon-heart'></span> by <span class='octicon octicon-logo-github'></span></a>
+      </div>
+  </div>
+</footer>
+
+    <script>
+  var anchorForId = function (id) {
+    var anchor = document.createElement("a");
+    anchor.className = "header-link";
+    anchor.href      = "#" + id;
+    anchor.innerHTML = "<span class='octicon octicon-link'></span>";
+    anchor.title = "Permalink";
+    return anchor;
+  };
+
+  var linkifyAnchors = function (level, containingElement) {
+    var headers = containingElement.getElementsByTagName("h" + level);
+    for (var h = 0; h < headers.length; h++) {
+      var header = headers[h];
+
+      if (typeof header.id !== "undefined" && header.id !== "") {
+        header.appendChild(anchorForId(header.id));
+      }
+    }
+  };
+
+  document.onreadystatechange = function () {
+    if (this.readyState === "complete") {
+      var contentBlock = document.getElementsByClassName("docs")[0] || document.getElementsByClassName("news")[0];
+      if (!contentBlock) {
+        return;
+      }
+      for (var level = 1; level <= 6; level++) {
+        linkifyAnchors(level, contentBlock);
+      }
+    }
+  };
+</script>
+
+  </body>
+
+</html>

@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+  <title>Menu Ko</title>
+  <meta name='description' content='Build cross platform desktop apps with web technologies'>
+
+  <link rel='shortcut icon' href='/images/favicon.ico'/>
+  <link rel='stylesheet' href='/css/normalize.css'>
+  <link rel='stylesheet' href='/css/skeleton.css'>
+  <link rel='stylesheet' href='/css/main.css'>
+  <link rel='stylesheet' href='/css/octicons/octicons.css'>
+  <link rel='stylesheet' href='/css/pygments.css'>
+  <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+  <link rel='canonical' href='/docs/v0.31.0/api/menu-ko/'>
+  <link rel='alternate' type='application/rss+xml' title='Electron' href='/feed.xml' />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-3769691-57', 'auto');
+    ga('send', 'pageview');
+  </script>
+</head>
+
+
+  <body>
+
+    <header>
+  <div class='top-bar'>
+    <div class='container'>
+      <div class='row'>
+        <div class='four columns'>
+          <ul class='navigation inline-list'>
+            <li><a href='/#built-on-electron'>Built on Electron</a></li>
+            <li><a href='/#get-started'>Get Started</a></li>
+          </ul>
+        </div>
+        <div class='eight columns text-right'>
+          <ul class='navigation inline-list'>
+            <li><a href='https://github.com/atom/electron'>Repository</a></li>
+            <li><a href='/docs/v0.36.5'>Documentation</a></li>
+            <li><a href='http://blog.atom.io'>Blog</a></li>
+            <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+    <div class='page-content'>
+      <div class='wrapper'>
+        <div class='page-template menu-ko'>
+  <section class='jump-to-release is-compact'>
+  <div class='container'>
+    <div class='row'>
+      <div class='twelve columns'>
+      <h1><img class="electron-icon" src='/images/electron-icon.svg'>Electron Documentation</h1>
+      
+      <a href='/docs/v0.31.0/'>v0.31.0  </a> |
+      <a href='https://github.com/atom/electron/blob/master/docs/api/menu-ko.md'>Document Source</a>
+      
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class='docs'>
+  <div class='container'>
+    <div class='row'>
+      <div class='ten columns release offset-by-one'>
+        
+        <h6 class='docs-breadcrumb'>v0.31.0 / API
+           / Menu Ko </h6>
+        
+
+        <h1 id="menu">menu</h1>
+
+<p><code>Menu</code> 클래스는 어플리케이션 메뉴와 컨텍스트 메뉴를 만들 때 사용할 수 있습니다.
+각 메뉴는 여러 개의 메뉴 아이템으로 구성되어 있으며 서브 메뉴를 가질 수도 있습니다.</p>
+
+<p>다음 예제는 웹 페이지 내에서 <a href="http://electron.atom.io/docs/v0.31.0/api/remote-ko">remote</a> 모듈을 활용하여 동적으로 메뉴를 생성하는 예제입니다.
+그리고 이 예제에서 만들어진 메뉴는 유저가 페이지에서 오른쪽 클릭을 할 때 마우스 위치에 팝업으로 표시됩니다:</p>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="c">&lt;!-- index.html --&gt;</span>
+<span class="nt">&lt;script&gt;</span>
+<span class="kd">var</span> <span class="nx">remote</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;remote&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">Menu</span> <span class="o">=</span> <span class="nx">remote</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;menu&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">MenuItem</span> <span class="o">=</span> <span class="nx">remote</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;menu-item&#39;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">menu</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Menu</span><span class="p">();</span>
+<span class="nx">menu</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="k">new</span> <span class="nx">MenuItem</span><span class="p">({</span> <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;MenuItem1&#39;</span><span class="p">,</span> <span class="nx">click</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;item 1 clicked&#39;</span><span class="p">);</span> <span class="p">}</span> <span class="p">}));</span>
+<span class="nx">menu</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="k">new</span> <span class="nx">MenuItem</span><span class="p">({</span> <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;separator&#39;</span> <span class="p">}));</span>
+<span class="nx">menu</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="k">new</span> <span class="nx">MenuItem</span><span class="p">({</span> <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;MenuItem2&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;checkbox&#39;</span><span class="p">,</span> <span class="nx">checked</span><span class="o">:</span> <span class="kc">true</span> <span class="p">}));</span>
+
+<span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;contextmenu&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">e</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span>
+  <span class="nx">menu</span><span class="p">.</span><span class="nx">popup</span><span class="p">(</span><span class="nx">remote</span><span class="p">.</span><span class="nx">getCurrentWindow</span><span class="p">());</span>
+<span class="p">},</span> <span class="kc">false</span><span class="p">);</span>
+<span class="nt">&lt;/script&gt;</span>
+</code></pre></div>
+<p>다음 예제는 template API를 활용하여 어플리케이션 메뉴를 만드는 간단한 예제입니다:</p>
+
+<p><strong>Windows 와 Linux 주의:</strong> 각 메뉴 아이템의 <code>selector</code> 멤버는 Mac 운영체제 전용입니다. <a href="https://github.com/atom/electron/blob/master/docs/api/accelerator-ko.md">Accelerator 옵션</a></p>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="c">&lt;!-- index.html --&gt;</span>
+<span class="nt">&lt;script&gt;</span>
+<span class="kd">var</span> <span class="nx">remote</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;remote&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">Menu</span> <span class="o">=</span> <span class="nx">remote</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;menu&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">template</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="p">{</span>
+    <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;Electron&#39;</span><span class="p">,</span>
+    <span class="nx">submenu</span><span class="o">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;About Electron&#39;</span><span class="p">,</span>
+        <span class="nx">selector</span><span class="o">:</span> <span class="s1">&#39;orderFrontStandardAboutPanel:&#39;</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;separator&#39;</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;Services&#39;</span><span class="p">,</span>
+        <span class="nx">submenu</span><span class="o">:</span> <span class="p">[]</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;separator&#39;</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;Hide Electron&#39;</span><span class="p">,</span>
+        <span class="nx">accelerator</span><span class="o">:</span> <span class="s1">&#39;CmdOrCtrl+H&#39;</span><span class="p">,</span>
+        <span class="nx">selector</span><span class="o">:</span> <span class="s1">&#39;hide:&#39;</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;Hide Others&#39;</span><span class="p">,</span>
+        <span class="nx">accelerator</span><span class="o">:</span> <span class="s1">&#39;CmdOrCtrl+Shift+H&#39;</span><span class="p">,</span>
+        <span class="nx">selector</span><span class="o">:</span> <span class="s1">&#39;hideOtherApplications:&#39;</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;Show All&#39;</span><span class="p">,</span>
+        <span class="nx">selector</span><span class="o">:</span> <span class="s1">&#39;unhideAllApplications:&#39;</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;separator&#39;</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;Quit&#39;</span><span class="p">,</span>
+        <span class="nx">accelerator</span><span class="o">:</span> <span class="s1">&#39;CmdOrCtrl+Q&#39;</span><span class="p">,</span>
+        <span class="nx">selector</span><span class="o">:</span> <span class="s1">&#39;terminate:&#39;</span>
+      <span class="p">},</span>
+    <span class="p">]</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;Edit&#39;</span><span class="p">,</span>
+    <span class="nx">submenu</span><span class="o">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;Undo&#39;</span><span class="p">,</span>
+        <span class="nx">accelerator</span><span class="o">:</span> <span class="s1">&#39;CmdOrCtrl+Z&#39;</span><span class="p">,</span>
+        <span class="nx">selector</span><span class="o">:</span> <span class="s1">&#39;undo:&#39;</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;Redo&#39;</span><span class="p">,</span>
+        <span class="nx">accelerator</span><span class="o">:</span> <span class="s1">&#39;Shift+CmdOrCtrl+Z&#39;</span><span class="p">,</span>
+        <span class="nx">selector</span><span class="o">:</span> <span class="s1">&#39;redo:&#39;</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;separator&#39;</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;Cut&#39;</span><span class="p">,</span>
+        <span class="nx">accelerator</span><span class="o">:</span> <span class="s1">&#39;CmdOrCtrl+X&#39;</span><span class="p">,</span>
+        <span class="nx">selector</span><span class="o">:</span> <span class="s1">&#39;cut:&#39;</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;Copy&#39;</span><span class="p">,</span>
+        <span class="nx">accelerator</span><span class="o">:</span> <span class="s1">&#39;CmdOrCtrl+C&#39;</span><span class="p">,</span>
+        <span class="nx">selector</span><span class="o">:</span> <span class="s1">&#39;copy:&#39;</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;Paste&#39;</span><span class="p">,</span>
+        <span class="nx">accelerator</span><span class="o">:</span> <span class="s1">&#39;CmdOrCtrl+V&#39;</span><span class="p">,</span>
+        <span class="nx">selector</span><span class="o">:</span> <span class="s1">&#39;paste:&#39;</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;Select All&#39;</span><span class="p">,</span>
+        <span class="nx">accelerator</span><span class="o">:</span> <span class="s1">&#39;CmdOrCtrl+A&#39;</span><span class="p">,</span>
+        <span class="nx">selector</span><span class="o">:</span> <span class="s1">&#39;selectAll:&#39;</span>
+      <span class="p">}</span>
+    <span class="p">]</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;View&#39;</span><span class="p">,</span>
+    <span class="nx">submenu</span><span class="o">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;Reload&#39;</span><span class="p">,</span>
+        <span class="nx">accelerator</span><span class="o">:</span> <span class="s1">&#39;CmdOrCtrl+R&#39;</span><span class="p">,</span>
+        <span class="nx">click</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="nx">remote</span><span class="p">.</span><span class="nx">getCurrentWindow</span><span class="p">().</span><span class="nx">reload</span><span class="p">();</span> <span class="p">}</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;Toggle DevTools&#39;</span><span class="p">,</span>
+        <span class="nx">accelerator</span><span class="o">:</span> <span class="s1">&#39;Alt+CmdOrCtrl+I&#39;</span><span class="p">,</span>
+        <span class="nx">click</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="nx">remote</span><span class="p">.</span><span class="nx">getCurrentWindow</span><span class="p">().</span><span class="nx">toggleDevTools</span><span class="p">();</span> <span class="p">}</span>
+      <span class="p">},</span>
+    <span class="p">]</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;Window&#39;</span><span class="p">,</span>
+    <span class="nx">submenu</span><span class="o">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;Minimize&#39;</span><span class="p">,</span>
+        <span class="nx">accelerator</span><span class="o">:</span> <span class="s1">&#39;CmdOrCtrl+M&#39;</span><span class="p">,</span>
+        <span class="nx">selector</span><span class="o">:</span> <span class="s1">&#39;performMiniaturize:&#39;</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;Close&#39;</span><span class="p">,</span>
+        <span class="nx">accelerator</span><span class="o">:</span> <span class="s1">&#39;CmdOrCtrl+W&#39;</span><span class="p">,</span>
+        <span class="nx">selector</span><span class="o">:</span> <span class="s1">&#39;performClose:&#39;</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;separator&#39;</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;Bring All to Front&#39;</span><span class="p">,</span>
+        <span class="nx">selector</span><span class="o">:</span> <span class="s1">&#39;arrangeInFront:&#39;</span>
+      <span class="p">}</span>
+    <span class="p">]</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;Help&#39;</span><span class="p">,</span>
+    <span class="nx">submenu</span><span class="o">:</span> <span class="p">[]</span>
+  <span class="p">}</span>
+<span class="p">];</span>
+
+<span class="nx">menu</span> <span class="o">=</span> <span class="nx">Menu</span><span class="p">.</span><span class="nx">buildFromTemplate</span><span class="p">(</span><span class="nx">template</span><span class="p">);</span>
+
+<span class="nx">Menu</span><span class="p">.</span><span class="nx">setApplicationMenu</span><span class="p">(</span><span class="nx">menu</span><span class="p">);</span>
+<span class="nt">&lt;/script&gt;</span>
+</code></pre></div>
+<h2 id="class:-menu">Class: Menu</h2>
+
+<h3 id="new-menu()">new Menu()</h3>
+
+<p>새로운 메뉴를 생성합니다.</p>
+
+<h3 id="class-method:-menu.setapplicationmenu(menu)">Class Method: Menu.setApplicationMenu(menu)</h3>
+
+<ul>
+<li><code>menu</code> Menu</li>
+</ul>
+
+<p>지정한 <code>menu</code>를 이용하여 어플리케이션 메뉴를 만듭니다. OS X에선 상단바에 표시되며 Windows와 Linux에선 각 창의 상단에 표시됩니다.</p>
+
+<h3 id="class-method:-menu.sendactiontofirstresponder(action)">Class Method: Menu.sendActionToFirstResponder(action)</h3>
+
+<ul>
+<li><code>action</code> String</li>
+</ul>
+
+<p><code>action</code>을 어플리케이션의 first responder에 전달합니다.
+이 함수는 Cocoa 메뉴 동작을 에뮬레이트 하는데 사용되며 보통 <code>MenuItem</code>의 <code>selector</code> 속성에 사용됩니다.</p>
+
+<p><strong>알림:</strong> 이 함수는 OS X에서만 사용할 수 있습니다.</p>
+
+<h3 id="class-method:-menu.buildfromtemplate(template)">Class Method: Menu.buildFromTemplate(template)</h3>
+
+<ul>
+<li><code>template</code> Array</li>
+</ul>
+
+<p>기본적으로 <code>template</code>는 <a href="http://electron.atom.io/docs/v0.31.0/api/menu-item-ko">MenuItem</a>을 생성할 때 사용하는 <code>options</code>의 배열입니다. 사용법은 위에서 설명한 것과 같습니다.</p>
+
+<p>또한 <code>template</code>에는 다른 속성도 추가할 수 있으며 메뉴가 만들어질 때 해당 메뉴 아이템의 프로퍼티로 변환됩니다.</p>
+
+<h3 id="menu.popup(browserwindow,-[x,-y])">Menu.popup(browserWindow, [x, y])</h3>
+
+<ul>
+<li><code>browserWindow</code> BrowserWindow</li>
+<li><code>x</code> Number</li>
+<li><code>y</code> Number</li>
+</ul>
+
+<p>메뉴를 <code>browserWindow</code> 안에서 팝업으로 표시합니다.
+옵션으로 메뉴를 표시할 <code>(x,y)</code> 좌표를 임의로 지정할 수 있습니다. 따로 지정하지 않은 경우 마우스 커서 위치에 표시됩니다.</p>
+
+<h3 id="menu.append(menuitem)">Menu.append(menuItem)</h3>
+
+<ul>
+<li><code>menuItem</code> MenuItem</li>
+</ul>
+
+<p>메뉴의 리스트 끝에 <code>menuItem</code>을 삽입합니다.</p>
+
+<h3 id="menu.insert(pos,-menuitem)">Menu.insert(pos, menuItem)</h3>
+
+<ul>
+<li><code>pos</code> Integer</li>
+<li><code>menuItem</code> MenuItem</li>
+</ul>
+
+<p><code>pos</code> 위치에 <code>menuItem</code>을 삽입합니다.</p>
+
+<h3 id="menu.items">Menu.items</h3>
+
+<p>메뉴가 가지고 있는 메뉴 아이템들의 배열입니다.</p>
+
+<h2 id="os-x-어플리케이션-메뉴에-대해-알아-둬야-할-것들">OS X 어플리케이션 메뉴에 대해 알아 둬야 할 것들</h2>
+
+<p>OS X에선 Windows, Linux와 달리 완전히 다른 어플리케이션 메뉴 스타일을 가지고 있습니다.
+어플리케이션을 네이티브처럼 작동할 수 있도록 하기 위해선 다음의 몇 가지 유의 사항을 숙지해야 합니다.</p>
+
+<h3 id="기본-메뉴">기본 메뉴</h3>
+
+<p>OS X엔 <code>Services</code>나 <code>Windows</code>와 같은 많은 시스템 지정 기본 메뉴가 있습니다.
+기본 메뉴를 만들려면 다음 중 하나를 메뉴의 라벨로 지정하기만 하면 됩니다.
+그러면 Electron이 자동으로 인식하여 해당 메뉴를 기본 메뉴로 만듭니다:</p>
+
+<ul>
+<li><code>Window</code></li>
+<li><code>Help</code></li>
+<li><code>Services</code></li>
+</ul>
+
+<h3 id="기본-메뉴-아이템-동작">기본 메뉴 아이템 동작</h3>
+
+<p>OS X는 몇몇의 메뉴 아이템에 대해 <code>About xxx</code>, <code>Hide xxx</code>, <code>Hide Others</code>와 같은 기본 동작을 제공하고 있습니다. (<code>selector</code>라고 불립니다)
+메뉴 아이템의 기본 동작을 지정하려면 메뉴 아이템의 <code>selector</code> 속성을 사용하면 됩니다.</p>
+
+<h3 id="메인-메뉴의-이름">메인 메뉴의 이름</h3>
+
+<p>OS X에선 지정한 어플리케이션 메뉴에 상관없이 메뉴의 첫번째 라벨은 언제나 어플리케이션의 이름이 됩니다.
+어플리케이션 이름을 변경하려면 앱 번들내의 <code>Info.plist</code> 파일을 수정해야합니다.
+자세한 내용은 <a href="https://developer.apple.com/library/ios/documentation/general/Reference/InfoPlistKeyReference/Articles/AboutInformationPropertyListFiles.html">About Information Property List Files</a>을 참고하세요.</p>
+
+<h2 id="메뉴-아이템-위치">메뉴 아이템 위치</h2>
+
+<p><code>Menu.buildFromTemplate</code>로 메뉴를 만들 때 <code>position</code>과 <code>id</code>를 사용해서 아이템의 위치를 지정할 수 있습니다.</p>
+
+<p><code>MenuItem</code>의 <code>position</code> 속성은 <code>[placement]=[id]</code>와 같은 형식을 가지며 <code>placement</code>는
+<code>before</code>, <code>after</code>, <code>endof</code> 속성 중 한가지를 사용할 수 있고 <code>id</code>는 메뉴 아이템이 가지는 유일 ID 입니다:</p>
+
+<ul>
+<li><code>before</code> - 이 아이템을 지정한 id 이전의 위치에 삽입합니다. 만약 참조된 아이템이 없을 경우 메뉴의 맨 뒤에 삽입됩니다.</li>
+<li><code>after</code> - 이 아이템을 지정한 id 다음의 위치에 삽입합니다. 만약 참조된 아이템이 없을 경우 메뉴의 맨 뒤에 삽입됩니다.</li>
+<li><code>endof</code> - 이 아이템을 id의 논리 그룹에 맞춰서 각 그룹의 항목 뒤에 삽입합니다. (그룹은 분리자 아이템에 의해 만들어집니다)
+만약 참조된 아이템의 분리자 그룹이 존재하지 않을 경우 지정된 id로 새로운 분리자 그룹을 만든 후 해당 그룹의 뒤에 삽입됩니다.</li>
+</ul>
+
+<p>위치를 지정한 아이템의 뒤에 위치가 지정되지 않은 아이템이 있을 경우 해당 아이템의 위치가 지정되기 전까지 이전에 위치가 지정된 아이템의 위치 지정을 따릅니다.
+이에 따라 위치를 이동하고 싶은 특정 그룹의 아이템들이 있을 경우 해당 그룹의 맨 첫번째 메뉴 아이템의 위치만을 지정하면 됩니다.</p>
+
+<h3 id="예제">예제</h3>
+
+<p>메뉴 템플릿:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="p">[</span>
+  <span class="p">{</span><span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;4&#39;</span><span class="p">,</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;4&#39;</span><span class="p">},</span>
+  <span class="p">{</span><span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;5&#39;</span><span class="p">,</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;5&#39;</span><span class="p">},</span>
+  <span class="p">{</span><span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="nx">position</span><span class="o">:</span> <span class="s1">&#39;before=4&#39;</span><span class="p">},</span>
+  <span class="p">{</span><span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;2&#39;</span><span class="p">},</span>
+  <span class="p">{</span><span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;3&#39;</span><span class="p">}</span>
+<span class="p">]</span>
+</code></pre></div>
+<p>메뉴:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">- 1
+- 2
+- 3
+- 4
+- 5
+</code></pre></div>
+<p>메뉴 템플릿:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="p">[</span>
+  <span class="p">{</span><span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="nx">position</span><span class="o">:</span> <span class="s1">&#39;endof=letters&#39;</span><span class="p">},</span>
+  <span class="p">{</span><span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="nx">position</span><span class="o">:</span> <span class="s1">&#39;endof=numbers&#39;</span><span class="p">},</span>
+  <span class="p">{</span><span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="nx">position</span><span class="o">:</span> <span class="s1">&#39;endof=letters&#39;</span><span class="p">},</span>
+  <span class="p">{</span><span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="nx">position</span><span class="o">:</span> <span class="s1">&#39;endof=numbers&#39;</span><span class="p">},</span>
+  <span class="p">{</span><span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="nx">position</span><span class="o">:</span> <span class="s1">&#39;endof=letters&#39;</span><span class="p">},</span>
+  <span class="p">{</span><span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="nx">position</span><span class="o">:</span> <span class="s1">&#39;endof=numbers&#39;</span><span class="p">}</span>
+<span class="p">]</span>
+</code></pre></div>
+<p>메뉴:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">- ---
+- a
+- b
+- c
+- ---
+- 1
+- 2
+- 3
+</code></pre></div>
+
+      </div>
+    </div>
+    
+    <div class='row'>
+      <div class='ten columns release offset-by-one docs-footer'>
+        <span class="octicon octicon-pencil"></span>
+        See something that needs fixing? Propose a change on the <a href='https://github.com/atom/electron/blob/master/docs/api/menu-ko.md'>source</a>.
+        <br>
+        <span class="octicon octicon-zap"></span>
+        Need a different version of the docs? See the <a href='/docs'>available versions</a>.
+      </div>
+    </div>
+    
+  </div>
+</section>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class='container'>
+    <div class='row'>
+      <div class='one-half column'>
+        <ul class='inline-list'>
+          <li><a href='https://github.com/atom/electron'>Repository</a></li>
+          <li><a href='/docs/v0.36.5'>Documentation</a></li>
+          <li><a href='/releases.html'>Releases</a></li>
+          <li><a href='http://blog.atom.io'>Blog</a></li>
+          <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+        </ul>
+      </div>
+
+      <div class='one-half column text-right'>
+        <a href='https://github.com' class="no-hover-dec"><span class='octicon octicon-code'></span> with <span class='octicon octicon-heart'></span> by <span class='octicon octicon-logo-github'></span></a>
+      </div>
+  </div>
+</footer>
+
+    <script>
+  var anchorForId = function (id) {
+    var anchor = document.createElement("a");
+    anchor.className = "header-link";
+    anchor.href      = "#" + id;
+    anchor.innerHTML = "<span class='octicon octicon-link'></span>";
+    anchor.title = "Permalink";
+    return anchor;
+  };
+
+  var linkifyAnchors = function (level, containingElement) {
+    var headers = containingElement.getElementsByTagName("h" + level);
+    for (var h = 0; h < headers.length; h++) {
+      var header = headers[h];
+
+      if (typeof header.id !== "undefined" && header.id !== "") {
+        header.appendChild(anchorForId(header.id));
+      }
+    }
+  };
+
+  document.onreadystatechange = function () {
+    if (this.readyState === "complete") {
+      var contentBlock = document.getElementsByClassName("docs")[0] || document.getElementsByClassName("news")[0];
+      if (!contentBlock) {
+        return;
+      }
+      for (var level = 1; level <= 6; level++) {
+        linkifyAnchors(level, contentBlock);
+      }
+    }
+  };
+</script>
+
+  </body>
+
+</html>

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+  <title>Chrome Command Line Switches</title>
+  <meta name='description' content='Build cross platform desktop apps with web technologies'>
+
+  <link rel='shortcut icon' href='/images/favicon.ico'/>
+  <link rel='stylesheet' href='/css/normalize.css'>
+  <link rel='stylesheet' href='/css/skeleton.css'>
+  <link rel='stylesheet' href='/css/main.css'>
+  <link rel='stylesheet' href='/css/octicons/octicons.css'>
+  <link rel='stylesheet' href='/css/pygments.css'>
+  <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+  <link rel='canonical' href='/docs/v0.24.0/api/chrome-command-line-switches/'>
+  <link rel='alternate' type='application/rss+xml' title='Electron' href='/feed.xml' />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-3769691-57', 'auto');
+    ga('send', 'pageview');
+  </script>
+</head>
+
+
+  <body>
+
+    <header>
+  <div class='top-bar'>
+    <div class='container'>
+      <div class='row'>
+        <div class='four columns'>
+          <ul class='navigation inline-list'>
+            <li><a href='/#built-on-electron'>Built on Electron</a></li>
+            <li><a href='/#get-started'>Get Started</a></li>
+          </ul>
+        </div>
+        <div class='eight columns text-right'>
+          <ul class='navigation inline-list'>
+            <li><a href='https://github.com/atom/electron'>Repository</a></li>
+            <li><a href='/docs/v0.36.5'>Documentation</a></li>
+            <li><a href='http://blog.atom.io'>Blog</a></li>
+            <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+    <div class='page-content'>
+      <div class='wrapper'>
+        <div class='page-template chrome-command-line-switches'>
+  <section class='jump-to-release is-compact'>
+  <div class='container'>
+    <div class='row'>
+      <div class='twelve columns'>
+      <h1><img class="electron-icon" src='/images/electron-icon.svg'>Electron Documentation</h1>
+      
+      <a href='/docs/v0.24.0/'>v0.24.0  </a> |
+      <a href='https://github.com/atom/electron/blob/master/docs/api/chrome-command-line-switches.md'>Document Source</a>
+      
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class='docs'>
+  <div class='container'>
+    <div class='row'>
+      <div class='ten columns release offset-by-one'>
+        
+        <h6 class='docs-breadcrumb'>v0.24.0 / API
+           / Chrome Command Line Switches </h6>
+        
+
+        <h1 id="supported-chrome-command-line-switches">Supported Chrome command line switches</h1>
+
+<p>Following command lines switches in Chrome browser are also Supported in
+Electron, you can use <a href="app.md#appcommandlineappendswitchswitch-value">app.commandLine.appendSwitch</a> to append
+them in your app&#39;s main script before the <a href="app.md#event-ready">ready</a> event of <a href="app.md">app</a>
+module is emitted:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;app&#39;</span><span class="p">);</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">commandLine</span><span class="p">.</span><span class="nx">appendSwitch</span><span class="p">(</span><span class="s1">&#39;remote-debugging-port&#39;</span><span class="p">,</span> <span class="s1">&#39;8315&#39;</span><span class="p">);</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">commandLine</span><span class="p">.</span><span class="nx">appendSwitch</span><span class="p">(</span><span class="s1">&#39;host-rules&#39;</span><span class="p">,</span> <span class="s1">&#39;MAP * 127.0.0.1&#39;</span><span class="p">);</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;ready&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+<span class="p">});</span>
+</code></pre></div>
+<h2 id="--disable-http-cache">--disable-http-cache</h2>
+
+<p>Disables the disk cache for HTTP requests.</p>
+
+<h2 id="--remote-debugging-port=port">--remote-debugging-port=<code>port</code></h2>
+
+<p>Enables remote debug over HTTP on the specified <code>port</code>.</p>
+
+<h2 id="--proxy-server=address:port">--proxy-server=<code>address:port</code></h2>
+
+<p>Uses a specified proxy server, overrides system settings. This switch only
+affects HTTP and HTTPS requests.</p>
+
+<h2 id="--no-proxy-server">--no-proxy-server</h2>
+
+<p>Don&#39;t use a proxy server, always make direct connections. Overrides any other
+proxy server flags that are passed.</p>
+
+<h2 id="--host-rules=rules">--host-rules=<code>rules</code></h2>
+
+<p>Comma-separated list of <code>rules</code> that control how hostnames are mapped.</p>
+
+<p>For example:</p>
+
+<ul>
+<li><code>MAP * 127.0.0.1</code> Forces all hostnames to be mapped to 127.0.0.1</li>
+<li><code>MAP *.google.com proxy</code> Forces all google.com subdomains to be resolved to
+&quot;proxy&quot;.</li>
+<li><code>MAP test.com [::1]:77</code> Forces &quot;test.com&quot; to resolve to IPv6 loopback. Will
+also force the port of the resulting socket address to be 77.</li>
+<li><code>MAP * baz, EXCLUDE www.google.com</code> Remaps everything to &quot;baz&quot;, except for
+&quot;www.google.com&quot;.</li>
+</ul>
+
+<p>These mappings apply to the endpoint host in a net request (the TCP connect
+and host resolver in a direct connection, and the <code>CONNECT</code> in an http proxy
+connection, and the endpoint host in a <code>SOCKS</code> proxy connection).</p>
+
+<h2 id="--host-resolver-rules=rules">--host-resolver-rules=<code>rules</code></h2>
+
+<p>Like <code>--host-rules</code> but these <code>rules</code> only apply to the host resolver.</p>
+
+<h2 id="--ignore-certificate-errors">--ignore-certificate-errors</h2>
+
+<p>Ignore certificate related errors.</p>
+
+<h2 id="--v=log_level">--v=<code>log_level</code></h2>
+
+<p>Gives the default maximal active V-logging level; 0 is the default. Normally
+positive values are used for V-logging levels.</p>
+
+<p>Passing <code>--v=-1</code> will disable logging.</p>
+
+<h2 id="--vmodule=pattern">--vmodule=<code>pattern</code></h2>
+
+<p>Gives the per-module maximal V-logging levels to override the value given by
+<code>--v</code>. E.g. <code>my_module=2,foo*=3</code> would change the logging level for all code in
+source files <code>my_module.*</code> and <code>foo*.*</code>.</p>
+
+<p>Any pattern containing a forward or backward slash will be tested against the
+whole pathname and not just the module. E.g. <code>*/foo/bar/*=2</code> would change the
+logging level for all code in source files under a <code>foo/bar</code> directory.</p>
+
+<p>To disable all chromium related logs and only enable your application logs you
+can do:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">app</span><span class="p">.</span><span class="nx">commandLine</span><span class="p">.</span><span class="nx">appendSwitch</span><span class="p">(</span><span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">commandLine</span><span class="p">.</span><span class="nx">appendSwitch</span><span class="p">(</span><span class="s1">&#39;vmodule&#39;</span><span class="p">,</span> <span class="s1">&#39;console=0&#39;</span><span class="p">);</span>
+</code></pre></div>
+
+      </div>
+    </div>
+    
+    <div class='row'>
+      <div class='ten columns release offset-by-one docs-footer'>
+        <span class="octicon octicon-pencil"></span>
+        See something that needs fixing? Propose a change on the <a href='https://github.com/atom/electron/blob/master/docs/api/chrome-command-line-switches.md'>source</a>.
+        <br>
+        <span class="octicon octicon-zap"></span>
+        Need a different version of the docs? See the <a href='/docs'>available versions</a>.
+      </div>
+    </div>
+    
+  </div>
+</section>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class='container'>
+    <div class='row'>
+      <div class='one-half column'>
+        <ul class='inline-list'>
+          <li><a href='https://github.com/atom/electron'>Repository</a></li>
+          <li><a href='/docs/v0.36.5'>Documentation</a></li>
+          <li><a href='/releases.html'>Releases</a></li>
+          <li><a href='http://blog.atom.io'>Blog</a></li>
+          <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+        </ul>
+      </div>
+
+      <div class='one-half column text-right'>
+        <a href='https://github.com' class="no-hover-dec"><span class='octicon octicon-code'></span> with <span class='octicon octicon-heart'></span> by <span class='octicon octicon-logo-github'></span></a>
+      </div>
+  </div>
+</footer>
+
+    <script>
+  var anchorForId = function (id) {
+    var anchor = document.createElement("a");
+    anchor.className = "header-link";
+    anchor.href      = "#" + id;
+    anchor.innerHTML = "<span class='octicon octicon-link'></span>";
+    anchor.title = "Permalink";
+    return anchor;
+  };
+
+  var linkifyAnchors = function (level, containingElement) {
+    var headers = containingElement.getElementsByTagName("h" + level);
+    for (var h = 0; h < headers.length; h++) {
+      var header = headers[h];
+
+      if (typeof header.id !== "undefined" && header.id !== "") {
+        header.appendChild(anchorForId(header.id));
+      }
+    }
+  };
+
+  document.onreadystatechange = function () {
+    if (this.readyState === "complete") {
+      var contentBlock = document.getElementsByClassName("docs")[0] || document.getElementsByClassName("news")[0];
+      if (!contentBlock) {
+        return;
+      }
+      for (var level = 1; level <= 6; level++) {
+        linkifyAnchors(level, contentBlock);
+      }
+    }
+  };
+</script>
+
+  </body>
+
+</html>

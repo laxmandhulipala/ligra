@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+  <title>Desktop Environment Integration Ko</title>
+  <meta name='description' content='Build cross platform desktop apps with web technologies'>
+
+  <link rel='shortcut icon' href='/images/favicon.ico'/>
+  <link rel='stylesheet' href='/css/normalize.css'>
+  <link rel='stylesheet' href='/css/skeleton.css'>
+  <link rel='stylesheet' href='/css/main.css'>
+  <link rel='stylesheet' href='/css/octicons/octicons.css'>
+  <link rel='stylesheet' href='/css/pygments.css'>
+  <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+  <link rel='canonical' href='/docs/v0.30.0/tutorial/desktop-environment-integration-ko/'>
+  <link rel='alternate' type='application/rss+xml' title='Electron' href='/feed.xml' />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-3769691-57', 'auto');
+    ga('send', 'pageview');
+  </script>
+</head>
+
+
+  <body>
+
+    <header>
+  <div class='top-bar'>
+    <div class='container'>
+      <div class='row'>
+        <div class='four columns'>
+          <ul class='navigation inline-list'>
+            <li><a href='/#built-on-electron'>Built on Electron</a></li>
+            <li><a href='/#get-started'>Get Started</a></li>
+          </ul>
+        </div>
+        <div class='eight columns text-right'>
+          <ul class='navigation inline-list'>
+            <li><a href='https://github.com/atom/electron'>Repository</a></li>
+            <li><a href='/docs/v0.36.5'>Documentation</a></li>
+            <li><a href='http://blog.atom.io'>Blog</a></li>
+            <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+    <div class='page-content'>
+      <div class='wrapper'>
+        <div class='page-template desktop-environment-integration-ko'>
+  <section class='jump-to-release is-compact'>
+  <div class='container'>
+    <div class='row'>
+      <div class='twelve columns'>
+      <h1><img class="electron-icon" src='/images/electron-icon.svg'>Electron Documentation</h1>
+      
+      <a href='/docs/v0.30.0/'>v0.30.0  </a> |
+      <a href='https://github.com/atom/electron/blob/master/docs/tutorial/desktop-environment-integration-ko.md'>Document Source</a>
+      
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class='docs'>
+  <div class='container'>
+    <div class='row'>
+      <div class='ten columns release offset-by-one'>
+        
+        <h6 class='docs-breadcrumb'>v0.30.0 / Tutorial
+           / Desktop Environment Integration Ko </h6>
+        
+
+        <h1 id="데스크톱-환경-통합">데스크톱 환경 통합</h1>
+
+<p>어플리케이션을 배포할 서로 다른 운영체제 시스템의 환경과 기능에 맞춰 사용 환경을 통합할 수 있습니다.
+예를 들어 Windows에선 태스크바의 JumpList에 바로가기를 추가할 수 있고 Mac(OS X)에선 dock menu에 커스텀 메뉴를 추가할 수 있습니다.</p>
+
+<p>이 가이드는 Electron API를 이용하여 각 운영체제 시스템의 기능을 활용하는 방법을 설명합니다.</p>
+
+<h2 id="최근-사용한-문서-(windows-&amp;-os-x)">최근 사용한 문서 (Windows &amp; OS X)</h2>
+
+<p>Windows와 OS X는 dock menu나 JumpList등을 통하여 최근 문서 리스트에 쉽게 접근할 수 있습니다.</p>
+
+<p><strong>JumpList:</strong></p>
+
+<p><img src="http://i.msdn.microsoft.com/dynimg/IC420538.png" alt="JumpList 최근 문서"></p>
+
+<p><strong>어플리케이션 dock menu:</strong></p>
+
+<p><img src="https://cloud.githubusercontent.com/assets/639601/5069610/2aa80758-6e97-11e4-8cfb-c1a414a10774.png" height="353" width="428" ></p>
+
+<p>파일을 최근 문서에 추가하려면 <a href="../api/app-ko.md#appaddrecentdocumentpath">app.addRecentDocument</a> API를 사용할 수 있습니다:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;app&#39;</span><span class="p">);</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">addRecentDocument</span><span class="p">(</span><span class="s1">&#39;/Users/USERNAME/Desktop/work.type&#39;</span><span class="p">);</span>
+</code></pre></div>
+<p>그리고 <a href="clearrecentdocuments">app.clearRecentDocuments</a> API로 최근 문서 리스트를 비울 수 있습니다:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">app</span><span class="p">.</span><span class="nx">clearRecentDocuments</span><span class="p">();</span>
+</code></pre></div>
+<h3 id="windows에서-주의할-점">Windows에서 주의할 점</h3>
+
+<p>이 기능을 Windows에서 사용할 땐 운영체제 시스템에 어플리케이션에서 사용하는 파일 확장자가 등록되어 있어야 합니다.
+그렇지 않은 경우 파일을 JumpList에 추가해도 추가되지 않습니다.
+어플리케이션 등록에 관련된 API의 모든 내용은 <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/ee872121(v=vs.85).aspx">Application Registration</a>에서 찾아볼 수 있습니다.</p>
+
+<p>유저가 JumpList에서 파일을 클릭할 경우 클릭된 파일의 경로가 커맨드 라인 인자로 추가되어 새로운 인스턴스의 어플리케이션이 실행됩니다.</p>
+
+<h3 id="os-x에서-주의할-점">OS X에서 주의할 점</h3>
+
+<p>파일이 최근 문서 메뉴에서 요청될 경우 <code>app</code> 모듈의 <code>open-file</code> 이벤트가 호출됩니다.</p>
+
+<h2 id="커스텀-독-메뉴-(os-x)">커스텀 독 메뉴 (OS X)</h2>
+
+<p>OS X는 개발자가 dock에 커스텀 메뉴를 만들 수 있도록 허용하고 있습니다.
+보통 어플리케이션의 특정 기능 바로가기를 만들 때 사용합니다:</p>
+
+<p><strong>Terminal.app의 dock menu:</strong></p>
+
+<p><img src="https://cloud.githubusercontent.com/assets/639601/5069962/6032658a-6e9c-11e4-9953-aa84006bdfff.png" height="354" width="341" ></p>
+
+<p>커스텀 dock menu를 설정하려면 <code>app.dock.setMenu</code> API를 사용하면 됩니다. OS X에서만 사용 가능합니다:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;app&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">Menu</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;menu&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">dockMenu</span> <span class="o">=</span> <span class="nx">Menu</span><span class="p">.</span><span class="nx">buildFromTemplate</span><span class="p">([</span>
+  <span class="p">{</span> <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;New Window&#39;</span><span class="p">,</span> <span class="nx">click</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;New Window&#39;</span><span class="p">);</span> <span class="p">}</span> <span class="p">},</span>
+  <span class="p">{</span> <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;New Window with Settings&#39;</span><span class="p">,</span> <span class="nx">submenu</span><span class="o">:</span> <span class="p">[</span>
+    <span class="p">{</span> <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;Basic&#39;</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;Pro&#39;</span><span class="p">}</span>
+  <span class="p">]},</span>
+  <span class="p">{</span> <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;New Command...&#39;</span><span class="p">}</span>
+<span class="p">]);</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">dock</span><span class="p">.</span><span class="nx">setMenu</span><span class="p">(</span><span class="nx">dockMenu</span><span class="p">);</span>
+</code></pre></div>
+<h2 id="사용자-작업-(windows)">사용자 작업 (Windows)</h2>
+
+<p>Windows에선 JumpList의 <code>Tasks</code> 카테고리에 원하는 작업을 설정할 수 있습니다.
+MSDN에선 해당 기능을 다음과 같이 설명하고 있습니다:</p>
+
+<blockquote>
+<p>어플리케이션 작업은 프로그램의 기능 그리고 주요사양 두가지를 기반으로 유저의 행동을 예측하여 정의합니다.
+실행할 필요가 없는 어플리케이션 작업은 작동하지 않을 때 반드시 context-free를 유지해야 합니다.
+작업은 일반 사용자가 프로그램을 실행하거나 이메일 프로그램으로 이메일을 작성하거나 달력을 불러오고
+워드 프로세서로 새 문서를 작성, 특정 모드, 부속 명령으로 프로그램을 실행하는 등의
+통계적, 일반적으로 가장 많이 사용되는 작업인지를 고려해야 합니다.
+어플리케이션 작업은 일반 유저가 필요로 하지 않는 고급 기능을 조잡하게 채우거나 등록과 같은 일회성의 작업을 포함해선 안됩니다.
+작업에 특별 이벤트 또는 업그레이드 등의 홍보성 작업을 추가하면 안됩니다.</p>
+
+<p>작업 리스트는 가능한 한 정적으로 유지되는 것을 적극 권장합니다.
+이것은 동일한 상태 또는 응용 프로그램의 상태에 관계없이 유지되어야 합니다.
+작업 목록은 동적으로 변경할 수 있지만 몇몇 유저는 예상하지 못한 작업 목록 변경에 혼동할 수 있다는 점을 고려해야 합니다.</p>
+</blockquote>
+
+<p><strong>Internet Explorer의 작업:</strong></p>
+
+<p><img src="http://i.msdn.microsoft.com/dynimg/IC420539.png" alt="IE"></p>
+
+<p>OS X의 말 그대로 메뉴로 작동하는 dock menu 와는 달리 Windows의 사용자 작업은 어플리케이션 바로가기처럼 작동합니다.
+유저가 작업을 클릭할 시 설정한 인자와 함께 새로운 어플리케이션이 실행됩니다.</p>
+
+<p>사용자 작업을 설정하려면 <a href="../api/app-ko.md#appsetusertaskstasks">app.setUserTasks</a> API를 사용하여 구현할 수 있습니다:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;app&#39;</span><span class="p">);</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">setUserTasks</span><span class="p">([</span>
+  <span class="p">{</span>
+    <span class="nx">program</span><span class="o">:</span> <span class="nx">process</span><span class="p">.</span><span class="nx">execPath</span><span class="p">,</span>
+    <span class="nx">arguments</span><span class="o">:</span> <span class="s1">&#39;--new-window&#39;</span><span class="p">,</span>
+    <span class="nx">iconPath</span><span class="o">:</span> <span class="nx">process</span><span class="p">.</span><span class="nx">execPath</span><span class="p">,</span>
+    <span class="nx">iconIndex</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;New Window&#39;</span><span class="p">,</span>
+    <span class="nx">description</span><span class="o">:</span> <span class="s1">&#39;Create a new window&#39;</span>
+  <span class="p">}</span>
+<span class="p">]);</span>
+</code></pre></div>
+<p>작업 리스트를 비우려면 간단히 <code>app.setUserTasks</code> 메서드의 첫번째 인자에 빈 배열을 넣어 호출하면 됩니다:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">app</span><span class="p">.</span><span class="nx">setUserTasks</span><span class="p">([]);</span>
+</code></pre></div>
+<p>사용자 작업 리스트는 어플리케이션이 종료되어도 태스크바에 여전히 보존됩니다. 그러므로 어플리케이션이 삭제되기 전까지 이 기능이 제대로 작동하도록 하기 위해 반드시 프로그램 경로와 아이콘 경로를 지정해야 합니다.</p>
+
+<h2 id="unity-런처-숏컷-기능-(linux)">Unity 런처 숏컷 기능 (Linux)</h2>
+
+<p>Unity 환경에선 <code>.desktop</code> 파일을 수정함으로써 런처에 새로운 커스텀 엔트리를 추가할 수 있습니다. <a href="https://help.ubuntu.com/community/UnityLaunchersAndDesktopFiles#Adding_shortcuts_to_a_launcher">Adding shortcuts to a launcher</a> 가이드를 참고하세요.</p>
+
+<p><strong>Audacious의 런처 숏컷:</strong></p>
+
+<p><img src="https://help.ubuntu.com/community/UnityLaunchersAndDesktopFiles?action=AttachFile&amp;do=get&amp;target=shortcuts.png" alt="audacious"></p>
+
+<h2 id="taskbar-progress-기능-(windows-&amp;-unity)">Taskbar progress 기능 (Windows &amp; Unity)</h2>
+
+<p>Windows에선 태스크바의 어플리케이션 버튼에 progress bar를 추가할 수 있습니다.
+이 기능은 사용자가 어플리케이션의 창을 열지 않고도 어플리케이션의 작업의 상태 정보를 시각적으로 보여줄 수 있도록 해줍니다.</p>
+
+<p>또한 Unity DE도 런처에 progress bar를 부착할 수 있습니다.</p>
+
+<p><strong>태스크바 버튼의 progress bar:</strong></p>
+
+<p><img src="https://cloud.githubusercontent.com/assets/639601/5081682/16691fda-6f0e-11e4-9676-49b6418f1264.png" alt="Taskbar Progress Bar"></p>
+
+<p><strong>Unity 런처의 progress bar:</strong></p>
+
+<p><img src="https://cloud.githubusercontent.com/assets/639601/5081747/4a0a589e-6f0f-11e4-803f-91594716a546.png" alt="Unity Launcher"></p>
+
+<p>이 기능은 <a href="../api/browser-window-ko.md#browserwindowsetprogressbarprogress">BrowserWindow.setProgressBar</a> API를 사용하여 구현할 수 있습니다:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nb">window</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">BrowserWindow</span><span class="p">({...});</span>
+<span class="nb">window</span><span class="p">.</span><span class="nx">setProgressBar</span><span class="p">(</span><span class="mf">0.5</span><span class="p">);</span>
+</code></pre></div>
+<h2 id="윈도우-대표-파일-제시-(os-x)">윈도우 대표 파일 제시 (OS X)</h2>
+
+<p>OS X는 윈도우에서 대표 파일을 설정할 수 있습니다. 쉽게 말해 타이틀바에서 파일 아이콘을 볼 수 있을 때 사용자가 Command-Click 또는 Control-Click 할 경우 파일 경로 팝업이 보여집니다.
+또한 윈도우의 상태도 지정할 수 있습니다. 쉽게 말해 로드된 문서의 수정여부를 타이틀바 파일 아이콘에 표시할 수 있습니다.</p>
+
+<p><strong>대표 파일 팝업 메뉴:</strong></p>
+
+<p><img src="https://cloud.githubusercontent.com/assets/639601/5082061/670a949a-6f14-11e4-987a-9aaa04b23c1d.png" height="232" width="663" ></p>
+
+<p>대표 파일 관련 API는 <a href="../api/browser-window-ko.md#browserwindowsetrepresentedfilenamefilename">BrowserWindow.setRepresentedFilename</a> 과 <a href="../api/browser-window-ko.md#browserwindowsetdocumenteditededited">BrowserWindow.setDocumentEdited</a>를 사용할 수 있습니다:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nb">window</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">BrowserWindow</span><span class="p">({...});</span>
+<span class="nb">window</span><span class="p">.</span><span class="nx">setRepresentedFilename</span><span class="p">(</span><span class="s1">&#39;/etc/passwd&#39;</span><span class="p">);</span>
+<span class="nb">window</span><span class="p">.</span><span class="nx">setDocumentEdited</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+</code></pre></div>
+
+      </div>
+    </div>
+    
+    <div class='row'>
+      <div class='ten columns release offset-by-one docs-footer'>
+        <span class="octicon octicon-pencil"></span>
+        See something that needs fixing? Propose a change on the <a href='https://github.com/atom/electron/blob/master/docs/tutorial/desktop-environment-integration-ko.md'>source</a>.
+        <br>
+        <span class="octicon octicon-zap"></span>
+        Need a different version of the docs? See the <a href='/docs'>available versions</a>.
+      </div>
+    </div>
+    
+  </div>
+</section>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class='container'>
+    <div class='row'>
+      <div class='one-half column'>
+        <ul class='inline-list'>
+          <li><a href='https://github.com/atom/electron'>Repository</a></li>
+          <li><a href='/docs/v0.36.5'>Documentation</a></li>
+          <li><a href='/releases.html'>Releases</a></li>
+          <li><a href='http://blog.atom.io'>Blog</a></li>
+          <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+        </ul>
+      </div>
+
+      <div class='one-half column text-right'>
+        <a href='https://github.com' class="no-hover-dec"><span class='octicon octicon-code'></span> with <span class='octicon octicon-heart'></span> by <span class='octicon octicon-logo-github'></span></a>
+      </div>
+  </div>
+</footer>
+
+    <script>
+  var anchorForId = function (id) {
+    var anchor = document.createElement("a");
+    anchor.className = "header-link";
+    anchor.href      = "#" + id;
+    anchor.innerHTML = "<span class='octicon octicon-link'></span>";
+    anchor.title = "Permalink";
+    return anchor;
+  };
+
+  var linkifyAnchors = function (level, containingElement) {
+    var headers = containingElement.getElementsByTagName("h" + level);
+    for (var h = 0; h < headers.length; h++) {
+      var header = headers[h];
+
+      if (typeof header.id !== "undefined" && header.id !== "") {
+        header.appendChild(anchorForId(header.id));
+      }
+    }
+  };
+
+  document.onreadystatechange = function () {
+    if (this.readyState === "complete") {
+      var contentBlock = document.getElementsByClassName("docs")[0] || document.getElementsByClassName("news")[0];
+      if (!contentBlock) {
+        return;
+      }
+      for (var level = 1; level <= 6; level++) {
+        linkifyAnchors(level, contentBlock);
+      }
+    }
+  };
+</script>
+
+  </body>
+
+</html>

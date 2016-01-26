@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+  <title>Accelerator Ko</title>
+  <meta name='description' content='Build cross platform desktop apps with web technologies'>
+
+  <link rel='shortcut icon' href='/images/favicon.ico'/>
+  <link rel='stylesheet' href='/css/normalize.css'>
+  <link rel='stylesheet' href='/css/skeleton.css'>
+  <link rel='stylesheet' href='/css/main.css'>
+  <link rel='stylesheet' href='/css/octicons/octicons.css'>
+  <link rel='stylesheet' href='/css/pygments.css'>
+  <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+  <link rel='canonical' href='/docs/v0.29.0/api/accelerator-ko/'>
+  <link rel='alternate' type='application/rss+xml' title='Electron' href='/feed.xml' />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-3769691-57', 'auto');
+    ga('send', 'pageview');
+  </script>
+</head>
+
+
+  <body>
+
+    <header>
+  <div class='top-bar'>
+    <div class='container'>
+      <div class='row'>
+        <div class='four columns'>
+          <ul class='navigation inline-list'>
+            <li><a href='/#built-on-electron'>Built on Electron</a></li>
+            <li><a href='/#get-started'>Get Started</a></li>
+          </ul>
+        </div>
+        <div class='eight columns text-right'>
+          <ul class='navigation inline-list'>
+            <li><a href='https://github.com/atom/electron'>Repository</a></li>
+            <li><a href='/docs/v0.36.5'>Documentation</a></li>
+            <li><a href='http://blog.atom.io'>Blog</a></li>
+            <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+    <div class='page-content'>
+      <div class='wrapper'>
+        <div class='page-template accelerator-ko'>
+  <section class='jump-to-release is-compact'>
+  <div class='container'>
+    <div class='row'>
+      <div class='twelve columns'>
+      <h1><img class="electron-icon" src='/images/electron-icon.svg'>Electron Documentation</h1>
+      
+      <a href='/docs/v0.29.0/'>v0.29.0  </a> |
+      <a href='https://github.com/atom/electron/blob/master/docs/api/accelerator-ko.md'>Document Source</a>
+      
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class='docs'>
+  <div class='container'>
+    <div class='row'>
+      <div class='ten columns release offset-by-one'>
+        
+        <h6 class='docs-breadcrumb'>v0.29.0 / API
+           / Accelerator Ko </h6>
+        
+
+        <h1 id="accelerator">Accelerator</h1>
+
+<p>Accelerator는 키보드 단축키를 표현하는 문자열입니다, 여러 혼합키와 키코드를 <code>+</code> 문자를
+이용하여 결합할 수 있습니다.</p>
+
+<p>예제:</p>
+
+<ul>
+<li><code>Command+A</code></li>
+<li><code>Ctrl+Shift+Z</code></li>
+</ul>
+
+<h2 id="플랫폼에-관련하여-주의할-점">플랫폼에 관련하여 주의할 점</h2>
+
+<p>Linux와 Windows에서는 <code>Command</code>키가 없으므로 작동하지 않습니다. 대신에 <code>CommandOrControl</code>을
+사용하면 OS X의 <code>Command</code>와 Linux, Windows의 <code>Control</code> 모두 지원할 수 있습니다.</p>
+
+<p><code>Super</code>키는 Windows와 Linux 에서는 <code>윈도우</code>키를, OS X에서는 <code>Cmd</code>키로 맵핑됩니다.</p>
+
+<h2 id="사용-가능한-혼합키">사용 가능한 혼합키</h2>
+
+<ul>
+<li><code>Command</code> (단축어 <code>Cmd</code>)</li>
+<li><code>Control</code> (단축어 <code>Ctrl</code>)</li>
+<li><code>CommandOrControl</code> (단축어 <code>CmdOrCtrl</code>)</li>
+<li><code>Alt</code></li>
+<li><code>Shift</code></li>
+<li><code>Super</code></li>
+</ul>
+
+<h2 id="사용-가능한-전체-키코드">사용 가능한 전체 키코드</h2>
+
+<ul>
+<li><code>0</code> 부터 <code>9</code> 까지</li>
+<li><code>A</code> 부터 <code>Z</code> 까지</li>
+<li><code>F1</code> 부터 <code>F24</code> 까지</li>
+<li><code>~</code>, <code>!</code>, <code>@</code>, <code>#</code>, <code>$</code>, etc 와 같은 구두점 기호들</li>
+<li><code>Plus</code></li>
+<li><code>Space</code></li>
+<li><code>Backspace</code></li>
+<li><code>Delete</code></li>
+<li><code>Insert</code></li>
+<li><code>Return</code> (또는 <code>Enter</code>)</li>
+<li><code>Up</code>, <code>Down</code>, <code>Left</code> 와 <code>Right</code></li>
+<li><code>Home</code> 그리고 <code>End</code></li>
+<li><code>PageUp</code> 그리고 <code>PageDown</code></li>
+<li><code>Escape</code> (단축어 <code>Esc</code>)</li>
+<li><code>VolumeUp</code>, <code>VolumeDown</code> 그리고 <code>VolumeMute</code></li>
+<li><code>MediaNextTrack</code>, <code>MediaPreviousTrack</code>, <code>MediaStop</code> 그리고 <code>MediaPlayPause</code></li>
+</ul>
+
+<p><strong>키코드는 <code>단축어</code>로도 사용할 수 있습니다</strong></p>
+
+
+      </div>
+    </div>
+    
+    <div class='row'>
+      <div class='ten columns release offset-by-one docs-footer'>
+        <span class="octicon octicon-pencil"></span>
+        See something that needs fixing? Propose a change on the <a href='https://github.com/atom/electron/blob/master/docs/api/accelerator-ko.md'>source</a>.
+        <br>
+        <span class="octicon octicon-zap"></span>
+        Need a different version of the docs? See the <a href='/docs'>available versions</a>.
+      </div>
+    </div>
+    
+  </div>
+</section>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class='container'>
+    <div class='row'>
+      <div class='one-half column'>
+        <ul class='inline-list'>
+          <li><a href='https://github.com/atom/electron'>Repository</a></li>
+          <li><a href='/docs/v0.36.5'>Documentation</a></li>
+          <li><a href='/releases.html'>Releases</a></li>
+          <li><a href='http://blog.atom.io'>Blog</a></li>
+          <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+        </ul>
+      </div>
+
+      <div class='one-half column text-right'>
+        <a href='https://github.com' class="no-hover-dec"><span class='octicon octicon-code'></span> with <span class='octicon octicon-heart'></span> by <span class='octicon octicon-logo-github'></span></a>
+      </div>
+  </div>
+</footer>
+
+    <script>
+  var anchorForId = function (id) {
+    var anchor = document.createElement("a");
+    anchor.className = "header-link";
+    anchor.href      = "#" + id;
+    anchor.innerHTML = "<span class='octicon octicon-link'></span>";
+    anchor.title = "Permalink";
+    return anchor;
+  };
+
+  var linkifyAnchors = function (level, containingElement) {
+    var headers = containingElement.getElementsByTagName("h" + level);
+    for (var h = 0; h < headers.length; h++) {
+      var header = headers[h];
+
+      if (typeof header.id !== "undefined" && header.id !== "") {
+        header.appendChild(anchorForId(header.id));
+      }
+    }
+  };
+
+  document.onreadystatechange = function () {
+    if (this.readyState === "complete") {
+      var contentBlock = document.getElementsByClassName("docs")[0] || document.getElementsByClassName("news")[0];
+      if (!contentBlock) {
+        return;
+      }
+      for (var level = 1; level <= 6; level++) {
+        linkifyAnchors(level, contentBlock);
+      }
+    }
+  };
+</script>
+
+  </body>
+
+</html>

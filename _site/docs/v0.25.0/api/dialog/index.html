@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+  <title>Dialog</title>
+  <meta name='description' content='Build cross platform desktop apps with web technologies'>
+
+  <link rel='shortcut icon' href='/images/favicon.ico'/>
+  <link rel='stylesheet' href='/css/normalize.css'>
+  <link rel='stylesheet' href='/css/skeleton.css'>
+  <link rel='stylesheet' href='/css/main.css'>
+  <link rel='stylesheet' href='/css/octicons/octicons.css'>
+  <link rel='stylesheet' href='/css/pygments.css'>
+  <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+  <link rel='canonical' href='/docs/v0.25.0/api/dialog/'>
+  <link rel='alternate' type='application/rss+xml' title='Electron' href='/feed.xml' />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-3769691-57', 'auto');
+    ga('send', 'pageview');
+  </script>
+</head>
+
+
+  <body>
+
+    <header>
+  <div class='top-bar'>
+    <div class='container'>
+      <div class='row'>
+        <div class='four columns'>
+          <ul class='navigation inline-list'>
+            <li><a href='/#built-on-electron'>Built on Electron</a></li>
+            <li><a href='/#get-started'>Get Started</a></li>
+          </ul>
+        </div>
+        <div class='eight columns text-right'>
+          <ul class='navigation inline-list'>
+            <li><a href='https://github.com/atom/electron'>Repository</a></li>
+            <li><a href='/docs/v0.36.5'>Documentation</a></li>
+            <li><a href='http://blog.atom.io'>Blog</a></li>
+            <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+    <div class='page-content'>
+      <div class='wrapper'>
+        <div class='page-template dialog'>
+  <section class='jump-to-release is-compact'>
+  <div class='container'>
+    <div class='row'>
+      <div class='twelve columns'>
+      <h1><img class="electron-icon" src='/images/electron-icon.svg'>Electron Documentation</h1>
+      
+      <a href='/docs/v0.25.0/'>v0.25.0  </a> |
+      <a href='https://github.com/atom/electron/blob/master/docs/api/dialog.md'>Document Source</a>
+      
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class='docs'>
+  <div class='container'>
+    <div class='row'>
+      <div class='ten columns release offset-by-one'>
+        
+        <h6 class='docs-breadcrumb'>v0.25.0 / API
+           / Dialog </h6>
+        
+
+        <h1 id="dialog">dialog</h1>
+
+<p>The <code>dialog</code> module provides APIs to show native system dialogs, so web
+applications can get the same user experience with native applications.</p>
+
+<p>An example of showing a dialog to select multiple files and directories:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">win</span> <span class="o">=</span> <span class="p">...;</span>  <span class="c1">// window in which to show the dialog</span>
+<span class="kd">var</span> <span class="nx">dialog</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;dialog&#39;</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">dialog</span><span class="p">.</span><span class="nx">showOpenDialog</span><span class="p">({</span> <span class="nx">properties</span><span class="o">:</span> <span class="p">[</span> <span class="s1">&#39;openFile&#39;</span><span class="p">,</span> <span class="s1">&#39;openDirectory&#39;</span><span class="p">,</span> <span class="s1">&#39;multiSelections&#39;</span> <span class="p">]}));</span>
+</code></pre></div>
+<p><strong>Note for OS X</strong>: If you want to present dialogs as sheets, the only thing you have to do is to provide a <code>BrowserWindow</code> reference in the <code>browserWindow</code> parameter.</p>
+
+<h2 id="dialog.showopendialog([browserwindow],-[options],-[callback])">dialog.showOpenDialog([browserWindow], [options], [callback])</h2>
+
+<ul>
+<li><code>browserWindow</code> BrowserWindow</li>
+<li><code>options</code> Object
+
+<ul>
+<li><code>title</code> String</li>
+<li><code>defaultPath</code> String</li>
+<li><code>filters</code> Array</li>
+<li><code>properties</code> Array - Contains which features the dialog should use, can
+contain <code>openFile</code>, <code>openDirectory</code>, <code>multiSelections</code> and
+<code>createDirectory</code></li>
+</ul></li>
+<li><code>callback</code> Function</li>
+</ul>
+
+<p>On success, returns an array of file paths chosen by the user, otherwise
+returns <code>undefined</code>.</p>
+
+<p>The <code>filters</code> specifies an array of file types that can be displayed or
+selected, an example is:</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="p">{</span>
+  <span class="nx">filters</span><span class="o">:</span> <span class="p">[</span>
+    <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Images&#39;</span><span class="p">,</span> <span class="nx">extensions</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;jpg&#39;</span><span class="p">,</span> <span class="s1">&#39;png&#39;</span><span class="p">,</span> <span class="s1">&#39;gif&#39;</span><span class="p">]</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Movies&#39;</span><span class="p">,</span> <span class="nx">extensions</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;mkv&#39;</span><span class="p">,</span> <span class="s1">&#39;avi&#39;</span><span class="p">,</span> <span class="s1">&#39;mp4&#39;</span><span class="p">]</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Custom File Type&#39;</span><span class="p">,</span> <span class="nx">extensions</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;as&#39;</span><span class="p">]</span> <span class="p">},</span>
+  <span class="p">],</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>If a <code>callback</code> is passed, the API call would be asynchronous and the result
+would be passed via <code>callback(filenames)</code></p>
+
+<p><strong>Note:</strong> On Windows and Linux, an open dialog could not be both file selector
+and directory selector at the same time, so if you set <code>properties</code> to
+<code>[&#39;openFile&#39;, &#39;openDirectory&#39;]</code> on these platforms, a directory selector would
+be showed.</p>
+
+<h2 id="dialog.showsavedialog([browserwindow],-[options],-[callback])">dialog.showSaveDialog([browserWindow], [options], [callback])</h2>
+
+<ul>
+<li><code>browserWindow</code> BrowserWindow</li>
+<li><code>options</code> Object
+
+<ul>
+<li><code>title</code> String</li>
+<li><code>defaultPath</code> String</li>
+<li><code>filters</code> Array</li>
+</ul></li>
+<li><code>callback</code> Function</li>
+</ul>
+
+<p>On success, returns the path of file chosen by the user, otherwise returns
+<code>undefined</code>.</p>
+
+<p>The <code>filters</code> specifies an array of file types that can be displayed, see
+<code>dialog.showOpenDialog</code> for an example.</p>
+
+<p>If a <code>callback</code> is passed, the API call would be asynchronous and the result
+would be passed via <code>callback(filename)</code></p>
+
+<h2 id="dialog.showmessagebox([browserwindow],-options,-[callback])">dialog.showMessageBox([browserWindow], options, [callback])</h2>
+
+<ul>
+<li><code>browserWindow</code> BrowserWindow</li>
+<li><code>options</code> Object
+
+<ul>
+<li><code>type</code> String - Can be <code>&quot;none&quot;</code>, <code>&quot;info&quot;</code> or <code>&quot;warning&quot;</code></li>
+<li><code>buttons</code> Array - Array of texts for buttons</li>
+<li><code>title</code> String - Title of the message box, some platforms will not show it</li>
+<li><code>message</code> String - Content of the message box</li>
+<li><code>detail</code> String - Extra information of the message</li>
+<li><code>icon</code> <a href="http://electron.atom.io/docs/v0.25.0/api/native-image">NativeImage</a></li>
+</ul></li>
+<li><code>callback</code> Function</li>
+</ul>
+
+<p>Shows a message box, it will block until the message box is closed. It returns
+the index of the clicked button.</p>
+
+<p>If a <code>callback</code> is passed, the API call would be asynchronous and the result
+would be passed via <code>callback(response)</code></p>
+
+<h2 id="dialog.showerrorbox(title,-content)">dialog.showErrorBox(title, content)</h2>
+
+<p>Runs a modal dialog that shows an error message.</p>
+
+<p>This API can be called safely before the <code>ready</code> event of <code>app</code> module emits, it
+is usually used to report errors in early stage of startup.</p>
+
+
+      </div>
+    </div>
+    
+    <div class='row'>
+      <div class='ten columns release offset-by-one docs-footer'>
+        <span class="octicon octicon-pencil"></span>
+        See something that needs fixing? Propose a change on the <a href='https://github.com/atom/electron/blob/master/docs/api/dialog.md'>source</a>.
+        <br>
+        <span class="octicon octicon-zap"></span>
+        Need a different version of the docs? See the <a href='/docs'>available versions</a>.
+      </div>
+    </div>
+    
+  </div>
+</section>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer>
+  <div class='container'>
+    <div class='row'>
+      <div class='one-half column'>
+        <ul class='inline-list'>
+          <li><a href='https://github.com/atom/electron'>Repository</a></li>
+          <li><a href='/docs/v0.36.5'>Documentation</a></li>
+          <li><a href='/releases.html'>Releases</a></li>
+          <li><a href='http://blog.atom.io'>Blog</a></li>
+          <li><a href='https://discuss.atom.io/c/electron'>Discuss</a></li>
+        </ul>
+      </div>
+
+      <div class='one-half column text-right'>
+        <a href='https://github.com' class="no-hover-dec"><span class='octicon octicon-code'></span> with <span class='octicon octicon-heart'></span> by <span class='octicon octicon-logo-github'></span></a>
+      </div>
+  </div>
+</footer>
+
+    <script>
+  var anchorForId = function (id) {
+    var anchor = document.createElement("a");
+    anchor.className = "header-link";
+    anchor.href      = "#" + id;
+    anchor.innerHTML = "<span class='octicon octicon-link'></span>";
+    anchor.title = "Permalink";
+    return anchor;
+  };
+
+  var linkifyAnchors = function (level, containingElement) {
+    var headers = containingElement.getElementsByTagName("h" + level);
+    for (var h = 0; h < headers.length; h++) {
+      var header = headers[h];
+
+      if (typeof header.id !== "undefined" && header.id !== "") {
+        header.appendChild(anchorForId(header.id));
+      }
+    }
+  };
+
+  document.onreadystatechange = function () {
+    if (this.readyState === "complete") {
+      var contentBlock = document.getElementsByClassName("docs")[0] || document.getElementsByClassName("news")[0];
+      if (!contentBlock) {
+        return;
+      }
+      for (var level = 1; level <= 6; level++) {
+        linkifyAnchors(level, contentBlock);
+      }
+    }
+  };
+</script>
+
+  </body>
+
+</html>
