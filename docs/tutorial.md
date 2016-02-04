@@ -8,7 +8,7 @@ redirect_from: "docs/index.html"
 ---
 
 In this tutorial we develop a parallel breadth-first search algorithm in Ligra. 
-If you don't already have Ligra setup, please first follow the [installation instructions](/react/docs/installation.html).
+If you don't already have Ligra setup, please first follow the [installation instructions](/ligra/docs/installation.html).
 
 ## Preliminaries
 
