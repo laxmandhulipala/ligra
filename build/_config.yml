@@ -14,5 +14,6 @@ exclude:
 - README.md
 - Rakefile
 - vendor/bundle
+- push.sh
 markdown: redcarpet
 highlighter: pygments
