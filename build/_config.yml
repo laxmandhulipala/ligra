@@ -16,5 +16,3 @@ exclude:
 - vendor/bundle
 markdown: redcarpet
 highlighter: pygments
-# Build settings
-#markdown: kramdown
