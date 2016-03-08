@@ -97,9 +97,45 @@
     </h1>
     <div class="subHeader"></div>
 
-    <p>In this tutorial we develop a parallel breadth-first search algorithm in Ligra. 
-If you don&#39;t already have Ligra setup, please first follow the <a href="/ligra/docs/installation.html">installation instructions</a>.</p>
+    <h2><a class="anchor" name="introduction"></a>Introduction <a class="hash-link" href="#introduction">#</a></h2>
+<p>Ligra is a lightweight graph processing framework for shared memory. It is particularly 
+suited for implementing parallel graph traversal algorithms where only a subset of the 
+vertices are processed in an iteration. </p>
+
+<p>The project was motivated by the fact that the 
+largest publicly available real-world graphs all fit in shared memory. When graphs fit 
+in shared-memory, processing them using Ligra can give performance improvements of up 
+orders of magnitude compared to distributed-memory graph processing systems. </p>
 <h2><a class="anchor" name="preliminaries"></a>Preliminaries <a class="hash-link" href="#preliminaries">#</a></h2>
+<p>After this tutorial, you will understand how to structure and implement a parallel 
+breadth-first search algorithm in Ligra. </p>
+<h2><a class="anchor" name="datatypes"></a>Datatypes <a class="hash-link" href="#datatypes">#</a></h2>
+<p>There are two main abstractions in Ligra: the <strong>graph</strong> datatype and the <strong>vertexSubset</strong> datatype.
+A graph can be parametrized by one of four vertex types:</p>
+
+<ul>
+<li>symmetricVertex</li>
+<li>asymmetricVertex</li>
+<li>compressedSymmetricVertex</li>
+<li>compressedAsymmetricVertex</li>
+</ul>
+
+<p>The vertex type will depend on the type of graph the application is dealing with. When
+reading a graph from file, this type will be automatically selected based on whether the
+underlying graph is compressed or symmetric. </p>
+
+<p>A vertexSubset represents </p>
+
+<p>Ligra is designed to support algorithms that run in rounds by operating on subsets
+of vertices. </p>
+
+<p>Ligra supports two data types, one representing a graph, and another for representing 
+subsets of the vertices, which is referred to as vertexSubsets. Other than constructors 
+and size queries, the interface supplies only two functions, one for mapping over 
+vertices (vertexMap) and the other for mapping over edges (edgeMap). Since a vertexSubset
+is a subset of vertices, the vertexMap can be used to map over any subset of the original 
+vertices, and hence its utility in traversal algorithms---or more generally in any algorithm in which only (possibly small) subsets of the graph are processed on each round. The edgeMap also processes a subset of the edges, which is specified using a vertexSubset to indicate the valid sources, and a Boolean function to indicate the valid targets of each edge.</p>
+
 <p>Open up <code>BFS.C</code> in your favorite text editor, and write the following stub for a
 function called <code>Compute</code> which will serve as the entrypoint to our application.</p>
 <div class="highlight"><pre><code class="language-c" data-lang="c"><span class="n">template</span> <span class="o">&lt;</span><span class="n">class</span> <span class="n">vertex</span><span class="o">&gt;</span>
