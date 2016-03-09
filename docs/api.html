@@ -19,6 +19,17 @@
   <script src="//use.typekit.net/vqa1hcx.js"></script>
   <script>try{Typekit.load();}catch(e){}</script>
 
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+
   <script src="/ligra/js/codemirror.js"></script>
   <script src="/ligra/js/javascript.js"></script>
 </head>
@@ -35,7 +46,7 @@
       Ligra 
     </a>
     <ul class="nav-site nav-site-internal">
-      <li><a href="/ligra/docs/tutorial.html" class="active">Docs</a></li>
+      <li><a href="/ligra/docs/introduction.html" class="active">Docs</a></li>
       <li><a href="/ligra/downloads.html">Download</a></li>
       <li><a href="/ligra/blog/">Blog</a></li>
     </ul>
@@ -58,17 +69,22 @@
       <ul>
         
           <li>
-            <a href="/ligra/docs/tutorial.html">Tutorial</a>
+            <a href="/ligra/docs/introduction.html">Introduction</a>
             
           </li>
         
           <li>
-            <a href="/ligra/docs/installation.html">Installation</a>
+            <a href="/ligra/docs/getting_started.html">Getting Started</a>
             
           </li>
         
           <li>
-            <a href="/ligra/docs/compilation.html">Compilation</a>
+            <a href="/ligra/docs/tutorial_bfs.html">Tutorial: BFS</a>
+            
+          </li>
+        
+          <li>
+            <a href="/ligra/docs/tutorial_kcore.html">Tutorial: KCore</a>
             
           </li>
         
@@ -102,7 +118,7 @@
     <div class="docs-prevnext">
       
       
-        <a class="docs-next" href="/react/docs/tutorial.html">Next &rarr;</a>
+        <a class="docs-next" href="/ligra/docs/introduction.html">Next &rarr;</a>
       
     </div>
   </div>

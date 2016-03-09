@@ -6,18 +6,29 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Installation</title>
+  <title>Tutorial: Breadth-First Search</title>
   <meta name="description" content="A Lightweight Graph Processing Framework for Shared Memory">
 
   <link rel="stylesheet" href="/ligra/css/main.css">
   <link rel="stylesheet" href="/ligra/css/syntax.css">
 
-  <link rel="canonical" href="http://laxmandhulipala.github.io/ligra/docs/installation.html">
+  <link rel="canonical" href="http://laxmandhulipala.github.io/ligra/docs/tutorial_bfs.html">
   <link rel="alternate" type="application/rss+xml" title="" href="http://laxmandhulipala.github.io/ligra/feed.xml">
 
 
   <script src="//use.typekit.net/vqa1hcx.js"></script>
   <script>try{Typekit.load();}catch(e){}</script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
 
   <script src="/ligra/js/codemirror.js"></script>
   <script src="/ligra/js/javascript.js"></script>
@@ -35,7 +46,7 @@
       Ligra 
     </a>
     <ul class="nav-site nav-site-internal">
-      <li><a href="/ligra/docs/tutorial.html" class="active">Docs</a></li>
+      <li><a href="/ligra/docs/introduction.html" class="active">Docs</a></li>
       <li><a href="/ligra/downloads.html">Download</a></li>
       <li><a href="/ligra/blog/">Blog</a></li>
     </ul>
@@ -58,17 +69,22 @@
       <ul>
         
           <li>
-            <a href="/ligra/docs/tutorial.html">Tutorial</a>
+            <a href="/ligra/docs/introduction.html">Introduction</a>
             
           </li>
         
           <li>
-            <a href="/ligra/docs/installation.html" class="active">Installation</a>
+            <a href="/ligra/docs/getting_started.html">Getting Started</a>
             
           </li>
         
           <li>
-            <a href="/ligra/docs/compilation.html">Compilation</a>
+            <a href="/ligra/docs/tutorial_bfs.html" class="active">Tutorial: BFS</a>
+            
+          </li>
+        
+          <li>
+            <a href="/ligra/docs/tutorial_kcore.html">Tutorial: KCore</a>
             
           </li>
         
@@ -93,16 +109,23 @@
 
   <div class="inner-content">
     <h1>
-      Installation
+      Tutorial: Breadth-First Search
     </h1>
     <div class="subHeader"></div>
 
-    
+    <p>In this project, we&#39;ll implement a parallel version of Breadth-First Search in 
+Ligra. Given a graph, $G = (V,E)$, and a source node $s$, a Breadth-First Search 
+processes the graph level by level, starting from $s$. The output of the 
+algorithm is an array $A$ s.t. $\forall v \in V, A[v]$ holds the parent of $v$ in 
+the <em>breadth-first tree</em> rooted at $s$. </p>
+
 
     <div class="docs-prevnext">
       
+        <a class="docs-prev" href="/ligra/docs/getting_started.html">&larr; Prev</a>
       
-        <a class="docs-next" href="/react/docs/tutorial.html">Next &rarr;</a>
+      
+        <a class="docs-next" href="/ligra/docs/tutorial_kcore.html">Next &rarr;</a>
       
     </div>
   </div>

@@ -6,13 +6,13 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Examples</title>
+  <title>Getting Started</title>
   <meta name="description" content="A Lightweight Graph Processing Framework for Shared Memory">
 
   <link rel="stylesheet" href="/ligra/css/main.css">
   <link rel="stylesheet" href="/ligra/css/syntax.css">
 
-  <link rel="canonical" href="http://laxmandhulipala.github.io/ligra/docs/examples.html">
+  <link rel="canonical" href="http://laxmandhulipala.github.io/ligra/docs/getting_started.html">
   <link rel="alternate" type="application/rss+xml" title="" href="http://laxmandhulipala.github.io/ligra/feed.xml">
 
 
@@ -74,7 +74,7 @@
           </li>
         
           <li>
-            <a href="/ligra/docs/getting_started.html">Getting Started</a>
+            <a href="/ligra/docs/getting_started.html" class="active">Getting Started</a>
             
           </li>
         
@@ -94,7 +94,7 @@
           </li>
         
           <li>
-            <a href="/ligra/docs/examples.html" class="active">Examples</a>
+            <a href="/ligra/docs/examples.html">Examples</a>
             
           </li>
         
@@ -109,16 +109,57 @@
 
   <div class="inner-content">
     <h1>
-      Examples
+      Getting Started
     </h1>
     <div class="subHeader"></div>
 
-    
+    <h2><a class="anchor" name="prerequisites"></a>Prerequisites <a class="hash-link" href="#prerequisites">#</a></h2>
+<p>Ligra can be compiled with multiple backend compilers. We currently support</p>
+
+<ul>
+<li>Intel <code>icpc</code> compiler</li>
+<li><code>g++ &gt;= 4.8.0</code> with support for <code>Cilk+</code></li>
+<li><code>OpenMP</code></li>
+</ul>
+<h2><a class="anchor" name="organization"></a>Organization <a class="hash-link" href="#organization">#</a></h2>
+<p><a href="https://github.com/jshun/ligra/archive/master.zip">Download</a> the code if you 
+have not already. The main directories are the <code>apps</code> directory, where we will
+program and compile applications, and the <code>ligra</code> directory, where the framework 
+code lives. </p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ cd ligra
+$ ls -1
+apps        (code for Ligra applications)
+inputs      (example graph inputs)
+LICENSE
+ligra       (code for the Ligra framework)
+README.md
+utils       (utilities for parsing different graph formats)
+</code></pre></div><h2><a class="anchor" name="compilation"></a>Compilation <a class="hash-link" href="#compilation">#</a></h2>
+<p>Compilation is done from within the <code>apps/</code> directory. Depending on the compiler
+you wish to use, you will need to set a different environment variable. </p>
+
+<ul>
+<li><code>g++</code> using <code>Cilk</code>: define the environment variable <code>CILK</code>. </li>
+<li><code>icpc</code>: define the environment variable <code>MKLROOT</code> and make sure <code>CILK</code> is not defined. </li>
+<li><code>OpenMP</code>: define the environment variable <code>OPENMP</code> and make sure 
+<code>CILK</code> and <code>MKLROOT</code> are not defined. </li>
+</ul>
+
+<p>Using <code>Cilk+</code> seems to give the best parallel performance in our experience. To compile 
+with <code>g++</code> with no parallel support, make sure <code>CILK</code>, <code>MKLROOT</code> and <code>OPENMP</code> are not 
+defined.</p>
+
+<p>Note: <code>OpenMP</code> support in Ligra has not been thoroughly tested. If you experience 
+any errors, please send an email to Julian Shun. A known issue is that <code>OpenMP</code>
+will not work correctly when using the experimental version of <code>gcc 4.8.0</code>.</p>
+
 
     <div class="docs-prevnext">
       
+        <a class="docs-prev" href="/ligra/docs/introduction.html">&larr; Prev</a>
       
-        <a class="docs-next" href="/ligra/docs/introduction.html">Next &rarr;</a>
+      
+        <a class="docs-next" href="/ligra/docs/tutorial_bfs.html">Next &rarr;</a>
       
     </div>
   </div>
