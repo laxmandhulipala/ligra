@@ -3,7 +3,7 @@ id: compressed
 sectionid: docs
 layout: docs
 title: Compressed Graphs
-next: tutorial.html
+next: introduction.html
 redirect_from: "docs/index.html"
 ---
 

@@ -3,7 +3,7 @@ id: api
 sectionid: docs
 layout: docs
 title: API
-next: tutorial.html
+next: introduction.html
 redirect_from: "docs/index.html"
 ---
 

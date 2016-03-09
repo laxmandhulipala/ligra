@@ -3,7 +3,7 @@ id: examples
 sectionid: docs
 layout: docs
 title: Examples
-next: tutorial.html
+next: introduction.html
 redirect_from: "docs/index.html"
 ---
 

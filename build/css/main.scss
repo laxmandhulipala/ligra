@@ -12,7 +12,7 @@
   line-height: 1.5;
 }
 
-$skinnyContentWidth: 650px;
+$skinnyContentWidth: 720px;
 $contentWidth: 920px;
 $contentPadding: 20px;
 $columnWidth: 280px;
@@ -30,6 +30,7 @@ $navHeight: 50px;
 
 html {
   background: $pageBg;
+  overflow-y: scroll;
 }
 
 
@@ -233,7 +234,7 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 16px;
   // position: fixed;
   float: left;
-  width: 210px;
+  width: 150px;
 
   ul {
     list-style: none;

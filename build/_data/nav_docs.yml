@@ -1,11 +1,13 @@
 - title: 
   items:
-  - id: tutorial
-    title: Tutorial
-  - id: installation
-    title: Installation
-  - id: compilation
-    title: Compilation
+  - id: introduction
+    title: Introduction
+  - id: getting_started
+    title: Getting Started
+  - id: tutorial_bfs
+    title: "Tutorial: BFS"
+  - id: tutorial_kcore
+    title: "Tutorial: KCore"
   - id: api
     title: API
   - id: examples

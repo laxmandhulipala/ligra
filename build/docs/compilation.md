@@ -3,7 +3,7 @@ id: compilation
 sectionid: docs
 layout: docs
 title: Compilation
-next: tutorial.html
+next: introduction.html
 redirect_from: "docs/index.html"
 ---
 
