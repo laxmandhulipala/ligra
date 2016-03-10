@@ -38,7 +38,7 @@ void Compute(graph<vertex>& G, commandLine P) {
   long start = P.getOptionLongValue("-start",0);
   long n = GA.n;
   //creates Parents array, initialized to all -1, except for start
-  long* Parents = newA(long,n);
+  long* Parents = new long[n];
   parallel_for(long i=0;i<n;i++) Parents[i] = -1;
   Parents[start] = start;
 }
@@ -162,7 +162,7 @@ void Compute(graph<vertex>& GA, commandLine P) {
   long start = P.getOptionLongValue("-r",0);
   long n = GA.n;
   //creates Parents array, initialized to all -1, except for start
-  long* Parents = newA(long,n);
+  long* Parents = new long[n];
   parallel_for(long i=0;i<n;i++) Parents[i] = -1;
   Parents[start] = start;
   vertexSubset Frontier(n,start); //creates initial frontier
