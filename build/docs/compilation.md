@@ -65,7 +65,7 @@ The applications take the input graph as input as well as an optional
 flag "-s" to indicate a symmetric graph.  Symmetric graphs should be
 called with the "-s" flag for better performance. For example:
 
-```
+``` bash
 $ ./BFS -s ../inputs/rMatGraph_J_5_100
 $ ./BellmanFord -s ../inputs/rMatGraph_WJ_5_100
 ``` 

@@ -23,15 +23,15 @@ have not already. The main directories are the `apps` directory, where we will
 program and compile applications, and the `ligra` directory, where the framework 
 code lives. 
 
-```
+``` bash
 $ cd ligra
 $ ls -1
-apps        (code for Ligra applications)
-inputs      (example graph inputs)
+apps        # code for Ligra applications
+inputs      # example graph inputs
 LICENSE
-ligra       (code for the Ligra framework)
+ligra       # code for the Ligra framework
 README.md
-utils       (utilities for parsing different graph formats)
+utils       # utilities for parsing different graph formats
 ```
 
 ## Compilation
