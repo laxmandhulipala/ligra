@@ -152,21 +152,21 @@ the following struct to `edgeMap`.
 
 ``` cpp
 struct Update_Deg {
-  intE* Degrees;
-  Update_Deg(intE* _Degrees) : Degrees(_Degrees) {}
-  inline bool update (uintE s, uintE d) {
+  long* Degrees;
+  Update_Deg(long* _Degrees) : Degrees(_Degrees) {}
+  inline bool update (long s, long d) {
     if(Degrees[d] > 0) Degrees[d]--;
     return 1;
   }
-  inline bool updateAtomic (uintE s, uintE d) {
-    if(Degrees[d] > 0) writeAdd(&Degrees[d],-1);
+  inline bool updateAtomic (long s, long d) {
+    if(Degrees[d] > 0) writeAdd(&Degrees[d],(long)-1);
     return 1;
   }
-  inline bool cond (uintE d) { return cond_true(d); }
+  inline bool cond (long d) { return cond_true(d); }
 };
 ```
 
-### Putting it together
+### Putting it all together
 
 What should our loop do? Initially $k$ starts at one. We don't know what the
 *degeneracy* (recall, the maximum non-empty $k$-core) of the graph is, but have
@@ -212,28 +212,28 @@ $>= k$. In code:
 #include "ligra.h"
 
 struct Update_Deg {
-  intE* Degrees;
-  Update_Deg(intE* _Degrees) : Degrees(_Degrees) {}
-  inline bool update (uintE s, uintE d) { 
-    if(Degrees[d] > 0) Degrees[d]--;
+  long* Degrees;
+  Update_Deg(long* _Degrees) : Degrees(_Degrees) {}
+  inline bool update (long s, long d) { 
+    if (Degrees[d] > 0) Degrees[d]--;
     return 1;
   }
-  inline bool updateAtomic (uintE s, uintE d){
+  inline bool updateAtomic (long s, long d){
     if(Degrees[d] > 0) writeAdd(&Degrees[d],-1);
     return 1;
   }
-  inline bool cond (uintE d) { return cond_true(d); }
+  inline bool cond (long d) { return cond_true(d); }
 };
 
 template<class vertex>
 struct Deg_LessThan_K {
   vertex* V;
-  uintE* coreNumbers;
-  intE* Degrees;
-  uintE k;
-  Deg_LessThan_K(vertex* _V, intE* _Degrees, uintE* _coreNumbers, uintE _k) : 
+  long* coreNumbers;
+  long* Degrees;
+  long k;
+  Deg_LessThan_K(vertex* _V, long* _Degrees, long* _coreNumbers, long _k) : 
     V(_V), k(_k), Degrees(_Degrees), coreNumbers(_coreNumbers) {}
-  inline bool operator () (uintE i) {
+  inline bool operator () (long i) {
     if(Degrees[i] < k) { coreNumbers[i] = k-1; Degrees[i] = 0; return true; }
     else return false;
   }
@@ -242,11 +242,11 @@ struct Deg_LessThan_K {
 template<class vertex>
 struct Deg_AtLeast_K {
   vertex* V;
-  intE *Degrees;
-  uintE k;
-  Deg_AtLeast_K(vertex* _V, intE* _Degrees, uintE _k) : 
+  long *Degrees;
+  long k;
+  Deg_AtLeast_K(vertex* _V, long* _Degrees, long _k) : 
     V(_V), k(_k), Degrees(_Degrees) {}
-  inline bool operator () (uintE i) {
+  inline bool operator () (long i) {
     return Degrees[i] >= k;
   }
 };
@@ -257,8 +257,8 @@ void Compute(graph<vertex>& GA, commandLine P) {
   bool* active = newA(bool,n);
   {parallel_for(long i=0;i<n;i++) active[i] = 1;}
   vertexSubset Frontier(n, n, active);
-  uintE* coreNumbers = newA(uintE,n);
-  intE* Degrees = newA(intE,n);
+  long* coreNumbers = newA(long,n);
+  long* Degrees = newA(long,n);
   {parallel_for(long i=0;i<n;i++) {
       coreNumbers[i] = 0;
       Degrees[i] = GA.V[i].getOutDegree();
@@ -316,5 +316,12 @@ Running time : 0.0057
 ```
 
 Great! You can try running the KCore on more interesting examples, such 
-as the twitter graph. 
+as the twitter graph (note that `-b` indicates that the graph is stored
+as a binary, and `-rounds 1` just says to run the application a single 
+time)
 
+```
+numactl -i all ./KCore -s -b -rounds 1 twitter_sym
+largestCore was 2488
+Running time : 280
+``` 
