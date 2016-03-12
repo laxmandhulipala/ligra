@@ -14,7 +14,7 @@ graph. Various constructors are given in ligra.h.
 
 ### Functions
 
-**edgeMap**: 
+#### **edgeMap**: 
 
 ``` cpp
 template <class vertex, class F>
@@ -68,7 +68,7 @@ optimization is described in Section 4 of the paper.
 Note that duplicate removal can only be avoided if `updateAtomic`
 returns true at most once for each vertex in a call to edgeMap.
 
-**vertexMap**: 
+#### **vertexMap**: 
 
 ``` cpp
 template <class F>
@@ -81,7 +81,7 @@ Takes as input:
 * function $F$ which is applied to all vertices in $V$. It does not have
   a return value.
 
-**vertexFilter**:
+#### **vertexFilter**:
 
 ``` cpp
 template <class F>
@@ -102,8 +102,6 @@ struct F {
   }
 };
 ```
-
-
 
 To write your own Ligra code, it would be helpful to look at the code
 for the provided applications as reference.
