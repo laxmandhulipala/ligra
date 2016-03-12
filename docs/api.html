@@ -88,6 +88,18 @@
           <li>
             <a href="/ligra/docs/api.html" class="active">API</a>
             
+              <ul>
+                
+                  <li>
+                    <a href="/ligra/docs/vertex.html">Vertex</a>
+                  </li>
+                
+                  <li>
+                    <a href="/ligra/docs/graph.html">Graph</a>
+                  </li>
+                
+              </ul>
+            
           </li>
         
           <li>
@@ -107,9 +119,40 @@
     </h1>
     <div class="subHeader"></div>
 
-    <h3><a class="anchor" name="data-structures"></a>Data Structures <a class="hash-link" href="#data-structures">#</a></h3>
-<p><strong>vertexSubset</strong>: represents a subset of vertices in the
-graph. Various constructors are given in ligra.h. </p>
+    <p>The Ligra API is conceptually very simple. At a high level, users can </p>
+
+<ul>
+<li>Represent subsets of vertices</li>
+<li>Apply a <em>map</em> function over the out-edges of a subset of vertices</li>
+<li>Apply a <em>map</em> function over a subset of vertices</li>
+<li>Apply a <em>filter</em> function over a subset of vertices</li>
+</ul>
+<h3><a class="anchor" name="primitive-types"></a>Primitive Types <a class="hash-link" href="#primitive-types">#</a></h3>
+<p>Ligra uses several &#39;primitive types&#39; that are non-standard in C/C++. This is 
+to allow the same application code to work on graphs with more than 
+<code>sizeof(int)</code> many vertices or edges without changing all of the type-annotations
+from <code>int</code> to <code>long</code>. </p>
+
+<ul>
+<li><strong><code>intT</code></strong> : The vertex identifier type</li>
+<li><strong><code>uintT</code></strong> : The unsigned vertex identifier type</li>
+<li><strong><code>intE</code></strong> : The edge identifier type</li>
+<li><strong><code>uintE</code></strong> : The unsigned edge identifier type</li>
+</ul>
+<h3><a class="anchor" name="data-structures"></a>Data Structures <a class="hash-link" href="#data-structures">#</a></h3>
+<p><strong>vertexSubset</strong>: represents a subset of vertices in the graph. </p>
+
+<p>The most common constructors are provided below. A full list can be 
+found in <code>ligra.h</code>.</p>
+
+<ul>
+<li><strong><code>vertexSubset(long n, intE v)</code></strong>: constructs a subset with a single
+element, <code>v</code>.</li>
+<li><strong><code>vertexSubset(long n, long m, uintE* indices)</code></strong>: constructs a subset
+of size <code>m</code> containing the the first <code>m</code> elements pointed to by <code>indices</code>. </li>
+<li><strong><code>vertexSubset(long n, bool* bits)</code></strong>: constructs a subset of size $n$
+whose elements are the entries of <code>bits</code> that are set to <code>1</code>. </li>
+</ul>
 <h3><a class="anchor" name="functions"></a>Functions <a class="hash-link" href="#functions">#</a></h3><h4><a class="anchor" name="edgemap"></a><strong>edgeMap</strong>: <a class="hash-link" href="#edgemap">#</a></h4><div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">vertex</span><span class="p">,</span> <span class="k">class</span> <span class="nc">F</span><span class="o">&gt;</span>
 <span class="n">vertexSubset</span> <span class="n">edgeMap</span><span class="p">(</span><span class="n">graph</span><span class="o">&lt;</span><span class="n">vertex</span><span class="o">&gt;</span> <span class="n">GA</span><span class="p">,</span> <span class="n">vertexSubset</span> <span class="o">&amp;</span><span class="n">V</span><span class="p">,</span> <span class="n">F</span> <span class="n">f</span><span class="p">,</span> 
                      <span class="n">intT</span> <span class="n">threshold</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="kt">char</span> <span class="n">option</span><span class="o">=</span><span class="n">DENSE</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">remDups</span><span class="o">=</span><span class="nb">false</span><span class="p">);</span>

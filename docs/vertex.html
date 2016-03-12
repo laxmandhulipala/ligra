@@ -6,13 +6,13 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Examples</title>
+  <title>Vertex API</title>
   <meta name="description" content="A Lightweight Graph Processing Framework for Shared Memory">
 
   <link rel="stylesheet" href="/ligra/css/main.css">
   <link rel="stylesheet" href="/ligra/css/syntax.css">
 
-  <link rel="canonical" href="http://laxmandhulipala.github.io/ligra/docs/examples.html">
+  <link rel="canonical" href="http://laxmandhulipala.github.io/ligra/docs/vertex.html">
   <link rel="alternate" type="application/rss+xml" title="" href="http://laxmandhulipala.github.io/ligra/feed.xml">
 
 
@@ -91,7 +91,7 @@
               <ul>
                 
                   <li>
-                    <a href="/ligra/docs/vertex.html">Vertex</a>
+                    <a href="/ligra/docs/vertex.html" class="active">Vertex</a>
                   </li>
                 
                   <li>
@@ -103,7 +103,7 @@
           </li>
         
           <li>
-            <a href="/ligra/docs/examples.html" class="active">Examples</a>
+            <a href="/ligra/docs/examples.html">Examples</a>
             
           </li>
         
@@ -115,16 +115,50 @@
 
   <div class="inner-content">
     <h1>
-      Examples
+      Vertex API
     </h1>
     <div class="subHeader"></div>
 
-    
+    <p>Ligra currently supports four different vertex types. </p>
+
+<ul>
+<li><code>symmetricVertex</code></li>
+<li><code>asymmetricVertex</code></li>
+<li><code>compressedSymmetricVertex</code></li>
+<li><code>compressedAsymmetricVertex</code></li>
+</ul>
+
+<p>The framework automatically picks the correct vertex type to use based on
+the command line flag a user supplies when running the application. </p>
+
+<ul>
+<li>If the flag <code>-c</code> is supplied, then the graph is assumed to be <em>compressed</em> and 
+one of the compressed vertex types is selected. </li>
+<li>If the flag <code>-s</code> is supplied, the graph is assumed to be <em>symmetric</em> (undirected) 
+and a symmetric vertex type is selected. Otherwise, an assymetric vertex type is selected. </li>
+</ul>
+
+<p>Certain applications, like PageRank, must work on both directed and undirected graphs,
+and therefore must do things like only iterating over <em>out</em>-edges, etc. In order to maximize
+code-reuse and not have different PageRank applications for directed and undirected graphs
+Ligra ensures that all four vertex types (implicitly) ascribe to the same interface. </p>
+<h3><a class="anchor" name="interface"></a>Interface <a class="hash-link" href="#interface">#</a></h3>
+<p>The interface for a vertex is provided below.</p>
+
+<ul>
+<li><strong><code>intE getInNeighbor(intT j)</code></strong> : Returns the j&#39;th in-neighbor of the vertex. </li>
+<li><strong><code>intE getOutNeighbor(intT j)</code></strong> : Returns the j&#39;th out-neighbor of the vertex. </li>
+<li><strong><code>intE getInDegree()</code></strong> : Returns the number of in-neighbors of the vertex.</li>
+<li><strong><code>intE getOutDegree()</code></strong> : Returns the number of out-neighbors of the vertex.</li>
+</ul>
+
 
     <div class="docs-prevnext">
       
+        <a class="docs-prev" href="/ligra/docs/api.html">&larr; Prev</a>
       
-        <a class="docs-next" href="/ligra/docs/introduction.html">Next &rarr;</a>
+      
+        <a class="docs-next" href="/ligra/docs/graph.html">Next &rarr;</a>
       
     </div>
   </div>
