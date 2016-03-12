@@ -110,9 +110,7 @@
     <h3><a class="anchor" name="data-structures"></a>Data Structures <a class="hash-link" href="#data-structures">#</a></h3>
 <p><strong>vertexSubset</strong>: represents a subset of vertices in the
 graph. Various constructors are given in ligra.h. </p>
-<h3><a class="anchor" name="functions"></a>Functions <a class="hash-link" href="#functions">#</a></h3>
-<p><strong>edgeMap</strong>: </p>
-<div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">vertex</span><span class="p">,</span> <span class="k">class</span> <span class="nc">F</span><span class="o">&gt;</span>
+<h3><a class="anchor" name="functions"></a>Functions <a class="hash-link" href="#functions">#</a></h3><h4><a class="anchor" name="edgemap"></a><strong>edgeMap</strong>: <a class="hash-link" href="#edgemap">#</a></h4><div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">vertex</span><span class="p">,</span> <span class="k">class</span> <span class="nc">F</span><span class="o">&gt;</span>
 <span class="n">vertexSubset</span> <span class="n">edgeMap</span><span class="p">(</span><span class="n">graph</span><span class="o">&lt;</span><span class="n">vertex</span><span class="o">&gt;</span> <span class="n">GA</span><span class="p">,</span> <span class="n">vertexSubset</span> <span class="o">&amp;</span><span class="n">V</span><span class="p">,</span> <span class="n">F</span> <span class="n">f</span><span class="p">,</span> 
                      <span class="n">intT</span> <span class="n">threshold</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="kt">char</span> <span class="n">option</span><span class="o">=</span><span class="n">DENSE</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">remDups</span><span class="o">=</span><span class="nb">false</span><span class="p">);</span>
 </code></pre></div>
@@ -160,9 +158,7 @@ optimization is described in Section 4 of the paper.</p>
 
 <p>Note that duplicate removal can only be avoided if <code>updateAtomic</code>
 returns true at most once for each vertex in a call to edgeMap.</p>
-
-<p><strong>vertexMap</strong>: </p>
-<div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">F</span><span class="o">&gt;</span>
+<h4><a class="anchor" name="vertexmap"></a><strong>vertexMap</strong>: <a class="hash-link" href="#vertexmap">#</a></h4><div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">F</span><span class="o">&gt;</span>
 <span class="kt">void</span> <span class="n">vertexMap</span><span class="p">(</span><span class="n">vertexSubset</span> <span class="n">V</span><span class="p">,</span> <span class="n">F</span> <span class="n">add</span><span class="p">);</span>
 </code></pre></div>
 <p>Takes as input: </p>
@@ -172,9 +168,7 @@ returns true at most once for each vertex in a call to edgeMap.</p>
 <li>function $F$ which is applied to all vertices in $V$. It does not have
 a return value.</li>
 </ul>
-
-<p><strong>vertexFilter</strong>:</p>
-<div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">F</span><span class="o">&gt;</span>
+<h4><a class="anchor" name="vertexfilter"></a><strong>vertexFilter</strong>: <a class="hash-link" href="#vertexfilter">#</a></h4><div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">F</span><span class="o">&gt;</span>
 <span class="kt">void</span> <span class="n">vertexFilter</span><span class="p">(</span><span class="n">vertexSubset</span> <span class="n">V</span><span class="p">,</span> <span class="n">F</span> <span class="n">filter</span><span class="p">);</span>
 </code></pre></div>
 <p>Takes as input </p>
