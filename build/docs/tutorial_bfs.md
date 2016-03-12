@@ -69,7 +69,7 @@ add this line to the end of the `Compute` function.
 
 Now, we need to describe the logic to produce the next frontier given the current 
 frontier. Enter **`edgeMap`**. `edgeMap` allows us to process the out edges of a 
-`vertexSubset`, and produce a new `vertexSubset`. Please see the [(api)](/ligra/docs/api.html#edgemap) 
+`vertexSubset`, and produce a new `vertexSubset`. Please see the [api](/ligra/docs/api.html#edgemap) 
 for more details.
 
 The behavior of `edgeMap` is intended to be customized by providing a user-defined structure.

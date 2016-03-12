@@ -10,5 +10,10 @@
     title: "Tutorial: KCore"
   - id: api
     title: API
+    subitems: 
+    - id: vertex
+      title: Vertex
+    - id: graph
+      title: Graph
   - id: examples
     title: Examples

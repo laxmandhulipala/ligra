@@ -7,10 +7,38 @@ next: introduction.html
 redirect_from: "docs/index.html"
 ---
 
+The Ligra API is conceptually very simple. At a high level, users can 
+
+* Represent subsets of vertices
+* Apply a *map* function over the out-edges of a subset of vertices
+* Apply a *map* function over a subset of vertices
+* Apply a *filter* function over a subset of vertices
+
+### Primitive Types
+
+Ligra uses several 'primitive types' that are non-standard in C/C++. This is 
+to allow the same application code to work on graphs with more than 
+`sizeof(int)` many vertices or edges without changing all of the type-annotations
+from `int` to `long`. 
+
+* **`intT`** : The vertex identifier type
+* **`uintT`** : The unsigned vertex identifier type
+* **`intE`** : The edge identifier type
+* **`uintE`** : The unsigned edge identifier type
+
 ### Data Structures 
 
-**vertexSubset**: represents a subset of vertices in the
-graph. Various constructors are given in ligra.h. 
+**vertexSubset**: represents a subset of vertices in the graph. 
+
+The most common constructors are provided below. A full list can be 
+found in `ligra.h`.
+
+* **`vertexSubset(long n, intE v)`**: constructs a subset with a single
+  element, `v`.
+* **`vertexSubset(long n, long m, uintE* indices)`**: constructs a subset
+  of size `m` containing the the first `m` elements pointed to by `indices`. 
+* **`vertexSubset(long n, bool* bits)`**: constructs a subset of size $n$
+  whose elements are the entries of `bits` that are set to `1`. 
 
 ### Functions
 
