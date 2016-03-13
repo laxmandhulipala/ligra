@@ -46,7 +46,7 @@ void Compute(graph<vertex>& G, commandLine P) {
 So far, we have set up the variables and data necessary for the algorithm. 
 We use `parallel_for` to initialize memory in parallel. This statement 
 is just a macro that is replaced by either a parallel loop if we are using 
-OpenMP or Cilk, or a standard for loop if MPI or CILK is unavailable. Note that 
+OpenMP or Cilk, or a standard for loop if OpenMP or CILK is unavailable. Note that 
 all memory we allocate in the body of `Compute`  must be explicitly freed 
 in order to prevent memory leaks.
 
