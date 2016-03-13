@@ -27,12 +27,14 @@ Certain applications, like PageRank, must work on both directed and undirected g
 and therefore must do things like only iterating over *out*-edges, etc. In order to maximize
 code-reuse and not have different PageRank applications for directed and undirected graphs
 Ligra ensures that all four vertex types (implicitly) ascribe to the same interface. 
-### Interface
 
-The interface for a vertex is provided below.
+### **Vertex Interface**
 
 * **`intE getInNeighbor(intT j)`** : Returns the j'th in-neighbor of the vertex. 
 * **`intE getOutNeighbor(intT j)`** : Returns the j'th out-neighbor of the vertex. 
+* **`intE getInWeight(intT j)`** : Returns the weight of the edge from the j'th in-neighbor.
+* **`intE getOutWeight(intT j)`** : Returns the weight of the edge to the j'th out-neighbor.
 * **`intE getInDegree()`** : Returns the number of in-neighbors of the vertex.
 * **`intE getOutDegree()`** : Returns the number of out-neighbors of the vertex.
+
 

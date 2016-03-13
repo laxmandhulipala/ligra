@@ -11,7 +11,7 @@ redirect_from: "docs/index.html"
 At this point, you should be familiar with some of the basic features 
 of Ligra such as the `vertexSubset` datatype and core parts of the API
 such as `edgeMap`. For examples of how to use this, please refer to either
-the [previous tutorial](/ligra/docs/tutorial_bfs.html) or the API reference. 
+the [previous tutorial](/ligra/docs/tutorial_bfs.html) or the [API reference](/ligra/api.html). 
 
 In this tutorial, we will introduce and use other parts of the core API such
 as `vertexFilter` in order to compute the *k-core* of a graph. Given 
@@ -306,7 +306,7 @@ Now, compile the application by running `make`, which will produce a binary call
 Let's try computing the KCore of one of the input graphs. 
 
 ``` 
-./KCore -s ../inputs/rMatGraph_J_5_100
+$ ./KCore -s ../inputs/rMatGraph_J_5_100
 largestCore was 4
 Running time : 0.00594
 largestCore was 4
@@ -317,11 +317,11 @@ Running time : 0.0057
 
 Great! You can try running the KCore on more interesting examples, such 
 as the twitter graph (note that `-b` indicates that the graph is stored
-as a binary, and `-rounds 1` just says to run the application a single 
-time)
+as a binary, and `-rounds 1` indicates that the application should be run
+just once)
 
 ```
-numactl -i all ./KCore -s -b -rounds 1 twitter_sym
+$ numactl -i all ./KCore -s -b -rounds 1 twitter_sym
 largestCore was 2488
 Running time : 280
 ``` 

@@ -14,11 +14,14 @@ The Ligra API is conceptually very simple. At a high level, users can
 * Apply a *map* function over a subset of vertices
 * Apply a *filter* function over a subset of vertices
 
+Using these simple primitives, we can design and cleanly express most
+graph algorithms. 
+
 ### Primitive Types
 
 Ligra uses several 'primitive types' that are non-standard in C/C++. This is 
 to allow the same application code to work on graphs with more than 
-`sizeof(int)` many vertices or edges without changing all of the type-annotations
+`MAX_INT` many vertices or edges without changing all of the type-annotations
 from `int` to `long`. 
 
 * **`intT`** : The vertex identifier type
