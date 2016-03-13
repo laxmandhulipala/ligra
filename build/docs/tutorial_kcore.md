@@ -39,8 +39,8 @@ $k$ and continue until there are no more active vertices.
 
 ### Implementing the simple algorithm
 
-Let's get started! Open up a new file, `Tutorial_KCore.C` in the `apps/` directory,
-and type in the following function stub. 
+Let's get started! `cd` into the `tutorial/` directory and open up the file
+called `KCore.C`. 
 
 ``` cpp
 #include "ligra.h"
@@ -63,8 +63,7 @@ subset will represent a subset of size $k$ using an array containing $k$ vertex-
 $O(n)$, the dense implementation will be more space efficient, and will allow us to decide 
 membership in a subset in $O(1)$. 
 
-We will also need to keep around an array containing the induced degrees of vertices. 
-Add the following snippet to the end of `Compute`
+We also need to keep around an array containing the induced degrees of vertices. 
 
 ``` cpp
   long* Degrees = new long[n]; 
@@ -77,7 +76,7 @@ Add the following snippet to the end of `Compute`
 
 ### Filtering vertices
 
-Great. We now need to implement the logic that separates a given `vertexSubset`
+Great! We now need to implement the logic that separates a `vertexSubset`
 into two sets:  vertices with degree $< k$ and vertices with induced degree 
 $\geq k$. In order to do this, we will use a new part of the Ligra API:
 `vertexFilter`, which takes as input  a `vertexSubset` and a function 
@@ -206,7 +205,7 @@ $>= k$. In code:
   }
 ```
 
-### The finished app
+### The finished application
 
 ``` cpp
 #include "ligra.h"
@@ -290,16 +289,8 @@ void Compute(graph<vertex>& GA, commandLine P) {
 
 ### Compilation
 
-Compile your algorithm by adding it to the Ligra `Makefile`. Open up the
-`Makefile` in the `apps/` directory in your editor, and change the definition of
-`ALL` to:
-
-``` bash
-ALL= Tutorial_KCore encoder ... (other apps) ...
-```
-
-Now, compile the application by running `make`, which will produce a binary called 
-`Tutorial_KCore`.
+Compile the application by running `make`, which will produce a binary called 
+`KCore`.
 
 ### Testing
 
