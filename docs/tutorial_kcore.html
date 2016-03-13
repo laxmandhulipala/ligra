@@ -150,8 +150,8 @@ For any vertices $v \in V$ removed during this step, set <code>cores[v] = k-1</c
 Decrement the induced degree of all neighbors of removed vertices. Increment 
 $k$ and continue until there are no more active vertices. </p>
 <h3><a class="anchor" name="implementing-the-simple-algorithm"></a>Implementing the simple algorithm <a class="hash-link" href="#implementing-the-simple-algorithm">#</a></h3>
-<p>Let&#39;s get started! Open up a new file, <code>Tutorial_KCore.C</code> in the <code>apps/</code> directory,
-and type in the following function stub. </p>
+<p>Let&#39;s get started! <code>cd</code> into the <code>tutorial/</code> directory and open up the file
+called <code>KCore.C</code>. </p>
 <div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="cp">#include &quot;ligra.h&quot;</span>
 
 <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">vertex</span><span class="o">&gt;</span>
@@ -171,8 +171,7 @@ subset will represent a subset of size $k$ using an array containing $k$ vertex-
 $O(n)$, the dense implementation will be more space efficient, and will allow us to decide 
 membership in a subset in $O(1)$. </p>
 
-<p>We will also need to keep around an array containing the induced degrees of vertices. 
-Add the following snippet to the end of <code>Compute</code></p>
+<p>We also need to keep around an array containing the induced degrees of vertices. </p>
 <div class="highlight"><pre><code class="language-cpp" data-lang="cpp">  <span class="kt">long</span><span class="o">*</span> <span class="n">Degrees</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">long</span><span class="p">[</span><span class="n">n</span><span class="p">];</span> 
   <span class="n">parallel_for</span><span class="p">(</span><span class="kt">long</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
     <span class="n">coreNumbers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
@@ -180,7 +179,7 @@ Add the following snippet to the end of <code>Compute</code></p>
   <span class="p">}</span>
   <span class="kt">long</span> <span class="n">largestCore</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span> 
 </code></pre></div><h3><a class="anchor" name="filtering-vertices"></a>Filtering vertices <a class="hash-link" href="#filtering-vertices">#</a></h3>
-<p>Great. We now need to implement the logic that separates a given <code>vertexSubset</code>
+<p>Great! We now need to implement the logic that separates a <code>vertexSubset</code>
 into two sets:  vertices with degree $&lt; k$ and vertices with induced degree 
 $\geq k$. In order to do this, we will use a new part of the Ligra API:
 <code>vertexFilter</code>, which takes as input  a <code>vertexSubset</code> and a function 
@@ -285,7 +284,7 @@ $&gt;= k$. In code:</p>
     <span class="p">}</span>
     <span class="k">if</span><span class="p">(</span><span class="n">Frontier</span><span class="p">.</span><span class="n">numNonzeros</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span> <span class="n">largestCore</span> <span class="o">=</span> <span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="k">break</span><span class="p">;</span> <span class="p">}</span>
   <span class="p">}</span>
-</code></pre></div><h3><a class="anchor" name="the-finished-app"></a>The finished app <a class="hash-link" href="#the-finished-app">#</a></h3><div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="cp">#include &quot;ligra.h&quot;</span>
+</code></pre></div><h3><a class="anchor" name="the-finished-application"></a>The finished application <a class="hash-link" href="#the-finished-application">#</a></h3><div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="cp">#include &quot;ligra.h&quot;</span>
 
 <span class="k">struct</span> <span class="n">Update_Deg</span> <span class="p">{</span>
   <span class="kt">long</span><span class="o">*</span> <span class="n">Degrees</span><span class="p">;</span>
@@ -363,13 +362,8 @@ $&gt;= k$. In code:</p>
   <span class="n">Frontier</span><span class="p">.</span><span class="n">del</span><span class="p">();</span> <span class="n">free</span><span class="p">(</span><span class="n">coreNumbers</span><span class="p">);</span> <span class="n">free</span><span class="p">(</span><span class="n">Degrees</span><span class="p">);</span>
 <span class="p">}</span>
 </code></pre></div><h3><a class="anchor" name="compilation"></a>Compilation <a class="hash-link" href="#compilation">#</a></h3>
-<p>Compile your algorithm by adding it to the Ligra <code>Makefile</code>. Open up the
-<code>Makefile</code> in the <code>apps/</code> directory in your editor, and change the definition of
-<code>ALL</code> to:</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">ALL</span><span class="o">=</span> Tutorial_KCore encoder ... <span class="o">(</span>other apps<span class="o">)</span> ...
-</code></pre></div>
-<p>Now, compile the application by running <code>make</code>, which will produce a binary called 
-<code>Tutorial_KCore</code>.</p>
+<p>Compile the application by running <code>make</code>, which will produce a binary called 
+<code>KCore</code>.</p>
 <h3><a class="anchor" name="testing"></a>Testing <a class="hash-link" href="#testing">#</a></h3>
 <p>Let&#39;s try computing the KCore of one of the input graphs. </p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">$ ./KCore -s ../inputs/rMatGraph_J_5_100
@@ -394,7 +388,7 @@ Running time : 280
         <a class="docs-prev" href="/ligra/docs/tutorial_bfs.html">&larr; Prev</a>
       
       
-        <a class="docs-next" href="/ligra/docs/getting_started.html">Next &rarr;</a>
+        <a class="docs-next" href="/ligra/docs/api.html">Next &rarr;</a>
       
     </div>
   </div>
