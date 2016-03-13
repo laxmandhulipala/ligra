@@ -103,6 +103,11 @@
           </li>
         
           <li>
+            <a href="/ligra/docs/running_code.html">Running Code</a>
+            
+          </li>
+        
+          <li>
             <a href="/ligra/docs/examples.html">Examples</a>
             
           </li>
@@ -127,10 +132,13 @@
 <li>Apply a <em>map</em> function over a subset of vertices</li>
 <li>Apply a <em>filter</em> function over a subset of vertices</li>
 </ul>
+
+<p>Using these simple primitives, we can design and cleanly express most
+graph algorithms. </p>
 <h3><a class="anchor" name="primitive-types"></a>Primitive Types <a class="hash-link" href="#primitive-types">#</a></h3>
 <p>Ligra uses several &#39;primitive types&#39; that are non-standard in C/C++. This is 
 to allow the same application code to work on graphs with more than 
-<code>sizeof(int)</code> many vertices or edges without changing all of the type-annotations
+<code>MAX_INT</code> many vertices or edges without changing all of the type-annotations
 from <code>int</code> to <code>long</code>. </p>
 
 <ul>

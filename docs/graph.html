@@ -103,6 +103,11 @@
           </li>
         
           <li>
+            <a href="/ligra/docs/running_code.html">Running Code</a>
+            
+          </li>
+        
+          <li>
             <a href="/ligra/docs/examples.html">Examples</a>
             
           </li>
@@ -119,14 +124,24 @@
     </h1>
     <div class="subHeader"></div>
 
-    
+    <p>Ligra has a single <code>graph</code> type, which is parametrized by an arbitrary 
+<code>vertex</code> type (see the <a href="/ligra/docs/vertex.html">vertex api</a>). We represent
+a graph as a collection of vertices, along with memory that the graph owns, 
+which is necessary for storing information about edges (weights, and endpoints). </p>
+<h3><a class="anchor" name="graph-interface"></a><strong>Graph Interface</strong> <a class="hash-link" href="#graph-interface">#</a></h3>
+<ul>
+<li><strong><code>void transpose()</code></strong> : no-op if the vertex type is symmetric, otherwise
+swaps the in-edges and out-edges for all vertices. </li>
+<li><strong><code>void del()</code></strong> : deletes memory owned by the graph </li>
+</ul>
+
 
     <div class="docs-prevnext">
       
         <a class="docs-prev" href="/ligra/docs/vertex.html">&larr; Prev</a>
       
       
-        <a class="docs-next" href="/ligra/docs/examples.html">Next &rarr;</a>
+        <a class="docs-next" href="/ligra/docs/running_code.html">Next &rarr;</a>
       
     </div>
   </div>

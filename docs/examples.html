@@ -103,6 +103,11 @@
           </li>
         
           <li>
+            <a href="/ligra/docs/running_code.html">Running Code</a>
+            
+          </li>
+        
+          <li>
             <a href="/ligra/docs/examples.html" class="active">Examples</a>
             
           </li>
@@ -119,7 +124,52 @@
     </h1>
     <div class="subHeader"></div>
 
-    
+    <p>Implementation files are provided in the apps/ directory: </p>
+
+<ul>
+<li><strong>BFS.C</strong> (breadth-first search)</li>
+<li><strong>BFS-Bitvector.C</strong> (breadth-first search with a bitvector to mark visited vertices)</li>
+<li><strong>BC.C</strong> (betweenness centrality) </li>
+<li><strong>Radii.C</strong> (graph eccentricity estimation) </li>
+<li><strong>Components.C</strong> (connected components)</li>
+<li><strong>BellmanFord.C</strong> (Bellman-Ford shortest paths)</li>
+<li><strong>PageRank.C</strong></li>
+<li><strong>PageRankDelta.C</strong> </li>
+<li><strong>BFSCC.C</strong> (connected components based on BFS)</li>
+<li><strong>KCore.C</strong> (computes k-cores of the graph)</li>
+</ul>
+<h2><a class="anchor" name="eccentricity-estimation-"></a>Eccentricity Estimation  <a class="hash-link" href="#eccentricity-estimation-">#</a></h2>
+<p>Code for eccentricity estimation is available in the
+apps/eccentricity/ directory: </p>
+
+<ul>
+<li><strong>kBFS-Ecc.C</strong> (2 passes of multiple BFS&#39;s)</li>
+<li><strong>kBFS-1Phase-Ecc.C</strong> (1 pass of multiple BFS&#39;s)</li>
+<li><strong>FM-Ecc.C</strong> (estimation using Flajolet-Martin counters; an implementation of
+a variant of HADI from <em>TKDD &#39;11</em>)</li>
+<li><strong>LogLog-Ecc.C</strong> (estimation using LogLog counters; an implementation of a 
+variant of HyperANF from <em>WWW &#39;11</em>)</li>
+<li><strong>RV.C</strong> (parallel implementation of the algorithm by Roditty and 
+Vassilevska Williams from <em>STOC &#39;13</em>)</li>
+<li><strong>CLRSTV.C</strong> (parallel implementation of a variant of the algorithm by Chechik, 
+Larkin, Roditty, Schoenebeck, Tarjan, and Vassilevska Williams from <em>SODA &#39;14</em>)</li>
+<li><strong>kBFS-Exact.C</strong> (exact algorithm using multiple BFS&#39;s)</li>
+<li><strong>TK.C</strong> (a parallel implementation of the exact algorithm by Takes and 
+Kosters from <em>Algorithms &#39;13</em>)</li>
+<li> <strong>Simple-Approx-Ecc.C</strong> (simple 2-approximation algorithm)</li>
+</ul>
+
+<p>Follow the same instructions as above for compilation, but from the apps/eccentricity/ directory.</p>
+
+<p>For kBFS-Ecc.C, kBFS-1Phase-Ecc.C, FM-Ecc.C, LogLog-Ecc.C, and
+kBFS-Exact.C, the &quot;-r&quot; flag followed by an integer indicates the
+maximum number of words to associate with each vertex. For all
+implementations, the &quot;-s&quot; flag should be used as the current
+implementations are designed for undirected graphs.  To output the
+eccentricity estimates to a file, use the &quot;-out&quot; flag followed by the
+name of the output file. The file format is one integer per line, with
+the eccentricity estimate for vertex <em>i</em> on line <em>i</em>.</p>
+
 
     <div class="docs-prevnext">
       

@@ -103,6 +103,11 @@
           </li>
         
           <li>
+            <a href="/ligra/docs/running_code.html">Running Code</a>
+            
+          </li>
+        
+          <li>
             <a href="/ligra/docs/examples.html">Examples</a>
             
           </li>
@@ -122,7 +127,7 @@
     <p>At this point, you should be familiar with some of the basic features 
 of Ligra such as the <code>vertexSubset</code> datatype and core parts of the API
 such as <code>edgeMap</code>. For examples of how to use this, please refer to either
-the <a href="/ligra/docs/tutorial_bfs.html">previous tutorial</a> or the API reference. </p>
+the <a href="/ligra/docs/tutorial_bfs.html">previous tutorial</a> or the <a href="/ligra/api.html">API reference</a>. </p>
 
 <p>In this tutorial, we will introduce and use other parts of the core API such
 as <code>vertexFilter</code> in order to compute the <em>k-core</em> of a graph. Given 
@@ -368,7 +373,7 @@ $&gt;= k$. In code:</p>
 <code>Tutorial_KCore</code>.</p>
 <h3><a class="anchor" name="testing"></a>Testing <a class="hash-link" href="#testing">#</a></h3>
 <p>Let&#39;s try computing the KCore of one of the input graphs. </p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">./KCore -s ../inputs/rMatGraph_J_5_100
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ ./KCore -s ../inputs/rMatGraph_J_5_100
 largestCore was 4
 Running time : 0.00594
 largestCore was 4
@@ -378,9 +383,9 @@ Running time : 0.0057
 </code></pre></div>
 <p>Great! You can try running the KCore on more interesting examples, such 
 as the twitter graph (note that <code>-b</code> indicates that the graph is stored
-as a binary, and <code>-rounds 1</code> just says to run the application a single 
-time)</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">numactl -i all ./KCore -s -b -rounds 1 twitter_sym
+as a binary, and <code>-rounds 1</code> indicates that the application should be run
+just once)</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ numactl -i all ./KCore -s -b -rounds 1 twitter_sym
 largestCore was 2488
 Running time : 280
 </code></pre></div>

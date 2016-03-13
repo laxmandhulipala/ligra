@@ -103,6 +103,11 @@
           </li>
         
           <li>
+            <a href="/ligra/docs/running_code.html">Running Code</a>
+            
+          </li>
+        
+          <li>
             <a href="/ligra/docs/examples.html">Examples</a>
             
           </li>
@@ -142,12 +147,12 @@ and a symmetric vertex type is selected. Otherwise, an assymetric vertex type is
 and therefore must do things like only iterating over <em>out</em>-edges, etc. In order to maximize
 code-reuse and not have different PageRank applications for directed and undirected graphs
 Ligra ensures that all four vertex types (implicitly) ascribe to the same interface. </p>
-<h3><a class="anchor" name="interface"></a>Interface <a class="hash-link" href="#interface">#</a></h3>
-<p>The interface for a vertex is provided below.</p>
-
+<h3><a class="anchor" name="vertex-interface"></a><strong>Vertex Interface</strong> <a class="hash-link" href="#vertex-interface">#</a></h3>
 <ul>
 <li><strong><code>intE getInNeighbor(intT j)</code></strong> : Returns the j&#39;th in-neighbor of the vertex. </li>
 <li><strong><code>intE getOutNeighbor(intT j)</code></strong> : Returns the j&#39;th out-neighbor of the vertex. </li>
+<li><strong><code>intE getInWeight(intT j)</code></strong> : Returns the weight of the edge from the j&#39;th in-neighbor.</li>
+<li><strong><code>intE getOutWeight(intT j)</code></strong> : Returns the weight of the edge to the j&#39;th out-neighbor.</li>
 <li><strong><code>intE getInDegree()</code></strong> : Returns the number of in-neighbors of the vertex.</li>
 <li><strong><code>intE getOutDegree()</code></strong> : Returns the number of out-neighbors of the vertex.</li>
 </ul>
