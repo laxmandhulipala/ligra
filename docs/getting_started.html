@@ -45,7 +45,6 @@
     <ul class="nav-site nav-site-internal">
       <li><a href="/ligra/docs/introduction.html" class="active">Docs</a></li>
       <li><a href="/ligra/downloads.html">Download</a></li>
-      <li><a href="/ligra/blog/">Blog</a></li>
     </ul>
 
     <ul class="nav-site nav-site-external">
@@ -124,7 +123,7 @@
     </h1>
     <div class="subHeader"></div>
 
-    <h2><a class="anchor" name="prerequisites"></a>Prerequisites <a class="hash-link" href="#prerequisites">#</a></h2>
+    <h3><a class="anchor" name="prerequisites"></a>Prerequisites <a class="hash-link" href="#prerequisites">#</a></h3>
 <p>Ligra can be compiled with multiple backend compilers. We currently support</p>
 
 <ul>
@@ -132,7 +131,7 @@
 <li><code>g++ &gt;= 4.8.0</code> with support for <code>Cilk+</code></li>
 <li><code>OpenMP</code></li>
 </ul>
-<h2><a class="anchor" name="organization"></a>Organization <a class="hash-link" href="#organization">#</a></h2>
+<h3><a class="anchor" name="organization"></a>Organization <a class="hash-link" href="#organization">#</a></h3>
 <p><a href="https://github.com/jshun/ligra/archive/master.zip">Download</a> the code if you 
 have not already. The main directories are the <code>apps</code> directory, where we will
 program and compile applications, and the <code>ligra</code> directory, where the framework 
@@ -145,7 +144,7 @@ LICENSE
 ligra       <span class="c"># code for the Ligra framework</span>
 README.md
 utils       <span class="c"># utilities for parsing different graph formats</span>
-</code></pre></div><h2><a class="anchor" name="compilation"></a>Compilation <a class="hash-link" href="#compilation">#</a></h2>
+</code></pre></div><h3><a class="anchor" name="compilation"></a>Compilation <a class="hash-link" href="#compilation">#</a></h3>
 <p>Compilation is done from within the <code>apps/</code> directory. Depending on the compiler
 you wish to use, you will need to set a different environment variable. </p>
 
@@ -162,8 +161,17 @@ defined.</p>
 
 <p>Note: <code>OpenMP</code> support in Ligra has not been thoroughly tested. If you experience 
 any errors, please send an email to Julian Shun. A known issue is that <code>OpenMP</code>
-will not work correctly when using the experimental version of <code>gcc 4.8.0</code>.</p>
-<h2><a class="anchor" name="example"></a>Example <a class="hash-link" href="#example">#</a></h2><div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span><span class="nb">cd </span>apps/
+will not work correctly when using the experimental version of <code>gcc 4.8.0</code>. </p>
+<h3><a class="anchor" name="openmp-on-osx"></a>OpenMP on OSX <a class="hash-link" href="#openmp-on-osx">#</a></h3>
+<p>On OSX, the g++ binary installed through commandline-tools should error out if you try
+to use OpenMP. If you encounter this error, you will need to install <code>g++-4.8</code> or 
+<code>g++-4.9</code>. You can easily do this by using <code>homebrew</code> as follows: </p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>brew tap homebrew/versions
+<span class="nv">$ </span>brew install gcc49
+</code></pre></div>
+<p>Finally, open up the Makefile and replace <code>g++</code> with <code>g++-4.9</code> (or <code>g++-4.8</code>). Your
+code should cleanly compile. </p>
+<h3><a class="anchor" name="example"></a>Example <a class="hash-link" href="#example">#</a></h3><div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span><span class="nb">cd </span>apps/
 <span class="nv">$ </span><span class="nb">export </span><span class="nv">CILK</span><span class="o">=</span>1
 <span class="nv">$ </span>make
 ln -s ../ligra/encoder.C .
