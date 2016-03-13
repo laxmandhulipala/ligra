@@ -51,3 +51,18 @@ defined.
 Note: `OpenMP` support in Ligra has not been thoroughly tested. If you experience 
 any errors, please send an email to Julian Shun. A known issue is that `OpenMP`
 will not work correctly when using the experimental version of `gcc 4.8.0`.
+
+Example
+--
+
+``` bash
+$ cd apps/
+$ export CILK=1
+$ make
+ln -s ../ligra/encoder.C .
+ln -s ../ligra/ligra.h .
+...
+g++ -fcilkplus -lcilkrts -O2 -DCILK   -o encoder encoder.C
+g++ -fcilkplus -lcilkrts -O2 -DCILK   -o BFS BFS.C
+...
+```

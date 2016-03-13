@@ -26,3 +26,23 @@ This document is split up into a number of sections.
   KCores of a graph
 * [API](/ligra/docs/api.html) - Comprehensive API reference 
 * [Examples](/ligra/docs/examples.html) - Overview of example Ligra applications
+
+
+## Resources
+
+Julian Shun and Guy Blelloch. [*Ligra: A
+Lightweight Graph Processing Framework for Shared
+Memory*](http://www.cs.cmu.edu/~jshun/ligra.pdf). Proceedings of the
+ACM SIGPLAN Symposium on Principles and Practice of Parallel
+Programming (PPoPP), pp. 135-146, 2013.
+
+Julian Shun, Laxman Dhulipala and Guy Blelloch. [*Smaller and Faster:
+Parallel Processing of Compressed Graphs with
+Ligra+*](http://www.cs.cmu.edu/~jshun/ligra+.pdf). Proceedings of the
+IEEE Data Compression Conference (DCC), pp. 403-412, 2015.
+
+Julian Shun. [*An Evaluation of Parallel Eccentricity Estimation
+Algorithms on Undirected Real-World
+Graphs*](http://www.cs.cmu.edu/~jshun/kdd-final.pdf). Proceedings of
+the ACM SIGKDD Conference on Knowledge Discovery and Data Mining
+(KDD), 2015.

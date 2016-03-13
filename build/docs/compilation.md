@@ -70,6 +70,8 @@ $ ./BFS -s ../inputs/rMatGraph_J_5_100
 $ ./BellmanFord -s ../inputs/rMatGraph_WJ_5_100
 ``` 
 
+
+
 For BFS, BC and BellmanFord, one can also pass the "-r" flag followed
 by an integer to indicate the source vertex.  rMat graphs along with
 other graphs can be generated with the graph generators in the utils/

@@ -163,7 +163,16 @@ defined.</p>
 <p>Note: <code>OpenMP</code> support in Ligra has not been thoroughly tested. If you experience 
 any errors, please send an email to Julian Shun. A known issue is that <code>OpenMP</code>
 will not work correctly when using the experimental version of <code>gcc 4.8.0</code>.</p>
-
+<h2><a class="anchor" name="example"></a>Example <a class="hash-link" href="#example">#</a></h2><div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span><span class="nb">cd </span>apps/
+<span class="nv">$ </span><span class="nb">export </span><span class="nv">CILK</span><span class="o">=</span>1
+<span class="nv">$ </span>make
+ln -s ../ligra/encoder.C .
+ln -s ../ligra/ligra.h .
+...
+g++ -fcilkplus -lcilkrts -O2 -DCILK   -o encoder encoder.C
+g++ -fcilkplus -lcilkrts -O2 -DCILK   -o BFS BFS.C
+...
+</code></pre></div>
 
     <div class="docs-prevnext">
       
