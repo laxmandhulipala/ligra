@@ -3,7 +3,7 @@ id: tutorial_kcore
 sectionid: docs
 layout: docs
 title: "Tutorial: KCore"
-next: getting_started.html
+next: api.html
 prev: tutorial_bfs.html
 redirect_from: "docs/index.html"
 ---
